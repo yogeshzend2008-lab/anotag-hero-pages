@@ -10,109 +10,118 @@
 
     body {
       font-family: 'Outfit', system-ui, sans-serif;
-      background: #000000;
-      color: #ffffff;
+      background: #000;
+      color: #fff;
       overflow: hidden;
+      width: 100vw;
+      height: 100vh;
     }
 
     .hero {
-      display: flex;
-      align-items: stretch;
+      position: relative;
       width: 100%;
       height: 100vh;
-      min-height: 600px;
-      padding: 0;
+      min-height: 700px;
+      display: flex;
       overflow: hidden;
     }
 
+    /* ── LEFT TEXT ── */
     .hero-left {
+      position: relative;
+      z-index: 10;
+      flex: 0 0 42%;
       display: flex;
       flex-direction: column;
       justify-content: center;
-      flex: 0 0 45%;
-      min-width: 0;
-      position: relative;
-      z-index: 2;
-      padding-left: 5%;
+      padding: 0 0 0 5.5%;
     }
 
-    .hero-right {
-      position: relative;
-      flex: 1;
-      min-width: 0;
-      overflow: hidden;
-    }
-
-    .eyebrow {
-      display: block;
-      font-size: 12px;
-      color: #9C9C9C;
-      font-weight: 500;
-      text-transform: uppercase;
-      letter-spacing: 0.04em;
+    .eyebrow-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 0;
+      border: 1px solid rgba(255,255,255,0.12);
+      border-radius: 4px;
+      padding: 6px 14px;
       margin-bottom: 2rem;
+      width: fit-content;
+    }
+
+    .eyebrow-badge span {
+      font-size: 10.5px;
+      font-weight: 500;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: #888;
     }
 
     .headline {
-      font-size: clamp(36px, 5vw, 58px);
-      font-family: 'Outfit', sans-serif;
-      line-height: 1.02;
+      font-size: clamp(40px, 4.8vw, 62px);
       font-weight: 600;
-      letter-spacing: -0.045em;
-      color: #ffffff;
-      margin-bottom: 1.2rem;
+      line-height: 1.0;
+      letter-spacing: -0.04em;
+      color: #fff;
+      margin-bottom: 1.5rem;
     }
 
-    .paragraph {
-      font-size: 17px;
-      color: #9C9C9C;
-      margin: 1.4rem 0 2rem;
-      max-width: 450px;
-      line-height: 1.72;
+    .headline em {
+      font-style: italic;
+      font-weight: 600;
+      color: #fff;
     }
 
-    .cta-row { display: flex; gap: 16px; flex-wrap: wrap; }
+    .description {
+      font-size: 16.5px;
+      color: #888;
+      line-height: 1.7;
+      max-width: 420px;
+      margin-bottom: 2.2rem;
+    }
+
+    .cta-row {
+      display: flex;
+      gap: 16px;
+      align-items: center;
+    }
 
     .cta {
-      font-weight: 500;
-      padding: 0.85rem 1.6rem;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 13px 24px;
       border-radius: 6px;
-      cursor: pointer;
-      transition: background 0.25s, border-color 0.25s;
-      font-size: 14px;
+      font-size: 13.5px;
+      font-weight: 500;
       font-family: 'Outfit', sans-serif;
       text-decoration: none;
+      cursor: pointer;
+      transition: all 0.2s;
     }
 
-    .cta-primary { background: #ffffff; color: #000000; border: none; }
-    .cta-primary:hover { background: #d1d1d6; }
-    .cta-secondary { background: transparent; color: #ffffff; border: 1px solid #555; }
-    .cta-secondary:hover { border-color: #ffffff; }
-
-    .capability-row {
-      display: flex;
-      align-items: center;
-      gap: 1.2rem;
-      margin-top: 1.5rem;
-      flex-wrap: wrap;
+    .cta-outlined {
+      background: transparent;
+      color: #fff;
+      border: 1px solid rgba(255,255,255,0.25);
     }
 
-    .cap-item {
-      display: flex;
-      align-items: center;
-      gap: 0.4rem;
-      font-size: 12px;
-      color: #9C9C9C;
-      font-weight: 500;
+    .cta-outlined:hover {
+      border-color: #fff;
+      background: rgba(255,255,255,0.04);
     }
 
-    .cap-icon {
-      width: 16px;
-      height: 16px;
-      opacity: 0.6;
+    .cta svg {
+      width: 14px;
+      height: 14px;
     }
 
-    /* PARTICLE CANVAS */
+    /* ── RIGHT ANIMATION ── */
+    .hero-right {
+      position: relative;
+      flex: 1;
+      overflow: hidden;
+    }
+
     #particleCanvas {
       position: absolute;
       top: 0;
@@ -121,72 +130,128 @@
       height: 100%;
     }
 
-    /* Stage Labels */
-    .stage-labels {
+    /* ── STAGE LABELS (TOP) ── */
+    .stage-bar {
       position: absolute;
-      bottom: 10%;
+      top: 8%;
       left: 0;
       right: 0;
       display: flex;
+      align-items: flex-start;
+      justify-content: flex-start;
+      z-index: 10;
+      pointer-events: none;
+      padding: 0 3% 0 2%;
+    }
+
+    .stage-item {
+      display: flex;
+      align-items: center;
+      gap: 0;
+      flex-shrink: 0;
+    }
+
+    .stage-text {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+      min-width: 90px;
+    }
+
+    .stage-name {
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: #fff;
+      white-space: nowrap;
+    }
+
+    .stage-sub {
+      font-size: 9.5px;
+      font-weight: 400;
+      color: rgba(255,255,255,0.5);
+      margin-top: 2px;
+    }
+
+    .stage-arrow {
+      width: 16px;
+      height: 16px;
+      margin: 0 12px;
+      flex-shrink: 0;
+      opacity: 0.25;
+    }
+
+    .stage-node {
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: #fff;
+      box-shadow: 0 0 8px rgba(255,255,255,0.5);
+      margin-top: 8px;
+    }
+
+    .stage-col {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    /* ── OUTCOME ICONS (RIGHT) ── */
+    .outcome-col {
+      position: absolute;
+      right: 2.5%;
+      top: 15%;
+      bottom: 35%;
+      display: flex;
+      flex-direction: column;
       justify-content: space-around;
-      padding: 0 4%;
       z-index: 10;
       pointer-events: none;
     }
 
-    .stage-label {
+    .outcome-item {
       display: flex;
-      flex-direction: column;
       align-items: center;
-      gap: 6px;
+      gap: 10px;
+      opacity: 0;
+      animation: fadeIn 0.5s ease forwards;
     }
 
-    .stage-connector {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      height: 50px;
-    }
+    .outcome-item:nth-child(1) { animation-delay: 0.5s; }
+    .outcome-item:nth-child(2) { animation-delay: 0.8s; }
+    .outcome-item:nth-child(3) { animation-delay: 1.1s; }
+    .outcome-item:nth-child(4) { animation-delay: 1.4s; }
 
-    .connector-line {
-      width: 1px;
-      height: 30px;
-      background: linear-gradient(to bottom, rgba(255,255,255,0.05), rgba(255,255,255,0.35));
-    }
+    @keyframes fadeIn { to { opacity: 0.55; } }
 
-    .connector-node {
-      width: 7px;
-      height: 7px;
-      border-radius: 50%;
-      background: #fff;
-      box-shadow: 0 0 10px rgba(255,255,255,0.5);
-    }
-
-    .stage-title {
-      font-weight: 600;
-      font-size: 10px;
-      letter-spacing: 0.1em;
+    .outcome-icon {
+      width: 26px;
+      height: 26px;
+      flex-shrink: 0;
       color: #fff;
-      text-transform: uppercase;
     }
 
-    .stage-caption {
+    .outcome-label {
+      font-size: 11px;
       font-weight: 400;
-      font-size: 9px;
-      color: rgba(255,255,255,0.6);
+      color: rgba(255,255,255,0.65);
+      line-height: 1.35;
+      white-space: nowrap;
     }
 
-    /* Center Badge */
-    .center-badge {
+    /* ── BADGE (BOTTOM CENTER) ── */
+    .badge {
       position: absolute;
-      bottom: 28%;
+      bottom: 10%;
       left: 50%;
       transform: translateX(-50%);
       display: flex;
       align-items: center;
       gap: 10px;
       padding: 10px 22px;
-      background: rgba(20, 22, 28, 0.65);
+      background: rgba(18, 20, 26, 0.7);
       backdrop-filter: blur(16px);
       border: 1px solid rgba(255,255,255,0.06);
       border-radius: 100px;
@@ -198,139 +263,125 @@
       width: 7px;
       height: 7px;
       border-radius: 50%;
-      background: #22C55E;
-      box-shadow: 0 0 10px rgba(34, 197, 94, 0.5);
+      background: #22c55e;
+      box-shadow: 0 0 8px rgba(34,197,94,0.5);
     }
 
-    .badge-text {
-      font-weight: 500;
+    .badge-label {
       font-size: 13px;
+      font-weight: 500;
       color: #fff;
-      letter-spacing: 0.03em;
+      letter-spacing: 0.02em;
     }
 
-    /* Outcome Icons */
-    .outcome-icons {
-      position: absolute;
-      right: 3%;
-      top: 50%;
-      transform: translateY(-50%);
-      display: flex;
-      flex-direction: column;
-      gap: 24px;
-      z-index: 10;
-      pointer-events: none;
-    }
-
-    .outcome-icon {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      opacity: 0;
-      animation: fadeInIcon 0.6s ease forwards;
-    }
-
-    #icon-1 { animation-delay: 0.3s; }
-    #icon-2 { animation-delay: 0.6s; }
-    #icon-3 { animation-delay: 0.9s; }
-    #icon-4 { animation-delay: 1.2s; }
-
-    @keyframes fadeInIcon { to { opacity: 0.65; } }
-
-    .outcome-icon svg {
-      width: 22px;
-      height: 22px;
-      color: #fff;
-      flex-shrink: 0;
-    }
-
-    .outcome-icon span {
-      font-weight: 400;
-      font-size: 11px;
-      color: rgba(255,255,255,0.65);
-      line-height: 1.3;
-    }
-
+    /* ── RESPONSIVE ── */
     @media (max-width: 1100px) {
-      .outcome-icons { display: none; }
+      .outcome-col { display: none; }
+      .hero-left { flex: 0 0 48%; }
     }
 
     @media (max-width: 768px) {
-      .hero { flex-direction: column; height: auto; min-height: 100vh; }
+      body { overflow: auto; }
+      .hero { height: auto; min-height: 100vh; flex-direction: column; }
       .hero-left { flex: none; width: 100%; padding: 100px 24px 40px; }
       .hero-right { display: none; }
       .headline { font-size: 36px; }
-      .paragraph { font-size: 15px; max-width: none; }
+      .description { font-size: 15px; max-width: none; }
     }
   </style>
 </head>
 <body>
-  <section class="hero" id="hero">
+  <section class="hero">
+    <!-- LEFT TEXT -->
     <div class="hero-left">
-      <span class="eyebrow">AI DATA THAT POWERS INTELLIGENCE</span>
-      <h1 class="headline">From Raw Data<br>to Real-World<br>AI Impact</h1>
-      <p class="paragraph">High-quality training data that helps AI models learn better, perform stronger, and scale faster across every industry.</p>
-      <div class="cta-row">
-        <a href="https://www.anotag.com/book-a-demo" target="_top" class="cta cta-primary">Explore Solutions</a>
-        <a href="https://www.anotag.com/data-annotation-services-ai" target="_top" class="cta cta-secondary">Book a Consultation</a>
+      <div class="eyebrow-badge">
+        <span>AI DATA THAT POWERS INTELLIGENCE</span>
       </div>
-      <div class="capability-row">
-        <div class="cap-item"><svg class="cap-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/><path d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/></svg> Computer Vision</div>
-        <div class="cap-item"><svg class="cap-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M9.813 15.904L9 18.75l-.813-2.846a4.5 4.5 0 00-3.09-3.09L2.25 12l2.846-.813a4.5 4.5 0 003.09-3.09L9 5.25l.813 2.846a4.5 4.5 0 003.09 3.09L15.75 12l-2.846.813a4.5 4.5 0 00-3.09 3.09z"/></svg> Generative AI</div>
-        <div class="cap-item"><svg class="cap-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M7.5 21L3 16.5m0 0L7.5 12M3 16.5h13.5m0-13.5L21 7.5m0 0L16.5 12M21 7.5H7.5"/></svg> Multimodal AI</div>
-        <div class="cap-item"><svg class="cap-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M2.25 18L9 11.25l4.306 4.307a11.95 11.95 0 015.814-5.519l2.74-1.22m0 0l-5.94-2.28m5.94 2.28l-2.28 5.941"/></svg> Model Evaluation</div>
+      <h1 class="headline">From Raw Data<br>to Real-World<br><em>AI Impact</em></h1>
+      <p class="description">High-quality training data that helps AI models learn better, perform stronger, and scale faster across every industry.</p>
+      <div class="cta-row">
+        <a href="https://www.anotag.com/book-a-demo" target="_top" class="cta cta-outlined">
+          Explore Solutions
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M7 17L17 7M17 7H7M17 7v10"/></svg>
+        </a>
+        <a href="https://www.anotag.com/data-annotation-services-ai" target="_top" class="cta cta-outlined">
+          Book a Consultation
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M7 17L17 7M17 7H7M17 7v10"/></svg>
+        </a>
       </div>
     </div>
+
+    <!-- RIGHT ANIMATION -->
     <div class="hero-right">
       <canvas id="particleCanvas"></canvas>
-      <div class="stage-labels">
-        <div class="stage-label">
-          <div class="stage-connector"><div class="connector-line"></div><div class="connector-node"></div></div>
-          <span class="stage-title">RAW DATA</span>
-          <span class="stage-caption">Unstructured</span>
+
+      <!-- Stage Labels -->
+      <div class="stage-bar">
+        <div class="stage-item">
+          <div class="stage-col">
+            <span class="stage-name">RAW DATA</span>
+            <span class="stage-sub">Unstructured</span>
+            <div class="stage-node"></div>
+          </div>
         </div>
-        <div class="stage-label">
-          <div class="stage-connector"><div class="connector-line"></div><div class="connector-node"></div></div>
-          <span class="stage-title">ANNOTATION</span>
-          <span class="stage-caption">Understood</span>
+        <svg class="stage-arrow" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M3 8h10M10 4l4 4-4 4"/></svg>
+        <div class="stage-item">
+          <div class="stage-col">
+            <span class="stage-name">ANNOTATION</span>
+            <span class="stage-sub">Understood</span>
+            <div class="stage-node"></div>
+          </div>
         </div>
-        <div class="stage-label">
-          <div class="stage-connector"><div class="connector-line"></div><div class="connector-node"></div></div>
-          <span class="stage-title">QUALITY CHECK</span>
-          <span class="stage-caption">Validated</span>
+        <svg class="stage-arrow" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M3 8h10M10 4l4 4-4 4"/></svg>
+        <div class="stage-item">
+          <div class="stage-col">
+            <span class="stage-name">QUALITY CHECK</span>
+            <span class="stage-sub">Validated</span>
+            <div class="stage-node"></div>
+          </div>
         </div>
-        <div class="stage-label">
-          <div class="stage-connector"><div class="connector-line"></div><div class="connector-node"></div></div>
-          <span class="stage-title">AI READY</span>
-          <span class="stage-caption">Structured</span>
+        <svg class="stage-arrow" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M3 8h10M10 4l4 4-4 4"/></svg>
+        <div class="stage-item">
+          <div class="stage-col">
+            <span class="stage-name">AI READY</span>
+            <span class="stage-sub">Structured</span>
+            <div class="stage-node"></div>
+          </div>
         </div>
-        <div class="stage-label">
-          <div class="stage-connector"><div class="connector-line"></div><div class="connector-node"></div></div>
-          <span class="stage-title">REAL WORLD IMPACT</span>
-          <span class="stage-caption">Intelligence in Action</span>
+        <svg class="stage-arrow" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M3 8h10M10 4l4 4-4 4"/></svg>
+        <div class="stage-item">
+          <div class="stage-col">
+            <span class="stage-name">REAL-WORLD IMPACT</span>
+            <span class="stage-sub">Intelligence in Action</span>
+            <div class="stage-node"></div>
+          </div>
         </div>
       </div>
-      <div class="center-badge">
+
+      <!-- Outcome Icons -->
+      <div class="outcome-col">
+        <div class="outcome-item">
+          <svg class="outcome-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M3 3v18h18"/><path d="M7 16l4-5 4 3 5-7"/></svg>
+          <span class="outcome-label">Smarter<br>Decisions</span>
+        </div>
+        <div class="outcome-item">
+          <svg class="outcome-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>
+          <span class="outcome-label">AI That<br>Performs</span>
+        </div>
+        <div class="outcome-item">
+          <svg class="outcome-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="12" r="3"/><path d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"/></svg>
+          <span class="outcome-label">Operational<br>Efficiency</span>
+        </div>
+        <div class="outcome-item">
+          <svg class="outcome-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M12 2L2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5"/><path d="M2 12l10 5 10-5"/></svg>
+          <span class="outcome-label">Real Business<br>Impact</span>
+        </div>
+      </div>
+
+      <!-- Badge -->
+      <div class="badge">
         <div class="badge-dot"></div>
-        <span class="badge-text">Living Dataset™ in Action</span>
-      </div>
-      <div class="outcome-icons">
-        <div class="outcome-icon" id="icon-1">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z"/></svg>
-          <span>Smarter Decisions</span>
-        </div>
-        <div class="outcome-icon" id="icon-2">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M13 10V3L4 14h7v7l9-11h-7z"/></svg>
-          <span>AI That Performs</span>
-        </div>
-        <div class="outcome-icon" id="icon-3">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
-          <span>Operational<br>Efficiency</span>
-        </div>
-        <div class="outcome-icon" id="icon-4">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6"/></svg>
-          <span>Real Business<br>Impact</span>
-        </div>
+        <span class="badge-label">Living Dataset™ in Action</span>
       </div>
     </div>
   </section>
@@ -339,49 +390,57 @@
   (function() {
     var canvas = document.getElementById('particleCanvas');
     var ctx = canvas.getContext('2d');
-    var W, H;
+    var W, H, dpr;
     var particles = [];
-    var connections = [];
-    var flowLines = [];
+    var gridNodes = [];
     var time = 0;
-    var PARTICLE_COUNT = 3000;
-    var CONNECTION_DIST = 60;
-    var MAX_CONNECTIONS = 1500;
+    var PARTICLE_COUNT = 4000;
 
-    var zoneColors = [
-      { r: 230, g: 242, b: 255 },
-      { r: 50,  g: 128, b: 255 },
-      { r: 255, g: 191, b: 50  },
-      { r: 100, g: 230, b: 130 },
-      { r: 155, g: 80,  b: 230 }
+    // Zone color palettes (RGB)
+    var ZONES = [
+      { name: 'raw',       colors: [{r:200,g:215,b:255}, {r:160,g:190,b:255}] },
+      { name: 'annotate',  colors: [{r:40,g:120,b:255},  {r:60,g:160,b:255}] },
+      { name: 'quality',   colors: [{r:255,g:190,b:40},  {r:255,g:210,b:80}] },
+      { name: 'aiready',   colors: [{r:60,g:220,b:120},  {r:80,g:240,b:140}] },
+      { name: 'impact',    colors: [{r:140,g:60,b:220},  {r:170,g:90,b:255}] }
     ];
 
     function resize() {
-      var container = canvas.parentElement;
-      W = container.clientWidth;
-      H = container.clientHeight;
-      canvas.width = W * (window.devicePixelRatio || 1);
-      canvas.height = H * (window.devicePixelRatio || 1);
+      dpr = window.devicePixelRatio || 1;
+      var rect = canvas.parentElement.getBoundingClientRect();
+      W = rect.width;
+      H = rect.height;
+      canvas.width = W * dpr;
+      canvas.height = H * dpr;
       canvas.style.width = W + 'px';
       canvas.style.height = H + 'px';
-      ctx.setTransform(window.devicePixelRatio || 1, 0, 0, window.devicePixelRatio || 1, 0, 0);
+      ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
     }
 
+    function rand(a, b) { return a + Math.random() * (b - a); }
     function lerp(a, b, t) { return a + (b - a) * t; }
+    function clamp(v, lo, hi) { return Math.max(lo, Math.min(hi, v)); }
 
-    function getZoneColor(x) {
-      var nx = (x / W);
-      var zone = Math.min(4, Math.floor(nx * 5));
-      var next = Math.min(4, zone + 1);
+    function getZoneIndex(x) {
+      var nx = clamp(x / W, 0, 0.999);
+      return Math.floor(nx * 5);
+    }
+
+    function getZoneColor(x, alpha) {
+      var nx = clamp(x / W, 0, 0.999);
+      var zi = Math.floor(nx * 5);
+      var next = Math.min(4, zi + 1);
       var t = (nx * 5) % 1;
       t = t * t * (3 - 2 * t);
-      return {
-        r: Math.round(lerp(zoneColors[zone].r, zoneColors[next].r, t)),
-        g: Math.round(lerp(zoneColors[zone].g, zoneColors[next].g, t)),
-        b: Math.round(lerp(zoneColors[zone].b, zoneColors[next].b, t))
-      };
+      var c = ZONES[zi].colors[0];
+      var n = ZONES[next].colors[0];
+      var r = Math.round(lerp(c.r, n.r, t));
+      var g = Math.round(lerp(c.g, n.g, t));
+      var b = Math.round(lerp(c.b, n.b, t));
+      return 'rgba(' + r + ',' + g + ',' + b + ',' + (alpha || 1) + ')';
     }
 
+    // ── PARTICLES ──
     function createParticle() {
       var zone = Math.floor(Math.random() * 5);
       var zoneW = W / 5;
@@ -389,16 +448,18 @@
       var y = Math.random() * H;
       return {
         x: x, y: y,
-        baseX: x, baseY: y,
-        size: 0.4 + Math.random() * 1.8,
-        opacity: 0.15 + Math.random() * 0.6,
-        speed: 0.15 + Math.random() * 0.4,
-        phase: Math.random() * Math.PI * 2,
-        driftAmpX: 0.3 + Math.random() * 1.2,
-        driftAmpY: 0.2 + Math.random() * 0.8,
-        driftFreqX: 0.0005 + Math.random() * 0.001,
-        driftFreqY: 0.0004 + Math.random() * 0.0008,
-        zone: zone
+        baseY: y,
+        size: rand(0.3, 2.2),
+        alpha: rand(0.08, 0.55),
+        speed: rand(0.08, 0.35),
+        phase: rand(0, Math.PI * 2),
+        driftAmp: rand(3, 18),
+        driftFreq: rand(0.0003, 0.001),
+        zone: zone,
+        // Connection line properties
+        hasNode: Math.random() < 0.008,
+        nodeSize: rand(2, 5),
+        nodeAlpha: rand(0.2, 0.6)
       };
     }
 
@@ -409,145 +470,210 @@
       }
     }
 
-    function initFlowLines() {
-      flowLines = [];
-      for (var i = 0; i < 120; i++) {
-        flowLines.push({
-          x: Math.random() * W,
-          baseY: Math.random() * H,
-          speed: 0.2 + Math.random() * 0.6,
-          length: 30 + Math.random() * 80,
-          opacity: 0.03 + Math.random() * 0.06,
-          phase: Math.random() * Math.PI * 2
-        });
-      }
-    }
-
-    function updateParticles(dt) {
-      time += dt;
-      for (var i = 0; i < particles.length; i++) {
-        var p = particles[i];
-
-        var driftX = Math.sin(time * p.driftFreqX + p.phase) * p.driftAmpX;
-        var driftY = Math.cos(time * p.driftFreqY + p.phase * 1.3) * p.driftAmpY;
-
-        p.x += p.speed * dt * 0.06;
-        p.y = p.baseY + driftY + Math.sin(time * 0.0003 + p.phase) * 8;
-
-        if (p.x > W + 20) {
-          p.x = -20;
-          p.baseX = -20;
-        }
-      }
-    }
-
-    function drawFlowLines() {
-      for (var i = 0; i < flowLines.length; i++) {
-        var f = flowLines[i];
-        f.x += f.speed * 0.5;
-        if (f.x > W + f.length) f.x = -f.length;
-
-        var waveY = Math.sin(time * 0.001 + f.phase) * 20;
-        var color = getZoneColor(f.x);
-        ctx.beginPath();
-        ctx.moveTo(f.x, f.baseY + waveY);
-        ctx.lineTo(f.x + f.length, f.baseY + waveY + Math.sin(time * 0.0005 + f.phase) * 10);
-        ctx.strokeStyle = 'rgba(' + color.r + ',' + color.g + ',' + color.b + ',' + f.opacity + ')';
-        ctx.lineWidth = 0.8;
-        ctx.stroke();
-      }
-    }
-
-    function drawParticles() {
-      for (var i = 0; i < particles.length; i++) {
-        var p = particles[i];
-        var color = getZoneColor(p.x);
-
-        var pulse = 1 + Math.sin(time * 0.002 + p.phase) * 0.15;
-        var size = p.size * pulse;
-        var alpha = p.opacity * (0.7 + Math.sin(time * 0.001 + p.phase * 2) * 0.3);
-
-        ctx.beginPath();
-        ctx.arc(p.x, p.y, size, 0, Math.PI * 2);
-        ctx.fillStyle = 'rgba(' + color.r + ',' + color.g + ',' + color.b + ',' + alpha + ')';
-        ctx.fill();
-
-        if (size > 1.2) {
-          ctx.beginPath();
-          ctx.arc(p.x, p.y, size * 2.5, 0, Math.PI * 2);
-          ctx.fillStyle = 'rgba(' + color.r + ',' + color.g + ',' + color.b + ',' + (alpha * 0.12) + ')';
-          ctx.fill();
-        }
-      }
-    }
-
-    function drawConnections() {
-      var count = 0;
-      var step = 4;
-      ctx.lineWidth = 0.4;
-
-      for (var i = 0; i < particles.length && count < MAX_CONNECTIONS; i += step) {
-        var a = particles[i];
-        for (var j = i + step; j < Math.min(i + 150, particles.length) && count < MAX_CONNECTIONS; j += step) {
-          var b = particles[j];
-          var dx = a.x - b.x;
-          var dy = a.y - b.y;
-          var dist = Math.sqrt(dx * dx + dy * dy);
-
-          if (dist < CONNECTION_DIST) {
-            var fade = 1 - dist / CONNECTION_DIST;
-            var color = getZoneColor((a.x + b.x) / 2);
-            ctx.beginPath();
-            ctx.moveTo(a.x, a.y);
-            ctx.lineTo(b.x, b.y);
-            ctx.strokeStyle = 'rgba(' + color.r + ',' + color.g + ',' + color.b + ',' + (fade * 0.18) + ')';
-            ctx.stroke();
-            count++;
+    // ── GRID NODES (blue annotation zone) ──
+    function initGridNodes() {
+      gridNodes = [];
+      var zoneStart = W * 0.18;
+      var zoneEnd = W * 0.42;
+      var cols = 12;
+      var rows = 8;
+      var spacingX = (zoneEnd - zoneStart) / cols;
+      var spacingY = H / rows;
+      for (var r = 0; r < rows; r++) {
+        for (var c = 0; c < cols; c++) {
+          if (Math.random() < 0.45) {
+            gridNodes.push({
+              x: zoneStart + c * spacingX + rand(-8, 8),
+              y: r * spacingY + rand(-12, 12),
+              size: rand(2.5, 5),
+              alpha: rand(0.1, 0.35),
+              phase: rand(0, Math.PI * 2),
+              pulseSpeed: rand(0.001, 0.003)
+            });
           }
         }
       }
     }
 
-    function drawBackground() {
-      ctx.fillStyle = '#000000';
-      ctx.fillRect(0, 0, W, H);
-
-      var grad = ctx.createRadialGradient(W * 0.35, H * 0.5, 0, W * 0.35, H * 0.5, W * 0.5);
-      grad.addColorStop(0, 'rgba(255,255,255,0.02)');
-      grad.addColorStop(1, 'rgba(0,0,0,0)');
-      ctx.fillStyle = grad;
-      ctx.fillRect(0, 0, W, H);
-    }
-
+    // ── ANIMATION LOOP ──
     var lastTime = 0;
-    function animate(timestamp) {
-      if (!lastTime) lastTime = timestamp;
-      var dt = Math.min(timestamp - lastTime, 50);
-      lastTime = timestamp;
 
+    function animate(ts) {
+      if (!lastTime) lastTime = ts;
+      var dt = Math.min(ts - lastTime, 50);
+      lastTime = ts;
+      time += dt;
+
+      ctx.clearRect(0, 0, W, H);
       drawBackground();
-      updateParticles(dt);
-      drawFlowLines();
-      drawConnections();
-      drawParticles();
+      drawGridConnections();
+      drawGridNodes();
+      drawFlowStreams();
+      updateAndDrawParticles();
+      drawZoneGlow();
 
       requestAnimationFrame(animate);
     }
 
+    function drawBackground() {
+      ctx.fillStyle = '#000';
+      ctx.fillRect(0, 0, W, H);
+      // Subtle radial glow center
+      var g = ctx.createRadialGradient(W * 0.42, H * 0.48, 0, W * 0.42, H * 0.48, W * 0.45);
+      g.addColorStop(0, 'rgba(255,255,255,0.018)');
+      g.addColorStop(1, 'rgba(0,0,0,0)');
+      ctx.fillStyle = g;
+      ctx.fillRect(0, 0, W, H);
+    }
+
+    function drawZoneGlow() {
+      // Gold zone center glow
+      var gx = W * 0.42;
+      var gy = H * 0.46;
+      var g = ctx.createRadialGradient(gx, gy, 0, gx, gy, 60);
+      g.addColorStop(0, 'rgba(255,195,40,0.12)');
+      g.addColorStop(0.5, 'rgba(255,195,40,0.04)');
+      g.addColorStop(1, 'rgba(255,195,40,0)');
+      ctx.fillStyle = g;
+      ctx.fillRect(gx - 80, gy - 80, 160, 160);
+
+      // Draw checkmark
+      ctx.save();
+      ctx.strokeStyle = 'rgba(255,210,80,0.7)';
+      ctx.lineWidth = 2.5;
+      ctx.lineCap = 'round';
+      ctx.lineJoin = 'round';
+      ctx.beginPath();
+      ctx.arc(gx, gy, 14, 0, Math.PI * 2);
+      ctx.stroke();
+      ctx.beginPath();
+      ctx.moveTo(gx - 6, gy);
+      ctx.lineTo(gx - 1, gy + 5);
+      ctx.lineTo(gx + 7, gy - 5);
+      ctx.stroke();
+      ctx.restore();
+    }
+
+    function drawFlowStreams() {
+      // Purple flowing streams on right side
+      var streamCount = 60;
+      var startX = W * 0.65;
+      var endX = W * 0.98;
+      for (var i = 0; i < streamCount; i++) {
+        var baseY = (i / streamCount) * H;
+        var wave = Math.sin(time * 0.0008 + i * 0.3) * 25;
+        var wave2 = Math.cos(time * 0.0005 + i * 0.15) * 15;
+        var alpha = 0.015 + Math.sin(time * 0.001 + i * 0.2) * 0.01;
+
+        ctx.beginPath();
+        ctx.moveTo(startX, baseY + wave);
+        for (var x = startX; x <= endX; x += 8) {
+          var progress = (x - startX) / (endX - startX);
+          var yWave = Math.sin(progress * Math.PI * 2 + time * 0.001 + i * 0.3) * (15 + progress * 30);
+          ctx.lineTo(x, baseY + wave + yWave + wave2 * progress);
+        }
+        ctx.strokeStyle = getZoneColor(x, alpha);
+        ctx.lineWidth = 0.8;
+        ctx.stroke();
+      }
+    }
+
+    function drawGridConnections() {
+      ctx.lineWidth = 0.4;
+      for (var i = 0; i < gridNodes.length; i++) {
+        var a = gridNodes[i];
+        var pulseA = 1 + Math.sin(time * a.pulseSpeed + a.phase) * 0.3;
+        for (var j = i + 1; j < Math.min(i + 8, gridNodes.length); j++) {
+          var b = gridNodes[j];
+          var dx = a.x - b.x;
+          var dy = a.y - b.y;
+          var dist = Math.sqrt(dx * dx + dy * dy);
+          if (dist < 80) {
+            var fade = 1 - dist / 80;
+            ctx.beginPath();
+            ctx.moveTo(a.x, a.y);
+            ctx.lineTo(b.x, b.y);
+            ctx.strokeStyle = 'rgba(50,140,255,' + (fade * 0.1 * pulseA) + ')';
+            ctx.stroke();
+          }
+        }
+      }
+    }
+
+    function drawGridNodes() {
+      for (var i = 0; i < gridNodes.length; i++) {
+        var n = gridNodes[i];
+        var pulse = 1 + Math.sin(time * n.pulseSpeed + n.phase) * 0.3;
+        var size = n.size * pulse;
+        var alpha = n.alpha * pulse;
+
+        // Outer glow
+        ctx.beginPath();
+        ctx.arc(n.x, n.y, size * 3, 0, Math.PI * 2);
+        ctx.fillStyle = 'rgba(50,140,255,' + (alpha * 0.08) + ')';
+        ctx.fill();
+
+        // Inner dot
+        ctx.beginPath();
+        ctx.arc(n.x, n.y, size, 0, Math.PI * 2);
+        ctx.fillStyle = 'rgba(80,160,255,' + alpha + ')';
+        ctx.fill();
+      }
+    }
+
+    function updateAndDrawParticles() {
+      for (var i = 0; i < particles.length; i++) {
+        var p = particles[i];
+
+        // Move right
+        p.x += p.speed * dt * 0.05;
+
+        // Drift Y
+        var dy = Math.sin(time * p.driftFreq + p.phase) * p.driftAmp;
+        p.y = p.baseY + dy;
+
+        // Wrap
+        if (p.x > W + 10) {
+          p.x = -10;
+        }
+
+        // Pulse
+        var pulse = 1 + Math.sin(time * 0.002 + p.phase) * 0.2;
+        var size = p.size * pulse;
+        var alpha = p.alpha * (0.6 + Math.sin(time * 0.0015 + p.phase * 1.5) * 0.4);
+        var color = getZoneColor(p.x, alpha);
+
+        // Draw particle
+        ctx.beginPath();
+        ctx.arc(p.x, p.y, size, 0, Math.PI * 2);
+        ctx.fillStyle = color;
+        ctx.fill();
+
+        // Glow for larger particles
+        if (size > 1) {
+          ctx.beginPath();
+          ctx.arc(p.x, p.y, size * 2.5, 0, Math.PI * 2);
+          ctx.fillStyle = getZoneColor(p.x, alpha * 0.08);
+          ctx.fill();
+        }
+      }
+    }
+
+    // ── INIT ──
     function start() {
       resize();
       initParticles();
-      initFlowLines();
+      initGridNodes();
       requestAnimationFrame(animate);
     }
 
-    window.addEventListener('resize', resize);
+    window.addEventListener('resize', function() {
+      resize();
+      initGridNodes();
+    });
 
-    if (document.readyState === 'complete') {
-      start();
-    } else {
-      window.addEventListener('load', start);
-    }
+    if (document.readyState === 'complete') start();
+    else window.addEventListener('load', start);
   })();
   </script>
 </body>
