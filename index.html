@@ -6,478 +6,489 @@
   <title>Anotag — Living Dataset</title>
   <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@200..800&display=swap" rel="stylesheet">
   <style>
-    * { margin: 0; padding: 0; box-sizing: border-box; }
-    body {
-      font-family: 'Outfit', system-ui, sans-serif;
-      background: #000;
-      color: #fff;
-      overflow: hidden;
-      width: 100vw;
-      height: 100vh;
-    }
-    .hero {
-      position: relative;
-      width: 100%;
-      height: 100vh;
-      min-height: 700px;
-      display: flex;
-      overflow: hidden;
-    }
-    .hero-left {
-      position: relative;
-      z-index: 10;
-      flex: 0 0 42%;
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-      padding: 0 0 0 5.5%;
-    }
-    .eyebrow-badge {
-      display: inline-flex;
-      align-items: center;
-      border: 1px solid rgba(255,255,255,0.12);
-      border-radius: 4px;
-      padding: 6px 14px;
-      margin-bottom: 2rem;
-      width: fit-content;
-    }
-    .eyebrow-badge span {
-      font-size: 10.5px;
-      font-weight: 500;
-      letter-spacing: 0.12em;
-      text-transform: uppercase;
-      color: #888;
-    }
-    .headline {
-      font-size: clamp(40px, 4.8vw, 62px);
-      font-weight: 600;
-      line-height: 1.0;
-      letter-spacing: -0.04em;
-      color: #fff;
-      margin-bottom: 1.5rem;
-    }
-    .headline em {
-      font-style: italic;
-      font-weight: 600;
-    }
-    .description {
-      font-size: 16.5px;
-      color: #888;
-      line-height: 1.7;
-      max-width: 420px;
-      margin-bottom: 2.2rem;
-    }
-    .cta-row { display: flex; gap: 16px; align-items: center; }
-    .cta {
-      display: inline-flex;
-      align-items: center;
-      gap: 6px;
-      padding: 13px 24px;
-      border-radius: 6px;
-      font-size: 13.5px;
-      font-weight: 500;
-      font-family: 'Outfit', sans-serif;
-      text-decoration: none;
-      cursor: pointer;
-      transition: all 0.2s;
-      background: transparent;
-      color: #fff;
-      border: 1px solid rgba(255,255,255,0.25);
-    }
-    .cta:hover { border-color: #fff; background: rgba(255,255,255,0.04); }
-    .cta svg { width: 14px; height: 14px; }
+    *{margin:0;padding:0;box-sizing:border-box}
+    body{font-family:'Outfit',system-ui,sans-serif;background:#000;color:#fff;overflow-x:hidden}
+    a{text-decoration:none;color:inherit}
 
-    .hero-right { position: relative; flex: 1; overflow: hidden; }
-    #particleCanvas { position: absolute; top: 0; left: 0; width: 100%; height: 100%; }
+    /* ═══════════════ HERO ═══════════════ */
+    .hero{position:relative;width:100%;height:clamp(650px,82vh,900px);display:flex;overflow:hidden}
+    .hero-left{position:relative;z-index:10;flex:0 0 42%;display:flex;flex-direction:column;justify-content:center;padding:0 0 0 5.5%}
+    .hero-right{position:relative;flex:1;overflow:hidden}
 
-    .stage-bar {
-      position: absolute;
-      top: 7%;
-      left: 0;
-      right: 0;
-      display: flex;
-      align-items: flex-start;
-      justify-content: flex-start;
-      z-index: 10;
-      pointer-events: none;
-      padding: 0 3% 0 2%;
-    }
-    .stage-item { display: flex; align-items: center; flex-shrink: 0; }
-    .stage-text { display: flex; flex-direction: column; align-items: center; text-align: center; min-width: 90px; }
-    .stage-name { font-size: 11px; font-weight: 600; letter-spacing: 0.1em; text-transform: uppercase; color: #fff; white-space: nowrap; }
-    .stage-sub { font-size: 9.5px; font-weight: 400; color: rgba(255,255,255,0.5); margin-top: 2px; }
-    .stage-arrow { width: 16px; height: 16px; margin: 0 12px; flex-shrink: 0; opacity: 0.25; }
-    .stage-col { display: flex; flex-direction: column; align-items: center; }
-    .stage-node { width: 6px; height: 6px; border-radius: 50%; background: #fff; box-shadow: 0 0 8px rgba(255,255,255,0.5); margin-top: 8px; }
+    .eyebrow-badge{display:inline-flex;align-items:center;border:1px solid rgba(255,255,255,0.12);border-radius:4px;padding:6px 14px;margin-bottom:2rem;width:fit-content}
+    .eyebrow-badge span{font-size:10.5px;font-weight:500;letter-spacing:0.12em;text-transform:uppercase;color:#888}
+    .headline{font-size:clamp(38px,4.6vw,60px);font-weight:600;line-height:1.0;letter-spacing:-0.04em;color:#fff;margin-bottom:1.5rem}
+    .headline em{font-style:italic;font-weight:600}
+    .description{font-size:16px;color:#888;line-height:1.7;max-width:420px;margin-bottom:2.2rem}
+    .cta-row{display:flex;gap:16px;flex-wrap:wrap}
+    .cta{display:inline-flex;align-items:center;gap:6px;padding:13px 24px;border-radius:6px;font-size:13.5px;font-weight:500;font-family:'Outfit',sans-serif;cursor:pointer;transition:all .2s;background:transparent;color:#fff;border:1px solid rgba(255,255,255,0.25)}
+    .cta:hover{border-color:#fff;background:rgba(255,255,255,0.04)}
+    .cta svg{width:14px;height:14px}
 
-    .outcome-col {
-      position: absolute;
-      right: 2.5%;
-      top: 15%;
-      bottom: 35%;
-      display: flex;
-      flex-direction: column;
-      justify-content: space-around;
-      z-index: 10;
-      pointer-events: none;
-    }
-    .outcome-item { display: flex; align-items: center; gap: 10px; opacity: 0; animation: fadeIn 0.5s ease forwards; }
-    .outcome-item:nth-child(1) { animation-delay: 0.5s; }
-    .outcome-item:nth-child(2) { animation-delay: 0.8s; }
-    .outcome-item:nth-child(3) { animation-delay: 1.1s; }
-    .outcome-item:nth-child(4) { animation-delay: 1.4s; }
-    @keyframes fadeIn { to { opacity: 0.55; } }
-    .outcome-icon { width: 26px; height: 26px; flex-shrink: 0; color: #fff; }
-    .outcome-label { font-size: 11px; font-weight: 400; color: rgba(255,255,255,0.65); line-height: 1.35; white-space: nowrap; }
+    /* ═══════════════ CANVAS ═══════════════ */
+    #particleCanvas{position:absolute;top:0;left:0;width:100%;height:100%}
 
-    .badge {
-      position: absolute;
-      bottom: 10%;
-      left: 50%;
-      transform: translateX(-50%);
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      padding: 10px 22px;
-      background: rgba(18,20,26,0.7);
-      backdrop-filter: blur(16px);
-      border: 1px solid rgba(255,255,255,0.06);
-      border-radius: 100px;
-      z-index: 10;
-      pointer-events: none;
-    }
-    .badge-dot { width: 7px; height: 7px; border-radius: 50%; background: #22c55e; box-shadow: 0 0 8px rgba(34,197,94,0.5); }
-    .badge-label { font-size: 13px; font-weight: 500; color: #fff; letter-spacing: 0.02em; }
+    /* ═══════════════ STAGE BAR ═══════════════ */
+    .stage-bar{position:absolute;top:7%;left:0;right:0;display:flex;align-items:flex-start;justify-content:flex-start;z-index:10;pointer-events:none;padding:0 3% 0 1.5%}
+    .stage-item{display:flex;align-items:center;flex-shrink:0}
+    .stage-col{display:flex;flex-direction:column;align-items:center}
+    .stage-name{font-size:11px;font-weight:600;letter-spacing:0.1em;text-transform:uppercase;color:#fff;white-space:nowrap}
+    .stage-sub{font-size:9.5px;font-weight:400;color:rgba(255,255,255,0.5);margin-top:2px}
+    .stage-node{width:6px;height:6px;border-radius:50%;background:#fff;box-shadow:0 0 8px rgba(255,255,255,0.5);margin-top:8px}
+    .stage-arrow{width:14px;height:14px;margin:0 14px;flex-shrink:0;opacity:0.2;color:#fff}
 
-    @media (max-width: 1100px) { .outcome-col { display: none; } .hero-left { flex: 0 0 48%; } }
-    @media (max-width: 768px) {
-      body { overflow: auto; }
-      .hero { height: auto; min-height: 100vh; flex-direction: column; }
-      .hero-left { flex: none; width: 100%; padding: 100px 24px 40px; }
-      .hero-right { display: none; }
-      .headline { font-size: 36px; }
-      .description { font-size: 15px; max-width: none; }
+    /* ═══════════════ OUTCOME ICONS ═══════════════ */
+    .outcome-col{position:absolute;right:2.5%;top:14%;bottom:32%;display:flex;flex-direction:column;justify-content:space-around;z-index:10;pointer-events:none}
+    .outcome-item{display:flex;align-items:center;gap:10px;opacity:0;animation:fadeIn .5s ease forwards}
+    .outcome-item:nth-child(1){animation-delay:.5s}
+    .outcome-item:nth-child(2){animation-delay:.8s}
+    .outcome-item:nth-child(3){animation-delay:1.1s}
+    .outcome-item:nth-child(4){animation-delay:1.4s}
+    @keyframes fadeIn{to{opacity:.55}}
+    .outcome-icon{width:26px;height:26px;flex-shrink:0;color:#fff}
+    .outcome-label{font-size:11px;font-weight:400;color:rgba(255,255,255,0.65);line-height:1.35;white-space:nowrap}
+
+    /* ═══════════════ BADGE ═══════════════ */
+    .badge{position:absolute;bottom:9%;left:50%;transform:translateX(-50%);display:flex;align-items:center;gap:10px;padding:10px 22px;background:rgba(18,20,26,0.7);backdrop-filter:blur(16px);border:1px solid rgba(255,255,255,0.06);border-radius:100px;z-index:10;pointer-events:none}
+    .badge-dot{width:7px;height:7px;border-radius:50%;background:#22c55e;box-shadow:0 0 8px rgba(34,197,94,0.5)}
+    .badge-label{font-size:13px;font-weight:500;color:#fff;letter-spacing:0.02em}
+
+    /* ═══════════════ INDUSTRY SECTION ═══════════════ */
+    .industry-section{width:100%;padding:0 5.5% 3rem}
+    .industry-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:1.5rem}
+    .industry-title{font-size:11px;font-weight:600;letter-spacing:0.12em;text-transform:uppercase;color:#888}
+    .industry-hint{display:flex;align-items:center;gap:8px;font-size:11px;color:#555}
+    .industry-hint svg{width:16px;height:16px;color:#555}
+
+    .cards-row{display:flex;gap:16px;overflow-x:auto;scroll-snap-type:x mandatory;-webkit-overflow-scrolling:touch;scrollbar-width:none;padding-bottom:8px}
+    .cards-row::-webkit-scrollbar{display:none}
+
+    .card{flex:0 0 220px;scroll-snap-align:start;border-radius:14px;overflow:hidden;position:relative;cursor:pointer;border:1px solid rgba(255,255,255,0.06);background:#0a0a0a;transition:all .35s}
+    .card:hover{border-color:rgba(255,255,255,0.12);transform:translateY(-2px)}
+    .card-img{width:100%;height:140px;background-size:cover;background-position:center;filter:brightness(0.55) contrast(1.1);transition:filter .3s}
+    .card:hover .card-img{filter:brightness(0.7) contrast(1.1)}
+    .card-body{padding:14px}
+    .card-head{display:flex;align-items:center;gap:8px;margin-bottom:6px}
+    .card-icon{width:20px;height:20px;color:#fff;flex-shrink:0}
+    .card-name{font-size:13px;font-weight:600;color:#fff}
+    .card-desc{font-size:11px;color:#777;line-height:1.5}
+    .card-arrow{position:absolute;bottom:14px;right:14px;width:28px;height:28px;border-radius:50%;border:1px solid rgba(255,255,255,0.15);display:flex;align-items:center;justify-content:center;transition:all .2s}
+    .card:hover .card-arrow{border-color:#fff;background:rgba(255,255,255,0.05)}
+    .card-arrow svg{width:12px;height:12px;color:#fff}
+
+    .dots{display:flex;gap:8px;margin-top:1.2rem;justify-content:center}
+    .dot{width:32px;height:3px;border-radius:2px;background:#333;transition:background .3s}
+    .dot.active{background:#f5a623}
+
+    /* ═══════════════ TRUST BAR ═══════════════ */
+    .trust-bar{width:100%;display:flex;justify-content:center;gap:clamp(24px,4vw,56px);padding:1.5rem 5.5%;border-top:1px solid rgba(255,255,255,0.06);flex-wrap:wrap}
+    .trust-item{display:flex;align-items:center;gap:8px;font-size:12px;color:#777;white-space:nowrap}
+    .trust-icon{width:18px;height:18px;color:#666;flex-shrink:0}
+
+    /* ═══════════════ RESPONSIVE ═══════════════ */
+    @media(max-width:1100px){.outcome-col{display:none}.hero-left{flex:0 0 48%}}
+    @media(max-width:768px){
+      body{overflow-y:auto}
+      .hero{height:auto;min-height:auto;flex-direction:column;min-height:100vh}
+      .hero-left{flex:none;width:100%;padding:100px 24px 40px}
+      .hero-right{display:none}
+      .headline{font-size:36px}
+      .description{font-size:15px;max-width:none}
+      .industry-section{padding:2rem 24px}
+      .card{flex:0 0 200px}
+      .trust-bar{padding:1.2rem 24px}
     }
   </style>
 </head>
 <body>
-  <section class="hero">
-    <div class="hero-left">
-      <div class="eyebrow-badge"><span>AI DATA THAT POWERS INTELLIGENCE</span></div>
-      <h1 class="headline">From Raw Data<br>to Real-World<br><em>AI Impact</em></h1>
-      <p class="description">High-quality training data that helps AI models learn better, perform stronger, and scale faster across every industry.</p>
-      <div class="cta-row">
-        <a href="https://www.anotag.com/book-a-demo" target="_top" class="cta">Explore Solutions <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M7 17L17 7M17 7H7M17 7v10"/></svg></a>
-        <a href="https://www.anotag.com/data-annotation-services-ai" target="_top" class="cta">Book a Consultation <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M7 17L17 7M17 7H7M17 7v10"/></svg></a>
-      </div>
+
+<!-- ═══════════════ HERO ═══════════════ -->
+<section class="hero">
+  <div class="hero-left">
+    <div class="eyebrow-badge"><span>AI DATA THAT POWERS INTELLIGENCE</span></div>
+    <h1 class="headline">From Raw Data<br>to Real-World<br><em>AI Impact</em></h1>
+    <p class="description">High-quality training data that helps AI models learn better, perform stronger, and scale faster across every industry.</p>
+    <div class="cta-row">
+      <a href="https://www.anotag.com/book-a-demo" target="_top" class="cta">Explore Solutions <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M7 17L17 7M17 7H7M17 7v10"/></svg></a>
+      <a href="https://www.anotag.com/data-annotation-services-ai" target="_top" class="cta">Book a Consultation <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M7 17L17 7M17 7H7M17 7v10"/></svg></a>
     </div>
-    <div class="hero-right">
-      <canvas id="particleCanvas"></canvas>
-      <div class="stage-bar">
-        <div class="stage-item"><div class="stage-col"><span class="stage-name">RAW DATA</span><span class="stage-sub">Unstructured</span><div class="stage-node"></div></div></div>
-        <svg class="stage-arrow" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M3 8h10M10 4l4 4-4 4"/></svg>
-        <div class="stage-item"><div class="stage-col"><span class="stage-name">ANNOTATION</span><span class="stage-sub">Understood</span><div class="stage-node"></div></div></div>
-        <svg class="stage-arrow" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M3 8h10M10 4l4 4-4 4"/></svg>
-        <div class="stage-item"><div class="stage-col"><span class="stage-name">QUALITY CHECK</span><span class="stage-sub">Validated</span><div class="stage-node"></div></div></div>
-        <svg class="stage-arrow" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M3 8h10M10 4l4 4-4 4"/></svg>
-        <div class="stage-item"><div class="stage-col"><span class="stage-name">AI READY</span><span class="stage-sub">Structured</span><div class="stage-node"></div></div></div>
-        <svg class="stage-arrow" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M3 8h10M10 4l4 4-4 4"/></svg>
-        <div class="stage-item"><div class="stage-col"><span class="stage-name">REAL-WORLD IMPACT</span><span class="stage-sub">Intelligence in Action</span><div class="stage-node"></div></div></div>
-      </div>
-      <div class="outcome-col">
-        <div class="outcome-item"><svg class="outcome-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M3 3v18h18"/><path d="M7 16l4-5 4 3 5-7"/></svg><span class="outcome-label">Smarter<br>Decisions</span></div>
-        <div class="outcome-item"><svg class="outcome-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg><span class="outcome-label">AI That<br>Performs</span></div>
-        <div class="outcome-item"><svg class="outcome-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="12" r="3"/><path d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"/></svg><span class="outcome-label">Operational<br>Efficiency</span></div>
-        <div class="outcome-item"><svg class="outcome-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M12 2L2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5"/><path d="M2 12l10 5 10-5"/></svg><span class="outcome-label">Real Business<br>Impact</span></div>
-      </div>
-      <div class="badge"><div class="badge-dot"></div><span class="badge-label">Living Dataset™ in Action</span></div>
+  </div>
+  <div class="hero-right">
+    <canvas id="particleCanvas"></canvas>
+    <div class="stage-bar">
+      <div class="stage-item"><div class="stage-col"><span class="stage-name">RAW DATA</span><span class="stage-sub">Unstructured</span><div class="stage-node"></div></div></div>
+      <svg class="stage-arrow" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M3 8h10M10 4l4 4-4 4"/></svg>
+      <div class="stage-item"><div class="stage-col"><span class="stage-name">ANNOTATION</span><span class="stage-sub">Understood</span><div class="stage-node"></div></div></div>
+      <svg class="stage-arrow" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M3 8h10M10 4l4 4-4 4"/></svg>
+      <div class="stage-item"><div class="stage-col"><span class="stage-name">QUALITY CHECK</span><span class="stage-sub">Validated</span><div class="stage-node"></div></div></div>
+      <svg class="stage-arrow" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M3 8h10M10 4l4 4-4 4"/></svg>
+      <div class="stage-item"><div class="stage-col"><span class="stage-name">AI READY</span><span class="stage-sub">Structured</span><div class="stage-node"></div></div></div>
+      <svg class="stage-arrow" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M3 8h10M10 4l4 4-4 4"/></svg>
+      <div class="stage-item"><div class="stage-col"><span class="stage-name">REAL-WORLD IMPACT</span><span class="stage-sub">Intelligence in Action</span><div class="stage-node"></div></div></div>
     </div>
-  </section>
+    <div class="outcome-col">
+      <div class="outcome-item"><svg class="outcome-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M3 3v18h18"/><path d="M7 16l4-5 4 3 5-7"/></svg><span class="outcome-label">Smarter<br>Decisions</span></div>
+      <div class="outcome-item"><svg class="outcome-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg><span class="outcome-label">AI That<br>Performs</span></div>
+      <div class="outcome-item"><svg class="outcome-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="12" r="3"/><path d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"/></svg><span class="outcome-label">Operational<br>Efficiency</span></div>
+      <div class="outcome-item"><svg class="outcome-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M12 2L2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5"/><path d="M2 12l10 5 10-5"/></svg><span class="outcome-label">Real Business<br>Impact</span></div>
+    </div>
+    <div class="badge"><div class="badge-dot"></div><span class="badge-label">Living Dataset™ in Action</span></div>
+  </div>
+</section>
 
-  <script>
-  (function() {
-    var canvas = document.getElementById('particleCanvas');
-    var ctx = canvas.getContext('2d');
-    var W, H, dpr;
-    var time = 0;
+<!-- ═══════════════ INDUSTRY SECTION ═══════════════ -->
+<section class="industry-section">
+  <div class="industry-header">
+    <span class="industry-title">AI DATA SOLUTIONS FOR EVERY INDUSTRY</span>
+    <div class="industry-hint">Hover to explore <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="5" y="2" width="14" height="20" rx="7"/><line x1="12" y1="6" x2="12" y2="10"/></svg></div>
+  </div>
+  <div class="cards-row" id="cardsRow">
+    <div class="card"><div class="card-img" style="background-image:url(https://static.wixstatic.com/media/d2fc1f_e350668152364951ac8dfd40f48dec8e~mv2.avif)"></div><div class="card-body"><div class="card-head"><svg class="card-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M20.84 4.61a5.5 5.5 0 00-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 00-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 000-7.78z"/></svg><span class="card-name">Healthcare</span></div><span class="card-desc">Medical imaging, diagnostics, and patient care AI</span></div><div class="card-arrow"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg></div></div>
+    <div class="card"><div class="card-img" style="background-image:url(https://static.wixstatic.com/media/d2fc1f_78c08d38d2084d6eaee70f0f7d147bfe~mv2.avif)"></div><div class="card-body"><div class="card-head"><svg class="card-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="1" y="3" width="15" height="13" rx="2"/><path d="M16 8h4l3 3v5h-7V8z"/><circle cx="5.5" cy="18.5" r="2.5"/><circle cx="18.5" cy="18.5" r="2.5"/></svg><span class="card-name">Automotive</span></div><span class="card-desc">Autonomous driving, ADAS, and smart mobility</span></div><div class="card-arrow"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg></div></div>
+    <div class="card"><div class="card-img" style="background-image:url(https://static.wixstatic.com/media/d2fc1f_2fe56d398a454b8a921373f267a43e27~mv2.avif)"></div><div class="card-body"><div class="card-head"><svg class="card-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 01-8 0"/></svg><span class="card-name">Retail & eCommerce</span></div><span class="card-desc">Product recognition, shelf analytics, and customer insights</span></div><div class="card-arrow"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg></div></div>
+    <div class="card"><div class="card-img" style="background-image:url(https://static.wixstatic.com/media/d2fc1f_42eb95ff93664a1580daeeea6942e0bf~mv2.avif)"></div><div class="card-body"><div class="card-head"><svg class="card-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M12 22c4-4 8-7.58 8-12a8 8 0 10-16 0c0 4.42 4 8 8 12z"/><circle cx="12" cy="10" r="3"/></svg><span class="card-name">Agriculture</span></div><span class="card-desc">Crop monitoring, yield prediction, and precision farming</span></div><div class="card-arrow"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg></div></div>
+    <div class="card"><div class="card-img" style="background-image:url(https://static.wixstatic.com/media/d2fc1f_9bad4001aec84ca6934bb5dc0885ac2c~mv2.avif)"></div><div class="card-body"><div class="card-head"><svg class="card-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M3 21h18"/><path d="M5 21V7l8-4v18"/><path d="M19 21V11l-6-4"/><path d="M9 9v.01"/><path d="M9 12v.01"/><path d="M9 15v.01"/><path d="M9 18v.01"/></svg><span class="card-name">Financial Services</span></div><span class="card-desc">Document intelligence, fraud detection, and risk analysis</span></div><div class="card-arrow"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg></div></div>
+  </div>
+  <div class="dots"><div class="dot active"></div><div class="dot"></div><div class="dot"></div><div class="dot"></div><div class="dot"></div></div>
+</section>
 
-    var PARTICLE_COUNT = 8000;
-    var particles = [];
-    var gridNodes = [];
+<!-- ═══════════════ TRUST BAR ═══════════════ -->
+<div class="trust-bar">
+  <div class="trust-item"><svg class="trust-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><path d="M9 12l2 2 4-4"/></svg> Enterprise Security</div>
+  <div class="trust-item"><svg class="trust-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="12" r="10"/><path d="M9 12l2 2 4-4"/></svg> 98%+ Quality Assurance</div>
+  <div class="trust-item"><svg class="trust-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87"/><path d="M16 3.13a4 4 0 010 7.75"/></svg> Human-in-the-Loop</div>
+  <div class="trust-item"><svg class="trust-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M15 3h6v6M9 21H3v-6M21 3l-7 7M3 21l7-7"/></svg> Scalable Operations</div>
+  <div class="trust-item"><svg class="trust-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M11 17a1 1 0 001.8.14l2-4a1 1 0 00-1.8-.14l-2 4zM17 13V7a4 4 0 00-8 0v1"/><path d="M7 15v2a5 5 0 0010 0v-2"/></svg> Flexible Engagement</div>
+  <div class="trust-item"><svg class="trust-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg> Domain Experts</div>
+</div>
 
-    var ZONE_W = [0.20, 0.20, 0.18, 0.18, 0.24];
-    var ZONE_COLORS = [
-      [200,220,255],
-      [50,130,255],
-      [255,195,50],
-      [70,225,130],
-      [150,75,230]
-    ];
+<!-- ═══════════════ PARTICLE ANIMATION ═══════════════ -->
+<script>
+(function(){
+  var c=document.getElementById('particleCanvas'),ctx=c.getContext('2d');
+  var W,H,dpr,time=0;
 
-    function resize() {
-      dpr = window.devicePixelRatio || 1;
-      var r = canvas.parentElement.getBoundingClientRect();
-      W = r.width;
-      H = r.height;
-      canvas.width = W * dpr;
-      canvas.height = H * dpr;
-      canvas.style.width = W + 'px';
-      canvas.style.height = H + 'px';
-      ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+  // ── ZONE CONFIG ──
+  // Each zone occupies a % of canvas width
+  var ZONES=[
+    {name:'raw',      x0:0.00,x1:0.20, colors:[[200,220,255],[160,190,255]]},
+    {name:'annotate', x0:0.20,x1:0.38, colors:[[40,130,255],[70,170,255]]},
+    {name:'quality',  x0:0.38,x1:0.52, colors:[[255,195,50],[255,215,90]]},
+    {name:'aiready',  x0:0.52,x1:0.68, colors:[[60,225,130],[90,245,150]]},
+    {name:'impact',   x0:0.68,x1:1.00, colors:[[150,75,230],[180,100,255]]}
+  ];
+
+  var particles=[];
+  var annotBoxes=[];   // annotation bounding boxes in zone 2
+  var gridNodes=[];    // grid nodes in zone 4
+  var streams=[];      // purple flow streams in zone 5
+  var TOTAL=10000;
+
+  function resize(){
+    dpr=window.devicePixelRatio||1;
+    var r=c.parentElement.getBoundingClientRect();
+    W=r.width;H=r.height;
+    c.width=W*dpr;c.height=H*dpr;
+    c.style.width=W+'px';c.style.height=H+'px';
+    ctx.setTransform(dpr,0,0,dpr,0,0);
+  }
+
+  function rand(a,b){return a+Math.random()*(b-a)}
+  function lerp(a,b,t){return a+(b-a)*t}
+  function clamp(v,lo,hi){return Math.max(lo,Math.min(hi,v))}
+
+  function getZoneColor(x,a){
+    var nx=clamp(x/W,0,0.999);
+    var zi=Math.floor(nx*5);
+    var z=ZONES[zi];
+    var nj=Math.min(4,zi+1);
+    var t=(nx*5)%1;
+    t=t*t*(3-2*t);
+    var c0=z.colors[0],c1=ZONES[nj].colors[0];
+    var r=Math.round(lerp(c0[0],c1[0],t));
+    var g=Math.round(lerp(c0[1],c1[1],t));
+    var b=Math.round(lerp(c0[2],c1[2],t));
+    return 'rgba('+r+','+g+','+b+','+(a!==undefined?a:1)+')';
+  }
+
+  // ═══════════ PARTICLES ═══════════
+  function mkParticle(zone){
+    if(zone===undefined) zone=Math.floor(Math.random()*5);
+    var z=ZONES[zone];
+    var x=(z.x0+Math.random()*(z.x1-z.x0))*W;
+    var y=Math.random()*H;
+    return{
+      x:x,y:y,baseY:y,zone:zone,
+      sz:rand(0.3,2.5),a:rand(0.1,0.6),
+      sp:rand(0.08,0.4),ph:rand(0,6.28),
+      dA:rand(3,20),dF:rand(0.0003,0.0012),
+      // Some particles are "data points" that flow through
+      isData:Math.random()<0.3,
+      dataTrail:[]
+    };
+  }
+
+  function initParticles(){
+    particles=[];
+    for(var i=0;i<TOTAL;i++) particles.push(mkParticle());
+  }
+
+  // ═══════════ ANNOTATION BOXES (Zone 2) ═══════════
+  function initAnnotBoxes(){
+    annotBoxes=[];
+    var x0=W*0.20,x1=W*0.38;
+    for(var i=0;i<25;i++){
+      annotBoxes.push({
+        x:x0+rand(10,(x1-x0)-30),
+        y:rand(H*0.1,H*0.85),
+        w:rand(14,32),h:rand(14,28),
+        a:rand(0.15,0.45),
+        ph:rand(0,6.28),
+        pf:rand(0.001,0.003),
+        label:['Car','Person','Tree','Dog','Bike','Sign'][Math.floor(rand(0,6))],
+        conf:rand(0.7,0.99).toFixed(2)
+      });
     }
+  }
 
-    function rand(a, b) { return a + Math.random() * (b - a); }
-    function lerp(a, b, t) { return a + (b - a) * t; }
-    function clamp(v, lo, hi) { return Math.max(lo, Math.min(hi, v)); }
-
-    function zoneOf(x) {
-      var nx = clamp(x / W, 0, 0.999);
-      return Math.floor(nx * 5);
-    }
-
-    function zoneColor(x, a) {
-      var nx = clamp(x / W, 0, 0.999);
-      var zi = Math.floor(nx * 5);
-      var nj = Math.min(4, zi + 1);
-      var t = (nx * 5) % 1;
-      t = t * t * (3 - 2 * t);
-      var c = ZONE_COLORS[zi], n = ZONE_COLORS[nj];
-      var r = Math.round(lerp(c[0], n[0], t));
-      var g = Math.round(lerp(c[1], n[1], t));
-      var b = Math.round(lerp(c[2], n[2], t));
-      return 'rgba(' + r + ',' + g + ',' + b + ',' + (a !== undefined ? a : 1) + ')';
-    }
-
-    // ── PARTICLES ──
-    function mkParticle() {
-      var zi = Math.floor(Math.random() * 5);
-      var startX = 0;
-      for (var k = 0; k < zi; k++) startX += ZONE_W[k];
-      var x = (startX + Math.random() * ZONE_W[zi]) * W;
-      var y = Math.random() * H;
-      return {
-        x: x, y: y, baseY: y,
-        sz: rand(0.4, 3.0),
-        a: rand(0.12, 0.65),
-        sp: rand(0.1, 0.45),
-        ph: rand(0, 6.28),
-        dA: rand(4, 22),
-        dF: rand(0.0003, 0.0012)
-      };
-    }
-
-    function initParticles() {
-      particles = [];
-      for (var i = 0; i < PARTICLE_COUNT; i++) particles.push(mkParticle());
-    }
-
-    // ── GRID NODES (Zone 2 — blue annotation) ──
-    function initGrid() {
-      gridNodes = [];
-      var x0 = W * 0.17, x1 = W * 0.40;
-      var cols = 14, rows = 10;
-      var sx = (x1 - x0) / cols, sy = H / rows;
-      for (var r = 0; r < rows; r++) {
-        for (var c = 0; c < cols; c++) {
-          if (Math.random() < 0.5) {
-            gridNodes.push({
-              x: x0 + c * sx + rand(-10, 10),
-              y: r * sy + rand(-15, 15),
-              sz: rand(2, 5.5),
-              a: rand(0.15, 0.45),
-              ph: rand(0, 6.28),
-              pf: rand(0.001, 0.003)
-            });
-          }
+  // ═══════════ GRID NODES (Zone 4) ═══════════
+  function initGrid(){
+    gridNodes=[];
+    var x0=W*0.52,x1=W*0.68;
+    var cols=16,rows=10;
+    var sx=(x1-x0)/cols,sy=H/rows;
+    for(var r=0;r<rows;r++){
+      for(var c=0;c<cols;c++){
+        if(Math.random()<0.55){
+          gridNodes.push({
+            x:x0+c*sx+rand(-8,8),y:r*sy+rand(-12,12),
+            sz:rand(2,5),a:rand(0.12,0.4),
+            ph:rand(0,6.28),pf:rand(0.001,0.003)
+          });
         }
       }
     }
+  }
 
-    // ── ANIMATION ──
-    var lastT = 0;
-    function loop(ts) {
-      if (!lastT) lastT = ts;
-      var dt = Math.min(ts - lastT, 50);
-      lastT = ts;
-      time += dt;
-
-      ctx.clearRect(0, 0, W, H);
-      drawBg();
-      drawStreams();
-      drawGridConns();
-      drawGridNodes();
-      drawZoneGlows();
-      drawCheckmark();
-      drawParticles();
-
-      requestAnimationFrame(loop);
+  // ═══════════ STREAMS (Zone 5) ═══════════
+  function initStreams(){
+    streams=[];
+    for(var i=0;i<100;i++){
+      streams.push({
+        baseY:rand(0,H),
+        speed:rand(0.15,0.5),
+        len:rand(40,120),
+        a:rand(0.02,0.07),
+        ph:rand(0,6.28)
+      });
     }
+  }
 
-    function drawBg() {
-      ctx.fillStyle = '#000';
-      ctx.fillRect(0, 0, W, H);
-      // Subtle center glow
-      var g = ctx.createRadialGradient(W * 0.42, H * 0.46, 0, W * 0.42, H * 0.46, W * 0.4);
-      g.addColorStop(0, 'rgba(255,255,255,0.015)');
-      g.addColorStop(1, 'rgba(0,0,0,0)');
-      ctx.fillStyle = g;
-      ctx.fillRect(0, 0, W, H);
+  // ═══════════ DRAW FUNCTIONS ═══════════
+  function drawBg(){
+    ctx.fillStyle='#000';ctx.fillRect(0,0,W,H);
+    // subtle center glow
+    var g=ctx.createRadialGradient(W*0.38,H*0.46,0,W*0.38,H*0.46,W*0.35);
+    g.addColorStop(0,'rgba(255,255,255,0.012)');g.addColorStop(1,'rgba(0,0,0,0)');
+    ctx.fillStyle=g;ctx.fillRect(0,0,W,H);
+  }
+
+  // ── Zone glows ──
+  function drawZoneGlows(){
+    // Zone 2 blue glow
+    drawGlow(W*0.29,H*0.45,80,'rgba(50,130,255,0.06)');
+    // Zone 3 gold glow + checkmark
+    drawGlow(W*0.45,H*0.45,65,'rgba(255,195,50,0.12)');
+    drawCheckmark(W*0.45,H*0.45);
+    // Zone 4 green glow
+    drawGlow(W*0.60,H*0.45,60,'rgba(60,225,130,0.06)');
+    // Zone 5 purple glow
+    drawGlow(W*0.82,H*0.45,90,'rgba(150,75,230,0.05)');
+  }
+
+  function drawGlow(x,y,r,col){
+    var g=ctx.createRadialGradient(x,y,0,x,y,r);
+    g.addColorStop(0,col);g.addColorStop(1,'rgba(0,0,0,0)');
+    ctx.fillStyle=g;ctx.fillRect(x-r,y-r,r*2,r*2);
+  }
+
+  function drawCheckmark(cx,cy){
+    ctx.save();
+    ctx.strokeStyle='rgba(255,210,80,0.55)';ctx.lineWidth=2;
+    ctx.beginPath();ctx.arc(cx,cy,16,0,Math.PI*2);ctx.stroke();
+    ctx.strokeStyle='rgba(255,210,80,0.75)';ctx.lineWidth=2.5;
+    ctx.lineCap='round';ctx.lineJoin='round';
+    ctx.beginPath();ctx.moveTo(cx-7,cy);ctx.lineTo(cx-2,cy+6);ctx.lineTo(cx+8,cy-6);ctx.stroke();
+    ctx.restore();
+  }
+
+  // ── Annotation boxes ──
+  function drawAnnotBoxes(){
+    for(var i=0;i<annotBoxes.length;i++){
+      var b=annotBoxes[i];
+      var pulse=1+Math.sin(time*b.pf+b.ph)*0.25;
+      var a=b.a*pulse;
+
+      // Box stroke
+      ctx.strokeStyle='rgba(80,170,255,'+a+')';
+      ctx.lineWidth=1.2;
+      ctx.strokeRect(b.x,b.y,b.w,b.h);
+
+      // Fill
+      ctx.fillStyle='rgba(50,140,255,'+(a*0.06)+')';
+      ctx.fillRect(b.x,b.y,b.w,b.h);
+
+      // Corner dots
+      var cs=3;
+      ctx.fillStyle='rgba(100,190,255,'+a+')';
+      ctx.fillRect(b.x-cs/2,b.y-cs/2,cs,cs);
+      ctx.fillRect(b.x+b.w-cs/2,b.y-cs/2,cs,cs);
+      ctx.fillRect(b.x-cs/2,b.y+b.h-cs/2,cs,cs);
+      ctx.fillRect(b.x+b.w-cs/2,b.y+b.h-cs/2,cs,cs);
+
+      // Label
+      ctx.font='500 8px Outfit';
+      ctx.fillStyle='rgba(100,190,255,'+(a*0.9)+')';
+      ctx.fillText(b.label,b.x+2,b.y-4);
+      // Confidence
+      ctx.fillStyle='rgba(100,190,255,'+(a*0.7)+')';
+      ctx.textAlign='right';
+      ctx.fillText(b.conf,b.x+b.w,b.y-4);
+      ctx.textAlign='left';
     }
+  }
 
-    // ── Zone glows ──
-    function drawZoneGlows() {
-      // Gold zone glow (center)
-      var gx = W * 0.40, gy = H * 0.45;
-      var g1 = ctx.createRadialGradient(gx, gy, 0, gx, gy, 70);
-      g1.addColorStop(0, 'rgba(255,200,60,0.15)');
-      g1.addColorStop(0.5, 'rgba(255,180,40,0.04)');
-      g1.addColorStop(1, 'rgba(0,0,0,0)');
-      ctx.fillStyle = g1;
-      ctx.fillRect(gx - 90, gy - 90, 180, 180);
-
-      // Green zone glow
-      var gx2 = W * 0.58, gy2 = H * 0.45;
-      var g2 = ctx.createRadialGradient(gx2, gy2, 0, gx2, gy2, 60);
-      g2.addColorStop(0, 'rgba(70,225,130,0.08)');
-      g2.addColorStop(1, 'rgba(0,0,0,0)');
-      ctx.fillStyle = g2;
-      ctx.fillRect(gx2 - 80, gy2 - 80, 160, 160);
-
-      // Purple zone glow
-      var gx3 = W * 0.78, gy3 = H * 0.45;
-      var g3 = ctx.createRadialGradient(gx3, gy3, 0, gx3, gy3, 80);
-      g3.addColorStop(0, 'rgba(150,75,230,0.08)');
-      g3.addColorStop(1, 'rgba(0,0,0,0)');
-      ctx.fillStyle = g3;
-      ctx.fillRect(gx3 - 100, gy3 - 100, 200, 200);
+  // ── Grid connections ──
+  function drawGridConns(){
+    ctx.lineWidth=0.4;
+    for(var i=0;i<gridNodes.length;i++){
+      var a=gridNodes[i];
+      var pa=1+Math.sin(time*a.pf+a.ph)*0.3;
+      for(var j=i+1;j<Math.min(i+6,gridNodes.length);j++){
+        var b=gridNodes[j];
+        var dx=a.x-b.x,dy=a.y-b.y;
+        var d=Math.sqrt(dx*dx+dy*dy);
+        if(d<65){
+          var f=1-d/65;
+          ctx.beginPath();ctx.moveTo(a.x,a.y);ctx.lineTo(b.x,b.y);
+          ctx.strokeStyle='rgba(70,230,140,'+(f*0.12*pa)+')';ctx.stroke();
+        }
+      }
     }
+  }
 
-    // ── Checkmark ──
-    function drawCheckmark() {
-      var cx = W * 0.40, cy = H * 0.45;
-      ctx.save();
-      // Circle
-      ctx.strokeStyle = 'rgba(255,210,80,0.6)';
-      ctx.lineWidth = 2;
+  function drawGridNodes(){
+    for(var i=0;i<gridNodes.length;i++){
+      var n=gridNodes[i];
+      var pulse=1+Math.sin(time*n.pf+n.ph)*0.35;
+      var sz=n.sz*pulse;
+      var a=n.a*pulse;
+      ctx.beginPath();ctx.arc(n.x,n.y,sz*3.5,0,Math.PI*2);
+      ctx.fillStyle='rgba(60,225,130,'+(a*0.1)+')';ctx.fill();
+      ctx.beginPath();ctx.arc(n.x,n.y,sz,0,Math.PI*2);
+      ctx.fillStyle='rgba(80,240,150,'+a+')';ctx.fill();
+    }
+  }
+
+  // ── Purple streams ──
+  function drawStreams(){
+    var sx=W*0.68,ex=W;
+    for(var i=0;i<streams.length;i++){
+      var s=streams[i];
+      var w1=Math.sin(time*0.0007+s.ph)*30;
+      var w2=Math.cos(time*0.0004+s.ph*0.7)*18;
+      ctx.beginPath();ctx.moveTo(sx,s.baseY+w1);
+      for(var x=sx;x<=ex;x+=5){
+        var p=(x-sx)/(ex-sx);
+        var yw=Math.sin(p*3.14+time*0.0008+s.ph*0.5)*(20+p*45);
+        ctx.lineTo(x,s.baseY+w1+yw+w2*p);
+      }
+      ctx.strokeStyle=getZoneColor(x,s.a);ctx.lineWidth=0.8;ctx.stroke();
+    }
+  }
+
+  // ── Particles ──
+  function drawParticles(){
+    for(var i=0;i<particles.length;i++){
+      var p=particles[i];
+
+      // Move right (data flow)
+      p.x+=p.sp*dt*0.05;
+      // Drift Y
+      p.y=p.baseY+Math.sin(time*p.dF+p.ph)*p.dA;
+      // Wrap
+      if(p.x>W+10) p.x=-10;
+
+      var pulse=1+Math.sin(time*0.002+p.ph)*0.2;
+      var sz=p.sz*pulse;
+      var a=p.a*(0.6+Math.sin(time*0.0015+p.ph*1.5)*0.4);
+
+      // Glow
+      if(sz>0.7){
+        ctx.beginPath();ctx.arc(p.x,p.y,sz*2.8,0,Math.PI*2);
+        ctx.fillStyle=getZoneColor(p.x,a*0.07);ctx.fill();
+      }
+      // Core
+      ctx.beginPath();ctx.arc(p.x,p.y,sz,0,Math.PI*2);
+      ctx.fillStyle=getZoneColor(p.x,a);ctx.fill();
+    }
+  }
+
+  // ── Data flow arrows (subtle horizontal lines moving right) ──
+  var flowLines=[];
+  function initFlowLines(){
+    flowLines=[];
+    for(var i=0;i<40;i++){
+      flowLines.push({
+        x:rand(0,W),y:rand(H*0.15,H*0.85),
+        len:rand(20,60),a:rand(0.02,0.06),
+        sp:rand(0.3,0.8),ph:rand(0,6.28)
+      });
+    }
+  }
+
+  function drawFlowLines(){
+    for(var i=0;i<flowLines.length;i++){
+      var f=flowLines[i];
+      f.x+=f.sp;
+      if(f.x>W+f.len) f.x=-f.len;
+      var waveY=Math.sin(time*0.001+f.ph)*12;
       ctx.beginPath();
-      ctx.arc(cx, cy, 16, 0, Math.PI * 2);
-      ctx.stroke();
-      // Check
-      ctx.strokeStyle = 'rgba(255,210,80,0.8)';
-      ctx.lineWidth = 2.5;
-      ctx.lineCap = 'round';
-      ctx.lineJoin = 'round';
-      ctx.beginPath();
-      ctx.moveTo(cx - 7, cy);
-      ctx.lineTo(cx - 2, cy + 6);
-      ctx.lineTo(cx + 8, cy - 6);
-      ctx.stroke();
-      ctx.restore();
+      ctx.moveTo(f.x,f.y+waveY);
+      ctx.lineTo(f.x+f.len,f.y+waveY+Math.sin(time*0.0005+f.ph)*5);
+      ctx.strokeStyle=getZoneColor(f.x,f.a);ctx.lineWidth=0.6;ctx.stroke();
     }
+  }
 
-    // ── Purple streams ──
-    function drawStreams() {
-      var sx = W * 0.62, ex = W;
-      var count = 80;
-      for (var i = 0; i < count; i++) {
-        var by = (i / count) * H;
-        var w1 = Math.sin(time * 0.0007 + i * 0.28) * 30;
-        var w2 = Math.cos(time * 0.0004 + i * 0.18) * 18;
-        var a = 0.02 + Math.sin(time * 0.0008 + i * 0.15) * 0.012;
+  // ═══════════ ANIMATION LOOP ═══════════
+  var lastT=0,dt=0;
+  function loop(ts){
+    if(!lastT)lastT=ts;
+    dt=Math.min(ts-lastT,50);lastT=ts;time+=dt;
 
-        ctx.beginPath();
-        ctx.moveTo(sx, by + w1);
-        for (var x = sx; x <= ex; x += 6) {
-          var p = (x - sx) / (ex - sx);
-          var yw = Math.sin(p * 3.14 + time * 0.0008 + i * 0.25) * (20 + p * 40);
-          ctx.lineTo(x, by + w1 + yw + w2 * p);
-        }
-        ctx.strokeStyle = zoneColor(x, a);
-        ctx.lineWidth = 0.9;
-        ctx.stroke();
-      }
-    }
+    ctx.clearRect(0,0,W,H);
+    drawBg();
+    drawZoneGlows();
+    drawAnnotBoxes();
+    drawGridConns();
+    drawGridNodes();
+    drawStreams();
+    drawFlowLines();
+    drawParticles();
 
-    // ── Grid connections ──
-    function drawGridConns() {
-      ctx.lineWidth = 0.5;
-      for (var i = 0; i < gridNodes.length; i++) {
-        var a = gridNodes[i];
-        var pa = 1 + Math.sin(time * a.pf + a.ph) * 0.3;
-        for (var j = i + 1; j < Math.min(i + 6, gridNodes.length); j++) {
-          var b = gridNodes[j];
-          var dx = a.x - b.x, dy = a.y - b.y;
-          var d = Math.sqrt(dx * dx + dy * dy);
-          if (d < 70) {
-            var f = 1 - d / 70;
-            ctx.beginPath();
-            ctx.moveTo(a.x, a.y);
-            ctx.lineTo(b.x, b.y);
-            ctx.strokeStyle = 'rgba(60,150,255,' + (f * 0.12 * pa) + ')';
-            ctx.stroke();
-          }
-        }
-      }
-    }
+    requestAnimationFrame(loop);
+  }
 
-    // ── Grid nodes ──
-    function drawGridNodes() {
-      for (var i = 0; i < gridNodes.length; i++) {
-        var n = gridNodes[i];
-        var pulse = 1 + Math.sin(time * n.pf + n.ph) * 0.35;
-        var sz = n.sz * pulse;
-        var a = n.a * pulse;
-        // Glow
-        ctx.beginPath();
-        ctx.arc(n.x, n.y, sz * 3.5, 0, Math.PI * 2);
-        ctx.fillStyle = 'rgba(50,140,255,' + (a * 0.1) + ')';
-        ctx.fill();
-        // Core
-        ctx.beginPath();
-        ctx.arc(n.x, n.y, sz, 0, Math.PI * 2);
-        ctx.fillStyle = 'rgba(80,170,255,' + a + ')';
-        ctx.fill();
-      }
-    }
+  // ═══════════ INIT ═══════════
+  function start(){
+    resize();initParticles();initAnnotBoxes();initGrid();initStreams();initFlowLines();
+    requestAnimationFrame(loop);
+  }
+  window.addEventListener('resize',function(){resize();initAnnotBoxes();initGrid()});
+  if(document.readyState==='complete')start();
+  else window.addEventListener('load',start);
+})();
+</script>
 
-    // ── Particles ──
-    function drawParticles() {
-      for (var i = 0; i < particles.length; i++) {
-        var p = particles[i];
-        p.x += p.sp * dt * 0.05;
-        p.y = p.baseY + Math.sin(time * p.dF + p.ph) * p.dA;
-        if (p.x > W + 10) p.x = -10;
-
-        var pulse = 1 + Math.sin(time * 0.002 + p.ph) * 0.2;
-        var sz = p.sz * pulse;
-        var a = p.a * (0.6 + Math.sin(time * 0.0015 + p.ph * 1.5) * 0.4);
-
-        // Glow
-        if (sz > 0.8) {
-          ctx.beginPath();
-          ctx.arc(p.x, p.y, sz * 2.8, 0, Math.PI * 2);
-          ctx.fillStyle = zoneColor(p.x, a * 0.08);
-          ctx.fill();
-        }
-        // Core
-        ctx.beginPath();
-        ctx.arc(p.x, p.y, sz, 0, Math.PI * 2);
-        ctx.fillStyle = zoneColor(p.x, a);
-        ctx.fill();
-      }
-    }
-
-    // ── INIT ──
-    function start() {
-      resize();
-      initParticles();
-      initGrid();
-      requestAnimationFrame(loop);
-    }
-    window.addEventListener('resize', function() { resize(); initGrid(); });
-    if (document.readyState === 'complete') start();
-    else window.addEventListener('load', start);
-  })();
-  </script>
 </body>
 </html>
