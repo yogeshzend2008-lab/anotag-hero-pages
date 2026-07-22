@@ -153,18 +153,50 @@
   function lerp(a,b,t){return a+(b-a)*t}
   function clamp(v,lo,hi){return Math.max(lo,Math.min(hi,v))}
 
-  function shapeMask(px, py) {
+  // ═══════════════════════════════════════════
+  // PER-ZONE ELLIPSE MASKS
+  // Each zone has its own ellipse with independent
+  // center, width, height, and edge falloff
+  // ═══════════════════════════════════════════
+  var ZONE_ELLIPSES = [
+    { cx: 0.10, cy: 0.48, rx: 0.10, ry: 0.35 },  // Zone 1: RAW DATA — small, left
+    { cx: 0.29, cy: 0.46, rx: 0.10, ry: 0.38 },  // Zone 2: ANNOTATION — medium, blue
+    { cx: 0.45, cy: 0.46, rx: 0.08, ry: 0.30 },  // Zone 3: QUALITY CHECK — compact, gold
+    { cx: 0.60, cy: 0.47, rx: 0.09, ry: 0.36 },  // Zone 4: AI READY — medium, green
+    { cx: 0.82, cy: 0.48, rx: 0.14, ry: 0.40 }   // Zone 5: REAL-WORLD IMPACT — wide, purple
+  ];
+
+  function ellipseMask(px, py, zoneIdx) {
+    var e = ZONE_ELLIPSES[zoneIdx];
     var nx = px / W;
     var ny = py / H;
-    var cx = 0.50;
-    var cy = 0.48;
-    var dx = (nx - cx) / 0.48;
-    var dy = (ny - cy) / 0.38;
+    var dx = (nx - e.cx) / e.rx;
+    var dy = (ny - e.cy) / e.ry;
     var dist = Math.sqrt(dx * dx + dy * dy);
     if (dist >= 1.0) return 0;
-    if (dist <= 0.7) return 1;
-    var t = (dist - 0.7) / 0.3;
+    if (dist <= 0.65) return 1;
+    var t = (dist - 0.65) / 0.35;
     return 1 - t * t * (3 - 2 * t);
+  }
+
+  // Combined mask: returns the max density across all zone ellipses
+  function shapeMask(px, py) {
+    var maxMask = 0;
+    for (var i = 0; i < 5; i++) {
+      var m = ellipseMask(px, py, i);
+      if (m > maxMask) maxMask = m;
+    }
+    return maxMask;
+  }
+
+  // Returns which zone ellipse a point is strongest in
+  function getZoneMask(px, py) {
+    var best = 0, bestMask = 0;
+    for (var i = 0; i < 5; i++) {
+      var m = ellipseMask(px, py, i);
+      if (m > bestMask) { bestMask = m; best = i; }
+    }
+    return { zone: best, mask: bestMask };
   }
 
   function getZoneColor(x, a) {
@@ -180,14 +212,20 @@
     var b = Math.round(lerp(c0[2], c1[2], t));
     return 'rgba(' + r + ',' + g + ',' + b + ',' + (a !== undefined ? a : 1) + ')';
   }
-
   function mkParticle() {
-    var x, y, mask;
+    var x, y, mask, zone;
+    // Pick a random zone, then spawn within its ellipse
+    zone = Math.floor(Math.random() * 5);
+    var e = ZONE_ELLIPSES[zone];
     do {
-      x = rand(0, W);
-      y = rand(0, H);
-      mask = shapeMask(x, y);
+      // Random point inside the ellipse
+      var angle = rand(0, Math.PI * 2);
+      var r = Math.sqrt(Math.random()); // sqrt for uniform distribution
+      x = (e.cx + Math.cos(angle) * r * e.rx) * W;
+      y = (e.cy + Math.sin(angle) * r * e.ry) * H;
+      mask = ellipseMask(x, y, zone);
     } while (Math.random() > mask);
+
     return {
       x: x, y: y, baseY: y,
       sz: rand(0.3, 2.5),
@@ -195,7 +233,8 @@
       sp: rand(0.08, 0.4),
       ph: rand(0, 6.28),
       dA: rand(3, 20),
-      dF: rand(0.0003, 0.0012)
+      dF: rand(0.0003, 0.0012),
+      zone: zone
     };
   }
 
@@ -315,7 +354,7 @@
     for (var i = 0; i < annotBoxes.length; i++) {
       var b = annotBoxes[i];
       var pulse = 1 + Math.sin(time * b.pf + b.ph) * 0.25;
-      var a = b.a * pulse * shapeMask(b.x + b.w / 2, b.y + b.h / 2);
+      var a = b.a * pulse * ellipseMask(b.x + b.w / 2, b.y + b.h / 2, 1);
       if (a < 0.01) continue;
       ctx.strokeStyle = 'rgba(80,170,255,' + a + ')';
       ctx.lineWidth = 1.2;
@@ -349,7 +388,7 @@
         var d = Math.sqrt(dx * dx + dy * dy);
         if (d < 65) {
           var f = 1 - d / 65;
-          var mask = shapeMask((a.x + b.x) / 2, (a.y + b.y) / 2);
+          var mask = ellipseMask((a.x + b.x) / 2, (a.y + b.y) / 2, 3);
           ctx.beginPath();
           ctx.moveTo(a.x, a.y);
           ctx.lineTo(b.x, b.y);
@@ -365,7 +404,7 @@
       var n = gridNodes[i];
       var pulse = 1 + Math.sin(time * n.pf + n.ph) * 0.35;
       var sz = n.sz * pulse;
-      var a = n.a * pulse * shapeMask(n.x, n.y);
+      var a = n.a * pulse * ellipseMask(n.x, n.y, 3);
       if (a < 0.01) continue;
       ctx.beginPath();
       ctx.arc(n.x, n.y, sz * 3.5, 0, Math.PI * 2);
@@ -382,7 +421,7 @@
     var sx = W * 0.68, ex = W;
     for (var i = 0; i < streams.length; i++) {
       var s = streams[i];
-      var mask = shapeMask(W * 0.80, s.baseY);
+      var mask = ellipseMask(W * 0.80, s.baseY, 4);
       if (mask < 0.01) continue;
       var w1 = Math.sin(time * 0.0007 + s.ph) * 30;
       var w2 = Math.cos(time * 0.0004 + s.ph * 0.7) * 18;
@@ -422,7 +461,7 @@
       p.x += p.sp * dt * 0.05;
       p.y = p.baseY + Math.sin(time * p.dF + p.ph) * p.dA;
       if (p.x > W + 10) p.x = -10;
-      var mask = shapeMask(p.x, p.y);
+      var mask = ellipseMask(p.x, p.y, p.zone);
       if (mask < 0.01) continue;
       var pulse = 1 + Math.sin(time * 0.002 + p.ph) * 0.2;
       var sz = p.sz * pulse;
