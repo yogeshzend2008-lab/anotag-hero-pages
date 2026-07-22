@@ -7,7 +7,6 @@
   <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@200..800&display=swap" rel="stylesheet">
   <style>
     * { margin: 0; padding: 0; box-sizing: border-box; }
-
     body {
       font-family: 'Outfit', system-ui, sans-serif;
       background: #000;
@@ -16,7 +15,6 @@
       width: 100vw;
       height: 100vh;
     }
-
     .hero {
       position: relative;
       width: 100%;
@@ -25,8 +23,6 @@
       display: flex;
       overflow: hidden;
     }
-
-    /* ── LEFT TEXT ── */
     .hero-left {
       position: relative;
       z-index: 10;
@@ -36,18 +32,15 @@
       justify-content: center;
       padding: 0 0 0 5.5%;
     }
-
     .eyebrow-badge {
       display: inline-flex;
       align-items: center;
-      gap: 0;
       border: 1px solid rgba(255,255,255,0.12);
       border-radius: 4px;
       padding: 6px 14px;
       margin-bottom: 2rem;
       width: fit-content;
     }
-
     .eyebrow-badge span {
       font-size: 10.5px;
       font-weight: 500;
@@ -55,7 +48,6 @@
       text-transform: uppercase;
       color: #888;
     }
-
     .headline {
       font-size: clamp(40px, 4.8vw, 62px);
       font-weight: 600;
@@ -64,13 +56,10 @@
       color: #fff;
       margin-bottom: 1.5rem;
     }
-
     .headline em {
       font-style: italic;
       font-weight: 600;
-      color: #fff;
     }
-
     .description {
       font-size: 16.5px;
       color: #888;
@@ -78,13 +67,7 @@
       max-width: 420px;
       margin-bottom: 2.2rem;
     }
-
-    .cta-row {
-      display: flex;
-      gap: 16px;
-      align-items: center;
-    }
-
+    .cta-row { display: flex; gap: 16px; align-items: center; }
     .cta {
       display: inline-flex;
       align-items: center;
@@ -97,43 +80,19 @@
       text-decoration: none;
       cursor: pointer;
       transition: all 0.2s;
-    }
-
-    .cta-outlined {
       background: transparent;
       color: #fff;
       border: 1px solid rgba(255,255,255,0.25);
     }
+    .cta:hover { border-color: #fff; background: rgba(255,255,255,0.04); }
+    .cta svg { width: 14px; height: 14px; }
 
-    .cta-outlined:hover {
-      border-color: #fff;
-      background: rgba(255,255,255,0.04);
-    }
+    .hero-right { position: relative; flex: 1; overflow: hidden; }
+    #particleCanvas { position: absolute; top: 0; left: 0; width: 100%; height: 100%; }
 
-    .cta svg {
-      width: 14px;
-      height: 14px;
-    }
-
-    /* ── RIGHT ANIMATION ── */
-    .hero-right {
-      position: relative;
-      flex: 1;
-      overflow: hidden;
-    }
-
-    #particleCanvas {
-      position: absolute;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-    }
-
-    /* ── STAGE LABELS (TOP) ── */
     .stage-bar {
       position: absolute;
-      top: 8%;
+      top: 7%;
       left: 0;
       right: 0;
       display: flex;
@@ -143,62 +102,14 @@
       pointer-events: none;
       padding: 0 3% 0 2%;
     }
+    .stage-item { display: flex; align-items: center; flex-shrink: 0; }
+    .stage-text { display: flex; flex-direction: column; align-items: center; text-align: center; min-width: 90px; }
+    .stage-name { font-size: 11px; font-weight: 600; letter-spacing: 0.1em; text-transform: uppercase; color: #fff; white-space: nowrap; }
+    .stage-sub { font-size: 9.5px; font-weight: 400; color: rgba(255,255,255,0.5); margin-top: 2px; }
+    .stage-arrow { width: 16px; height: 16px; margin: 0 12px; flex-shrink: 0; opacity: 0.25; }
+    .stage-col { display: flex; flex-direction: column; align-items: center; }
+    .stage-node { width: 6px; height: 6px; border-radius: 50%; background: #fff; box-shadow: 0 0 8px rgba(255,255,255,0.5); margin-top: 8px; }
 
-    .stage-item {
-      display: flex;
-      align-items: center;
-      gap: 0;
-      flex-shrink: 0;
-    }
-
-    .stage-text {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      text-align: center;
-      min-width: 90px;
-    }
-
-    .stage-name {
-      font-size: 11px;
-      font-weight: 600;
-      letter-spacing: 0.1em;
-      text-transform: uppercase;
-      color: #fff;
-      white-space: nowrap;
-    }
-
-    .stage-sub {
-      font-size: 9.5px;
-      font-weight: 400;
-      color: rgba(255,255,255,0.5);
-      margin-top: 2px;
-    }
-
-    .stage-arrow {
-      width: 16px;
-      height: 16px;
-      margin: 0 12px;
-      flex-shrink: 0;
-      opacity: 0.25;
-    }
-
-    .stage-node {
-      width: 6px;
-      height: 6px;
-      border-radius: 50%;
-      background: #fff;
-      box-shadow: 0 0 8px rgba(255,255,255,0.5);
-      margin-top: 8px;
-    }
-
-    .stage-col {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-    }
-
-    /* ── OUTCOME ICONS (RIGHT) ── */
     .outcome-col {
       position: absolute;
       right: 2.5%;
@@ -210,38 +121,15 @@
       z-index: 10;
       pointer-events: none;
     }
-
-    .outcome-item {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      opacity: 0;
-      animation: fadeIn 0.5s ease forwards;
-    }
-
+    .outcome-item { display: flex; align-items: center; gap: 10px; opacity: 0; animation: fadeIn 0.5s ease forwards; }
     .outcome-item:nth-child(1) { animation-delay: 0.5s; }
     .outcome-item:nth-child(2) { animation-delay: 0.8s; }
     .outcome-item:nth-child(3) { animation-delay: 1.1s; }
     .outcome-item:nth-child(4) { animation-delay: 1.4s; }
-
     @keyframes fadeIn { to { opacity: 0.55; } }
+    .outcome-icon { width: 26px; height: 26px; flex-shrink: 0; color: #fff; }
+    .outcome-label { font-size: 11px; font-weight: 400; color: rgba(255,255,255,0.65); line-height: 1.35; white-space: nowrap; }
 
-    .outcome-icon {
-      width: 26px;
-      height: 26px;
-      flex-shrink: 0;
-      color: #fff;
-    }
-
-    .outcome-label {
-      font-size: 11px;
-      font-weight: 400;
-      color: rgba(255,255,255,0.65);
-      line-height: 1.35;
-      white-space: nowrap;
-    }
-
-    /* ── BADGE (BOTTOM CENTER) ── */
     .badge {
       position: absolute;
       bottom: 10%;
@@ -251,35 +139,17 @@
       align-items: center;
       gap: 10px;
       padding: 10px 22px;
-      background: rgba(18, 20, 26, 0.7);
+      background: rgba(18,20,26,0.7);
       backdrop-filter: blur(16px);
       border: 1px solid rgba(255,255,255,0.06);
       border-radius: 100px;
       z-index: 10;
       pointer-events: none;
     }
+    .badge-dot { width: 7px; height: 7px; border-radius: 50%; background: #22c55e; box-shadow: 0 0 8px rgba(34,197,94,0.5); }
+    .badge-label { font-size: 13px; font-weight: 500; color: #fff; letter-spacing: 0.02em; }
 
-    .badge-dot {
-      width: 7px;
-      height: 7px;
-      border-radius: 50%;
-      background: #22c55e;
-      box-shadow: 0 0 8px rgba(34,197,94,0.5);
-    }
-
-    .badge-label {
-      font-size: 13px;
-      font-weight: 500;
-      color: #fff;
-      letter-spacing: 0.02em;
-    }
-
-    /* ── RESPONSIVE ── */
-    @media (max-width: 1100px) {
-      .outcome-col { display: none; }
-      .hero-left { flex: 0 0 48%; }
-    }
-
+    @media (max-width: 1100px) { .outcome-col { display: none; } .hero-left { flex: 0 0 48%; } }
     @media (max-width: 768px) {
       body { overflow: auto; }
       .hero { height: auto; min-height: 100vh; flex-direction: column; }
@@ -292,97 +162,35 @@
 </head>
 <body>
   <section class="hero">
-    <!-- LEFT TEXT -->
     <div class="hero-left">
-      <div class="eyebrow-badge">
-        <span>AI DATA THAT POWERS INTELLIGENCE</span>
-      </div>
+      <div class="eyebrow-badge"><span>AI DATA THAT POWERS INTELLIGENCE</span></div>
       <h1 class="headline">From Raw Data<br>to Real-World<br><em>AI Impact</em></h1>
       <p class="description">High-quality training data that helps AI models learn better, perform stronger, and scale faster across every industry.</p>
       <div class="cta-row">
-        <a href="https://www.anotag.com/book-a-demo" target="_top" class="cta cta-outlined">
-          Explore Solutions
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M7 17L17 7M17 7H7M17 7v10"/></svg>
-        </a>
-        <a href="https://www.anotag.com/data-annotation-services-ai" target="_top" class="cta cta-outlined">
-          Book a Consultation
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M7 17L17 7M17 7H7M17 7v10"/></svg>
-        </a>
+        <a href="https://www.anotag.com/book-a-demo" target="_top" class="cta">Explore Solutions <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M7 17L17 7M17 7H7M17 7v10"/></svg></a>
+        <a href="https://www.anotag.com/data-annotation-services-ai" target="_top" class="cta">Book a Consultation <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M7 17L17 7M17 7H7M17 7v10"/></svg></a>
       </div>
     </div>
-
-    <!-- RIGHT ANIMATION -->
     <div class="hero-right">
       <canvas id="particleCanvas"></canvas>
-
-      <!-- Stage Labels -->
       <div class="stage-bar">
-        <div class="stage-item">
-          <div class="stage-col">
-            <span class="stage-name">RAW DATA</span>
-            <span class="stage-sub">Unstructured</span>
-            <div class="stage-node"></div>
-          </div>
-        </div>
+        <div class="stage-item"><div class="stage-col"><span class="stage-name">RAW DATA</span><span class="stage-sub">Unstructured</span><div class="stage-node"></div></div></div>
         <svg class="stage-arrow" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M3 8h10M10 4l4 4-4 4"/></svg>
-        <div class="stage-item">
-          <div class="stage-col">
-            <span class="stage-name">ANNOTATION</span>
-            <span class="stage-sub">Understood</span>
-            <div class="stage-node"></div>
-          </div>
-        </div>
+        <div class="stage-item"><div class="stage-col"><span class="stage-name">ANNOTATION</span><span class="stage-sub">Understood</span><div class="stage-node"></div></div></div>
         <svg class="stage-arrow" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M3 8h10M10 4l4 4-4 4"/></svg>
-        <div class="stage-item">
-          <div class="stage-col">
-            <span class="stage-name">QUALITY CHECK</span>
-            <span class="stage-sub">Validated</span>
-            <div class="stage-node"></div>
-          </div>
-        </div>
+        <div class="stage-item"><div class="stage-col"><span class="stage-name">QUALITY CHECK</span><span class="stage-sub">Validated</span><div class="stage-node"></div></div></div>
         <svg class="stage-arrow" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M3 8h10M10 4l4 4-4 4"/></svg>
-        <div class="stage-item">
-          <div class="stage-col">
-            <span class="stage-name">AI READY</span>
-            <span class="stage-sub">Structured</span>
-            <div class="stage-node"></div>
-          </div>
-        </div>
+        <div class="stage-item"><div class="stage-col"><span class="stage-name">AI READY</span><span class="stage-sub">Structured</span><div class="stage-node"></div></div></div>
         <svg class="stage-arrow" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M3 8h10M10 4l4 4-4 4"/></svg>
-        <div class="stage-item">
-          <div class="stage-col">
-            <span class="stage-name">REAL-WORLD IMPACT</span>
-            <span class="stage-sub">Intelligence in Action</span>
-            <div class="stage-node"></div>
-          </div>
-        </div>
+        <div class="stage-item"><div class="stage-col"><span class="stage-name">REAL-WORLD IMPACT</span><span class="stage-sub">Intelligence in Action</span><div class="stage-node"></div></div></div>
       </div>
-
-      <!-- Outcome Icons -->
       <div class="outcome-col">
-        <div class="outcome-item">
-          <svg class="outcome-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M3 3v18h18"/><path d="M7 16l4-5 4 3 5-7"/></svg>
-          <span class="outcome-label">Smarter<br>Decisions</span>
-        </div>
-        <div class="outcome-item">
-          <svg class="outcome-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>
-          <span class="outcome-label">AI That<br>Performs</span>
-        </div>
-        <div class="outcome-item">
-          <svg class="outcome-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="12" r="3"/><path d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"/></svg>
-          <span class="outcome-label">Operational<br>Efficiency</span>
-        </div>
-        <div class="outcome-item">
-          <svg class="outcome-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M12 2L2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5"/><path d="M2 12l10 5 10-5"/></svg>
-          <span class="outcome-label">Real Business<br>Impact</span>
-        </div>
+        <div class="outcome-item"><svg class="outcome-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M3 3v18h18"/><path d="M7 16l4-5 4 3 5-7"/></svg><span class="outcome-label">Smarter<br>Decisions</span></div>
+        <div class="outcome-item"><svg class="outcome-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg><span class="outcome-label">AI That<br>Performs</span></div>
+        <div class="outcome-item"><svg class="outcome-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="12" r="3"/><path d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"/></svg><span class="outcome-label">Operational<br>Efficiency</span></div>
+        <div class="outcome-item"><svg class="outcome-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M12 2L2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5"/><path d="M2 12l10 5 10-5"/></svg><span class="outcome-label">Real Business<br>Impact</span></div>
       </div>
-
-      <!-- Badge -->
-      <div class="badge">
-        <div class="badge-dot"></div>
-        <span class="badge-label">Living Dataset™ in Action</span>
-      </div>
+      <div class="badge"><div class="badge-dot"></div><span class="badge-label">Living Dataset™ in Action</span></div>
     </div>
   </section>
 
@@ -391,25 +199,26 @@
     var canvas = document.getElementById('particleCanvas');
     var ctx = canvas.getContext('2d');
     var W, H, dpr;
+    var time = 0;
+
+    var PARTICLE_COUNT = 8000;
     var particles = [];
     var gridNodes = [];
-    var time = 0;
-    var PARTICLE_COUNT = 4000;
 
-    // Zone color palettes (RGB)
-    var ZONES = [
-      { name: 'raw',       colors: [{r:200,g:215,b:255}, {r:160,g:190,b:255}] },
-      { name: 'annotate',  colors: [{r:40,g:120,b:255},  {r:60,g:160,b:255}] },
-      { name: 'quality',   colors: [{r:255,g:190,b:40},  {r:255,g:210,b:80}] },
-      { name: 'aiready',   colors: [{r:60,g:220,b:120},  {r:80,g:240,b:140}] },
-      { name: 'impact',    colors: [{r:140,g:60,b:220},  {r:170,g:90,b:255}] }
+    var ZONE_W = [0.20, 0.20, 0.18, 0.18, 0.24];
+    var ZONE_COLORS = [
+      [200,220,255],
+      [50,130,255],
+      [255,195,50],
+      [70,225,130],
+      [150,75,230]
     ];
 
     function resize() {
       dpr = window.devicePixelRatio || 1;
-      var rect = canvas.parentElement.getBoundingClientRect();
-      W = rect.width;
-      H = rect.height;
+      var r = canvas.parentElement.getBoundingClientRect();
+      W = r.width;
+      H = r.height;
       canvas.width = W * dpr;
       canvas.height = H * dpr;
       canvas.style.width = W + 'px';
@@ -421,241 +230,240 @@
     function lerp(a, b, t) { return a + (b - a) * t; }
     function clamp(v, lo, hi) { return Math.max(lo, Math.min(hi, v)); }
 
-    function getZoneIndex(x) {
+    function zoneOf(x) {
       var nx = clamp(x / W, 0, 0.999);
       return Math.floor(nx * 5);
     }
 
-    function getZoneColor(x, alpha) {
+    function zoneColor(x, a) {
       var nx = clamp(x / W, 0, 0.999);
       var zi = Math.floor(nx * 5);
-      var next = Math.min(4, zi + 1);
+      var nj = Math.min(4, zi + 1);
       var t = (nx * 5) % 1;
       t = t * t * (3 - 2 * t);
-      var c = ZONES[zi].colors[0];
-      var n = ZONES[next].colors[0];
-      var r = Math.round(lerp(c.r, n.r, t));
-      var g = Math.round(lerp(c.g, n.g, t));
-      var b = Math.round(lerp(c.b, n.b, t));
-      return 'rgba(' + r + ',' + g + ',' + b + ',' + (alpha || 1) + ')';
+      var c = ZONE_COLORS[zi], n = ZONE_COLORS[nj];
+      var r = Math.round(lerp(c[0], n[0], t));
+      var g = Math.round(lerp(c[1], n[1], t));
+      var b = Math.round(lerp(c[2], n[2], t));
+      return 'rgba(' + r + ',' + g + ',' + b + ',' + (a !== undefined ? a : 1) + ')';
     }
 
     // ── PARTICLES ──
-    function createParticle() {
-      var zone = Math.floor(Math.random() * 5);
-      var zoneW = W / 5;
-      var x = zone * zoneW + Math.random() * zoneW;
+    function mkParticle() {
+      var zi = Math.floor(Math.random() * 5);
+      var startX = 0;
+      for (var k = 0; k < zi; k++) startX += ZONE_W[k];
+      var x = (startX + Math.random() * ZONE_W[zi]) * W;
       var y = Math.random() * H;
       return {
-        x: x, y: y,
-        baseY: y,
-        size: rand(0.3, 2.2),
-        alpha: rand(0.08, 0.55),
-        speed: rand(0.08, 0.35),
-        phase: rand(0, Math.PI * 2),
-        driftAmp: rand(3, 18),
-        driftFreq: rand(0.0003, 0.001),
-        zone: zone,
-        // Connection line properties
-        hasNode: Math.random() < 0.008,
-        nodeSize: rand(2, 5),
-        nodeAlpha: rand(0.2, 0.6)
+        x: x, y: y, baseY: y,
+        sz: rand(0.4, 3.0),
+        a: rand(0.12, 0.65),
+        sp: rand(0.1, 0.45),
+        ph: rand(0, 6.28),
+        dA: rand(4, 22),
+        dF: rand(0.0003, 0.0012)
       };
     }
 
     function initParticles() {
       particles = [];
-      for (var i = 0; i < PARTICLE_COUNT; i++) {
-        particles.push(createParticle());
-      }
+      for (var i = 0; i < PARTICLE_COUNT; i++) particles.push(mkParticle());
     }
 
-    // ── GRID NODES (blue annotation zone) ──
-    function initGridNodes() {
+    // ── GRID NODES (Zone 2 — blue annotation) ──
+    function initGrid() {
       gridNodes = [];
-      var zoneStart = W * 0.18;
-      var zoneEnd = W * 0.42;
-      var cols = 12;
-      var rows = 8;
-      var spacingX = (zoneEnd - zoneStart) / cols;
-      var spacingY = H / rows;
+      var x0 = W * 0.17, x1 = W * 0.40;
+      var cols = 14, rows = 10;
+      var sx = (x1 - x0) / cols, sy = H / rows;
       for (var r = 0; r < rows; r++) {
         for (var c = 0; c < cols; c++) {
-          if (Math.random() < 0.45) {
+          if (Math.random() < 0.5) {
             gridNodes.push({
-              x: zoneStart + c * spacingX + rand(-8, 8),
-              y: r * spacingY + rand(-12, 12),
-              size: rand(2.5, 5),
-              alpha: rand(0.1, 0.35),
-              phase: rand(0, Math.PI * 2),
-              pulseSpeed: rand(0.001, 0.003)
+              x: x0 + c * sx + rand(-10, 10),
+              y: r * sy + rand(-15, 15),
+              sz: rand(2, 5.5),
+              a: rand(0.15, 0.45),
+              ph: rand(0, 6.28),
+              pf: rand(0.001, 0.003)
             });
           }
         }
       }
     }
 
-    // ── ANIMATION LOOP ──
-    var lastTime = 0;
-
-    function animate(ts) {
-      if (!lastTime) lastTime = ts;
-      var dt = Math.min(ts - lastTime, 50);
-      lastTime = ts;
+    // ── ANIMATION ──
+    var lastT = 0;
+    function loop(ts) {
+      if (!lastT) lastT = ts;
+      var dt = Math.min(ts - lastT, 50);
+      lastT = ts;
       time += dt;
 
       ctx.clearRect(0, 0, W, H);
-      drawBackground();
-      drawGridConnections();
+      drawBg();
+      drawStreams();
+      drawGridConns();
       drawGridNodes();
-      drawFlowStreams();
-      updateAndDrawParticles();
-      drawZoneGlow();
+      drawZoneGlows();
+      drawCheckmark();
+      drawParticles();
 
-      requestAnimationFrame(animate);
+      requestAnimationFrame(loop);
     }
 
-    function drawBackground() {
+    function drawBg() {
       ctx.fillStyle = '#000';
       ctx.fillRect(0, 0, W, H);
-      // Subtle radial glow center
-      var g = ctx.createRadialGradient(W * 0.42, H * 0.48, 0, W * 0.42, H * 0.48, W * 0.45);
-      g.addColorStop(0, 'rgba(255,255,255,0.018)');
+      // Subtle center glow
+      var g = ctx.createRadialGradient(W * 0.42, H * 0.46, 0, W * 0.42, H * 0.46, W * 0.4);
+      g.addColorStop(0, 'rgba(255,255,255,0.015)');
       g.addColorStop(1, 'rgba(0,0,0,0)');
       ctx.fillStyle = g;
       ctx.fillRect(0, 0, W, H);
     }
 
-    function drawZoneGlow() {
-      // Gold zone center glow
-      var gx = W * 0.42;
-      var gy = H * 0.46;
-      var g = ctx.createRadialGradient(gx, gy, 0, gx, gy, 60);
-      g.addColorStop(0, 'rgba(255,195,40,0.12)');
-      g.addColorStop(0.5, 'rgba(255,195,40,0.04)');
-      g.addColorStop(1, 'rgba(255,195,40,0)');
-      ctx.fillStyle = g;
-      ctx.fillRect(gx - 80, gy - 80, 160, 160);
+    // ── Zone glows ──
+    function drawZoneGlows() {
+      // Gold zone glow (center)
+      var gx = W * 0.40, gy = H * 0.45;
+      var g1 = ctx.createRadialGradient(gx, gy, 0, gx, gy, 70);
+      g1.addColorStop(0, 'rgba(255,200,60,0.15)');
+      g1.addColorStop(0.5, 'rgba(255,180,40,0.04)');
+      g1.addColorStop(1, 'rgba(0,0,0,0)');
+      ctx.fillStyle = g1;
+      ctx.fillRect(gx - 90, gy - 90, 180, 180);
 
-      // Draw checkmark
+      // Green zone glow
+      var gx2 = W * 0.58, gy2 = H * 0.45;
+      var g2 = ctx.createRadialGradient(gx2, gy2, 0, gx2, gy2, 60);
+      g2.addColorStop(0, 'rgba(70,225,130,0.08)');
+      g2.addColorStop(1, 'rgba(0,0,0,0)');
+      ctx.fillStyle = g2;
+      ctx.fillRect(gx2 - 80, gy2 - 80, 160, 160);
+
+      // Purple zone glow
+      var gx3 = W * 0.78, gy3 = H * 0.45;
+      var g3 = ctx.createRadialGradient(gx3, gy3, 0, gx3, gy3, 80);
+      g3.addColorStop(0, 'rgba(150,75,230,0.08)');
+      g3.addColorStop(1, 'rgba(0,0,0,0)');
+      ctx.fillStyle = g3;
+      ctx.fillRect(gx3 - 100, gy3 - 100, 200, 200);
+    }
+
+    // ── Checkmark ──
+    function drawCheckmark() {
+      var cx = W * 0.40, cy = H * 0.45;
       ctx.save();
-      ctx.strokeStyle = 'rgba(255,210,80,0.7)';
+      // Circle
+      ctx.strokeStyle = 'rgba(255,210,80,0.6)';
+      ctx.lineWidth = 2;
+      ctx.beginPath();
+      ctx.arc(cx, cy, 16, 0, Math.PI * 2);
+      ctx.stroke();
+      // Check
+      ctx.strokeStyle = 'rgba(255,210,80,0.8)';
       ctx.lineWidth = 2.5;
       ctx.lineCap = 'round';
       ctx.lineJoin = 'round';
       ctx.beginPath();
-      ctx.arc(gx, gy, 14, 0, Math.PI * 2);
-      ctx.stroke();
-      ctx.beginPath();
-      ctx.moveTo(gx - 6, gy);
-      ctx.lineTo(gx - 1, gy + 5);
-      ctx.lineTo(gx + 7, gy - 5);
+      ctx.moveTo(cx - 7, cy);
+      ctx.lineTo(cx - 2, cy + 6);
+      ctx.lineTo(cx + 8, cy - 6);
       ctx.stroke();
       ctx.restore();
     }
 
-    function drawFlowStreams() {
-      // Purple flowing streams on right side
-      var streamCount = 60;
-      var startX = W * 0.65;
-      var endX = W * 0.98;
-      for (var i = 0; i < streamCount; i++) {
-        var baseY = (i / streamCount) * H;
-        var wave = Math.sin(time * 0.0008 + i * 0.3) * 25;
-        var wave2 = Math.cos(time * 0.0005 + i * 0.15) * 15;
-        var alpha = 0.015 + Math.sin(time * 0.001 + i * 0.2) * 0.01;
+    // ── Purple streams ──
+    function drawStreams() {
+      var sx = W * 0.62, ex = W;
+      var count = 80;
+      for (var i = 0; i < count; i++) {
+        var by = (i / count) * H;
+        var w1 = Math.sin(time * 0.0007 + i * 0.28) * 30;
+        var w2 = Math.cos(time * 0.0004 + i * 0.18) * 18;
+        var a = 0.02 + Math.sin(time * 0.0008 + i * 0.15) * 0.012;
 
         ctx.beginPath();
-        ctx.moveTo(startX, baseY + wave);
-        for (var x = startX; x <= endX; x += 8) {
-          var progress = (x - startX) / (endX - startX);
-          var yWave = Math.sin(progress * Math.PI * 2 + time * 0.001 + i * 0.3) * (15 + progress * 30);
-          ctx.lineTo(x, baseY + wave + yWave + wave2 * progress);
+        ctx.moveTo(sx, by + w1);
+        for (var x = sx; x <= ex; x += 6) {
+          var p = (x - sx) / (ex - sx);
+          var yw = Math.sin(p * 3.14 + time * 0.0008 + i * 0.25) * (20 + p * 40);
+          ctx.lineTo(x, by + w1 + yw + w2 * p);
         }
-        ctx.strokeStyle = getZoneColor(x, alpha);
-        ctx.lineWidth = 0.8;
+        ctx.strokeStyle = zoneColor(x, a);
+        ctx.lineWidth = 0.9;
         ctx.stroke();
       }
     }
 
-    function drawGridConnections() {
-      ctx.lineWidth = 0.4;
+    // ── Grid connections ──
+    function drawGridConns() {
+      ctx.lineWidth = 0.5;
       for (var i = 0; i < gridNodes.length; i++) {
         var a = gridNodes[i];
-        var pulseA = 1 + Math.sin(time * a.pulseSpeed + a.phase) * 0.3;
-        for (var j = i + 1; j < Math.min(i + 8, gridNodes.length); j++) {
+        var pa = 1 + Math.sin(time * a.pf + a.ph) * 0.3;
+        for (var j = i + 1; j < Math.min(i + 6, gridNodes.length); j++) {
           var b = gridNodes[j];
-          var dx = a.x - b.x;
-          var dy = a.y - b.y;
-          var dist = Math.sqrt(dx * dx + dy * dy);
-          if (dist < 80) {
-            var fade = 1 - dist / 80;
+          var dx = a.x - b.x, dy = a.y - b.y;
+          var d = Math.sqrt(dx * dx + dy * dy);
+          if (d < 70) {
+            var f = 1 - d / 70;
             ctx.beginPath();
             ctx.moveTo(a.x, a.y);
             ctx.lineTo(b.x, b.y);
-            ctx.strokeStyle = 'rgba(50,140,255,' + (fade * 0.1 * pulseA) + ')';
+            ctx.strokeStyle = 'rgba(60,150,255,' + (f * 0.12 * pa) + ')';
             ctx.stroke();
           }
         }
       }
     }
 
+    // ── Grid nodes ──
     function drawGridNodes() {
       for (var i = 0; i < gridNodes.length; i++) {
         var n = gridNodes[i];
-        var pulse = 1 + Math.sin(time * n.pulseSpeed + n.phase) * 0.3;
-        var size = n.size * pulse;
-        var alpha = n.alpha * pulse;
-
-        // Outer glow
+        var pulse = 1 + Math.sin(time * n.pf + n.ph) * 0.35;
+        var sz = n.sz * pulse;
+        var a = n.a * pulse;
+        // Glow
         ctx.beginPath();
-        ctx.arc(n.x, n.y, size * 3, 0, Math.PI * 2);
-        ctx.fillStyle = 'rgba(50,140,255,' + (alpha * 0.08) + ')';
+        ctx.arc(n.x, n.y, sz * 3.5, 0, Math.PI * 2);
+        ctx.fillStyle = 'rgba(50,140,255,' + (a * 0.1) + ')';
         ctx.fill();
-
-        // Inner dot
+        // Core
         ctx.beginPath();
-        ctx.arc(n.x, n.y, size, 0, Math.PI * 2);
-        ctx.fillStyle = 'rgba(80,160,255,' + alpha + ')';
+        ctx.arc(n.x, n.y, sz, 0, Math.PI * 2);
+        ctx.fillStyle = 'rgba(80,170,255,' + a + ')';
         ctx.fill();
       }
     }
 
-    function updateAndDrawParticles() {
+    // ── Particles ──
+    function drawParticles() {
       for (var i = 0; i < particles.length; i++) {
         var p = particles[i];
+        p.x += p.sp * dt * 0.05;
+        p.y = p.baseY + Math.sin(time * p.dF + p.ph) * p.dA;
+        if (p.x > W + 10) p.x = -10;
 
-        // Move right
-        p.x += p.speed * dt * 0.05;
+        var pulse = 1 + Math.sin(time * 0.002 + p.ph) * 0.2;
+        var sz = p.sz * pulse;
+        var a = p.a * (0.6 + Math.sin(time * 0.0015 + p.ph * 1.5) * 0.4);
 
-        // Drift Y
-        var dy = Math.sin(time * p.driftFreq + p.phase) * p.driftAmp;
-        p.y = p.baseY + dy;
-
-        // Wrap
-        if (p.x > W + 10) {
-          p.x = -10;
-        }
-
-        // Pulse
-        var pulse = 1 + Math.sin(time * 0.002 + p.phase) * 0.2;
-        var size = p.size * pulse;
-        var alpha = p.alpha * (0.6 + Math.sin(time * 0.0015 + p.phase * 1.5) * 0.4);
-        var color = getZoneColor(p.x, alpha);
-
-        // Draw particle
-        ctx.beginPath();
-        ctx.arc(p.x, p.y, size, 0, Math.PI * 2);
-        ctx.fillStyle = color;
-        ctx.fill();
-
-        // Glow for larger particles
-        if (size > 1) {
+        // Glow
+        if (sz > 0.8) {
           ctx.beginPath();
-          ctx.arc(p.x, p.y, size * 2.5, 0, Math.PI * 2);
-          ctx.fillStyle = getZoneColor(p.x, alpha * 0.08);
+          ctx.arc(p.x, p.y, sz * 2.8, 0, Math.PI * 2);
+          ctx.fillStyle = zoneColor(p.x, a * 0.08);
           ctx.fill();
         }
+        // Core
+        ctx.beginPath();
+        ctx.arc(p.x, p.y, sz, 0, Math.PI * 2);
+        ctx.fillStyle = zoneColor(p.x, a);
+        ctx.fill();
       }
     }
 
@@ -663,15 +471,10 @@
     function start() {
       resize();
       initParticles();
-      initGridNodes();
-      requestAnimationFrame(animate);
+      initGrid();
+      requestAnimationFrame(loop);
     }
-
-    window.addEventListener('resize', function() {
-      resize();
-      initGridNodes();
-    });
-
+    window.addEventListener('resize', function() { resize(); initGrid(); });
     if (document.readyState === 'complete') start();
     else window.addEventListener('load', start);
   })();
