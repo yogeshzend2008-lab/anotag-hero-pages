@@ -5,7 +5,6 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Anotag — Living Dataset</title>
   <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@200..800&display=swap" rel="stylesheet">
-  <link href="https://unpkg.com/@phosphor-icons/web@2.0.3/src/regular/style.css" rel="stylesheet">
   <style>
     * { margin: 0; padding: 0; box-sizing: border-box; }
 
@@ -13,16 +12,15 @@
       font-family: 'Outfit', system-ui, sans-serif;
       background: #000000;
       color: #ffffff;
-      overflow-x: hidden;
+      overflow: hidden;
     }
 
     .hero {
       display: flex;
       align-items: stretch;
       width: 100%;
-      height: 100%;
-      min-height: clamp(600px, 82vh, 900px);
-      margin: 0 auto;
+      height: 100vh;
+      min-height: 600px;
       padding: 0;
       overflow: hidden;
     }
@@ -31,32 +29,18 @@
       display: flex;
       flex-direction: column;
       justify-content: center;
-      flex: 0 1 517px;
+      flex: 0 0 45%;
       min-width: 0;
       position: relative;
       z-index: 2;
-      background: none;
+      padding-left: 5%;
     }
 
     .hero-right {
       position: relative;
-      flex: 1 1 auto;
+      flex: 1;
       min-width: 0;
-      min-height: clamp(600px, 82vh, 900px);
       overflow: hidden;
-    }
-
-    .hero-right::before {
-      content: "";
-      position: absolute;
-      inset: 0;
-      pointer-events: none;
-      background: radial-gradient(circle at 35% 50%, rgba(255,255,255,0.035), transparent 60%);
-      z-index: 1;
-    }
-
-    .hero-copy {
-      will-change: transform, opacity;
     }
 
     .eyebrow {
@@ -67,75 +51,50 @@
       text-transform: uppercase;
       letter-spacing: 0.04em;
       margin-bottom: 2rem;
-      font-family: 'Outfit', sans-serif;
     }
-
-    .headline-group { position: relative; }
-
-    .headline-group::before {
-      content: "";
-      position: absolute;
-      top: -14px;
-      left: 0;
-      width: 0;
-      height: 2px;
-      border-radius: 2px;
-      background: #ffffff;
-      transition: width .45s ease, opacity .45s ease;
-      opacity: 0;
-    }
-
-    .headline-group.active::before { width: 120px; opacity: 1; }
 
     .headline {
-      font-size: 58px;
+      font-size: clamp(36px, 5vw, 58px);
       font-family: 'Outfit', sans-serif;
       line-height: 1.02;
       font-weight: 600;
       letter-spacing: -0.045em;
-      min-height: 40px;
-      max-width: 640px;
       color: #ffffff;
       margin-bottom: 1.2rem;
     }
 
     .paragraph {
-      font-size: 18px;
+      font-size: 17px;
       color: #9C9C9C;
       margin: 1.4rem 0 2rem;
       max-width: 450px;
       line-height: 1.72;
-      letter-spacing: 0.01em;
-      min-height: 4.8rem;
-      transition: color .45s ease;
     }
 
-    .cta-row { display: flex; gap: 22px; flex-wrap: wrap; }
+    .cta-row { display: flex; gap: 16px; flex-wrap: wrap; }
 
     .cta {
       font-weight: 500;
-      padding: 0.95rem 1.8rem;
+      padding: 0.85rem 1.6rem;
       border-radius: 6px;
       cursor: pointer;
-      transition: background 0.25s, color 0.25s, border-color 0.25s, transform 0.15s;
+      transition: background 0.25s, border-color 0.25s;
       font-size: 14px;
       font-family: 'Outfit', sans-serif;
       text-decoration: none;
     }
 
     .cta-primary { background: #ffffff; color: #000000; border: none; }
-    .cta-primary:hover { background: #9C9C9C; }
-    .cta-secondary { background: transparent; color: #ffffff; border: 1px solid #9C9C9C; }
-    .cta-secondary:hover { border-color: #ffffff; color: #ffffff; }
-    .cta:active { transform: scale(0.97); }
+    .cta-primary:hover { background: #d1d1d6; }
+    .cta-secondary { background: transparent; color: #ffffff; border: 1px solid #555; }
+    .cta-secondary:hover { border-color: #ffffff; }
 
     .capability-row {
       display: flex;
       align-items: center;
-      gap: 1rem;
+      gap: 1.2rem;
       margin-top: 1.5rem;
       flex-wrap: wrap;
-      transition: opacity 0.2s ease;
     }
 
     .cap-item {
@@ -145,143 +104,108 @@
       font-size: 12px;
       color: #9C9C9C;
       font-weight: 500;
-      white-space: nowrap;
-      font-family: 'Outfit', sans-serif;
     }
 
-    .cap-item i {
-      font-size: 14px;
+    .cap-icon {
+      width: 16px;
+      height: 16px;
+      opacity: 0.6;
     }
 
-    /* ============================================
-       PARTICLE ANIMATION STYLES
-       ============================================ */
-    
-    #particle-canvas {
+    /* PARTICLE CANVAS */
+    #particleCanvas {
       position: absolute;
       top: 0;
       left: 0;
       width: 100%;
       height: 100%;
-      z-index: 0;
-    }
-
-    #particle-overlay {
-      position: absolute;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      pointer-events: none;
-      z-index: 10;
     }
 
     /* Stage Labels */
-    .stage-label {
+    .stage-labels {
       position: absolute;
-      bottom: 12%;
+      bottom: 10%;
+      left: 0;
+      right: 0;
+      display: flex;
+      justify-content: space-around;
+      padding: 0 4%;
+      z-index: 10;
+      pointer-events: none;
+    }
+
+    .stage-label {
       display: flex;
       flex-direction: column;
       align-items: center;
-      gap: 8px;
+      gap: 6px;
     }
-
-    #stage-1 { left: 5%; }
-    #stage-2 { left: 22%; }
-    #stage-3 { left: 39%; }
-    #stage-4 { left: 56%; }
-    #stage-5 { left: 73%; }
 
     .stage-connector {
       display: flex;
       flex-direction: column;
       align-items: center;
-      height: 60px;
+      height: 50px;
     }
 
     .connector-line {
       width: 1px;
-      height: 40px;
-      background: linear-gradient(to bottom, rgba(255,255,255,0.1), rgba(255,255,255,0.4));
+      height: 30px;
+      background: linear-gradient(to bottom, rgba(255,255,255,0.05), rgba(255,255,255,0.35));
     }
 
     .connector-node {
-      width: 8px;
-      height: 8px;
+      width: 7px;
+      height: 7px;
       border-radius: 50%;
       background: #fff;
-      box-shadow: 0 0 12px rgba(255,255,255,0.6);
-      animation: nodeBreathe 4s ease-in-out infinite;
-    }
-
-    .connector-arrow {
-      width: 12px;
-      height: 12px;
-      border-right: 1px solid rgba(255,255,255,0.3);
-      border-bottom: 1px solid rgba(255,255,255,0.3);
-      transform: rotate(-45deg);
-      margin: 0 -8px;
-      align-self: center;
-    }
-
-    @keyframes nodeBreathe {
-      0%, 100% { transform: scale(1); opacity: 0.8; }
-      50% { transform: scale(1.08); opacity: 1; }
+      box-shadow: 0 0 10px rgba(255,255,255,0.5);
     }
 
     .stage-title {
-      font-family: 'Outfit', sans-serif;
       font-weight: 600;
-      font-size: 11px;
+      font-size: 10px;
       letter-spacing: 0.1em;
-      color: #FFFFFF;
+      color: #fff;
       text-transform: uppercase;
     }
 
     .stage-caption {
-      font-family: 'Outfit', sans-serif;
       font-weight: 400;
-      font-size: 10px;
-      color: rgba(255, 255, 255, 0.7);
-      letter-spacing: 0.05em;
+      font-size: 9px;
+      color: rgba(255,255,255,0.6);
     }
 
     /* Center Badge */
     .center-badge {
       position: absolute;
-      top: 50%;
+      bottom: 28%;
       left: 50%;
-      transform: translate(-50%, -50%);
+      transform: translateX(-50%);
       display: flex;
       align-items: center;
       gap: 10px;
-      padding: 12px 24px;
-      background: rgba(20, 22, 28, 0.7);
-      backdrop-filter: blur(20px);
-      border: 1px solid rgba(255, 255, 255, 0.08);
+      padding: 10px 22px;
+      background: rgba(20, 22, 28, 0.65);
+      backdrop-filter: blur(16px);
+      border: 1px solid rgba(255,255,255,0.06);
       border-radius: 100px;
-      animation: badgeBreathe 4s ease-in-out infinite;
-      z-index: 20;
-    }
-
-    @keyframes badgeBreathe {
-      0%, 100% { box-shadow: 0 0 20px rgba(34, 197, 94, 0.1); }
-      50% { box-shadow: 0 0 30px rgba(34, 197, 94, 0.2); }
+      z-index: 10;
+      pointer-events: none;
     }
 
     .badge-dot {
-      width: 8px;
-      height: 8px;
+      width: 7px;
+      height: 7px;
       border-radius: 50%;
       background: #22C55E;
-      box-shadow: 0 0 12px rgba(34, 197, 94, 0.6);
+      box-shadow: 0 0 10px rgba(34, 197, 94, 0.5);
     }
 
     .badge-text {
-      font-family: 'Outfit', sans-serif;
       font-weight: 500;
-      font-size: 14px;
-      color: #FFFFFF;
+      font-size: 13px;
+      color: #fff;
       letter-spacing: 0.03em;
     }
 
@@ -293,13 +217,15 @@
       transform: translateY(-50%);
       display: flex;
       flex-direction: column;
-      gap: 28px;
+      gap: 24px;
+      z-index: 10;
+      pointer-events: none;
     }
 
     .outcome-icon {
       display: flex;
       align-items: center;
-      gap: 12px;
+      gap: 10px;
       opacity: 0;
       animation: fadeInIcon 0.6s ease forwards;
     }
@@ -309,753 +235,320 @@
     #icon-3 { animation-delay: 0.9s; }
     #icon-4 { animation-delay: 1.2s; }
 
-    @keyframes fadeInIcon {
-      to { opacity: 0.7; }
-    }
+    @keyframes fadeInIcon { to { opacity: 0.65; } }
 
     .outcome-icon svg {
-      width: 24px;
-      height: 24px;
-      color: #FFFFFF;
+      width: 22px;
+      height: 22px;
+      color: #fff;
+      flex-shrink: 0;
     }
 
     .outcome-icon span {
-      font-family: 'Outfit', sans-serif;
       font-weight: 400;
       font-size: 11px;
-      color: rgba(255, 255, 255, 0.7);
-      letter-spacing: 0.04em;
-      white-space: nowrap;
+      color: rgba(255,255,255,0.65);
+      line-height: 1.3;
     }
 
-    /* ============================================
-       RESPONSIVE STYLES
-       ============================================ */
-
-    @media (max-width: 1200px) {
-      .outcome-icons { right: 2%; gap: 20px; }
-      .outcome-icon span { font-size: 10px; }
-      .stage-title { font-size: 10px; }
-      .stage-caption { font-size: 9px; }
-    }
-
-    @media (max-width: 1024px) {
-      .hero { gap: 24px; }
-      .hero-left { flex: 0 1 420px; }
-      .headline { font-size: 44px; }
-      .paragraph { font-size: 16px; max-width: 400px; }
+    @media (max-width: 1100px) {
       .outcome-icons { display: none; }
-      #stage-1 { left: 2%; }
-      #stage-2 { left: 18%; }
-      #stage-3 { left: 34%; }
-      #stage-4 { left: 50%; }
-      #stage-5 { left: 66%; }
-    }
-
-    @media (max-width: 834px) {
-      .hero { gap: 20px; }
-      .hero-left { flex: 0 1 360px; }
-      .headline { font-size: 40px; }
-      .paragraph { font-size: 15px; max-width: 360px; }
-      .stage-title { font-size: 9px; letter-spacing: 0.05em; }
-      .stage-caption { font-size: 8px; }
-      .badge-text { font-size: 12px; }
-      .center-badge { padding: 10px 18px; }
     }
 
     @media (max-width: 768px) {
-      body { overflow-y: auto; }
-      .hero { flex-direction: column; height: auto; min-height: 100vh; gap: 0; }
-      .hero-left { flex: none; width: 100%; padding: 100px 24px 40px; order: 1; }
-      .hero-right { display: none; order: 2; }
+      .hero { flex-direction: column; height: auto; min-height: 100vh; }
+      .hero-left { flex: none; width: 100%; padding: 100px 24px 40px; }
+      .hero-right { display: none; }
       .headline { font-size: 36px; }
-      .paragraph { font-size: 15px; max-width: none; min-height: auto; }
-      .cta-row { margin-top: 0.5rem; }
-      .capability-row { margin-top: 1.25rem; }
-    }
-
-    @media (max-width: 430px) {
-      .hero { padding: 0 16px; }
-      .hero-left { padding: 80px 0 32px; }
-      .headline { font-size: 32px; }
-      .paragraph { font-size: 14px; }
-    }
-
-    @media (max-width: 375px) {
-      .headline { font-size: 28px; }
-      .paragraph { font-size: 13px; }
-      .cta { font-size: 13px; padding: 0.6rem 1.4rem; }
+      .paragraph { font-size: 15px; max-width: none; }
     }
   </style>
 </head>
 <body>
   <section class="hero" id="hero">
     <div class="hero-left">
-      <div class="hero-copy" id="heroCopy">
-        <div class="headline-group" id="headlineGroup">
-          <span class="eyebrow" id="eyebrow">AI DATA THAT POWERS INTELLIGENCE</span>
-          <h1 class="headline" id="headline">From Raw Data<br>to Real-World<br>AI Impact</h1>
-        </div>
-        <p class="paragraph" id="paragraph">High-quality training data that helps AI models learn better, perform stronger, and scale faster across every industry.</p>
-      </div>
+      <span class="eyebrow">AI DATA THAT POWERS INTELLIGENCE</span>
+      <h1 class="headline">From Raw Data<br>to Real-World<br>AI Impact</h1>
+      <p class="paragraph">High-quality training data that helps AI models learn better, perform stronger, and scale faster across every industry.</p>
       <div class="cta-row">
-        <a href="https://www.anotag.com/book-a-demo" target="_top" rel="noopener" class="cta cta-primary">Explore Solutions</a>
-        <a href="https://www.anotag.com/data-annotation-services-ai" target="_top" rel="noopener" class="cta cta-secondary">Book a Consultation</a>
+        <a href="https://www.anotag.com/book-a-demo" target="_top" class="cta cta-primary">Explore Solutions</a>
+        <a href="https://www.anotag.com/data-annotation-services-ai" target="_top" class="cta cta-secondary">Book a Consultation</a>
       </div>
       <div class="capability-row">
-        <div class="cap-item">
-          <i class="ph ph-eye"></i>
-          <span>Computer Vision</span>
-        </div>
-        <div class="cap-item">
-          <i class="ph ph-sparkle"></i>
-          <span>Generative AI</span>
-        </div>
-        <div class="cap-item">
-          <i class="ph ph-circles-three"></i>
-          <span>Multimodal AI</span>
-        </div>
-        <div class="cap-item">
-          <i class="ph ph-chart-line-up"></i>
-          <span>Model Evaluation</span>
-        </div>
+        <div class="cap-item"><svg class="cap-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/><path d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/></svg> Computer Vision</div>
+        <div class="cap-item"><svg class="cap-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M9.813 15.904L9 18.75l-.813-2.846a4.5 4.5 0 00-3.09-3.09L2.25 12l2.846-.813a4.5 4.5 0 003.09-3.09L9 5.25l.813 2.846a4.5 4.5 0 003.09 3.09L15.75 12l-2.846.813a4.5 4.5 0 00-3.09 3.09z"/></svg> Generative AI</div>
+        <div class="cap-item"><svg class="cap-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M7.5 21L3 16.5m0 0L7.5 12M3 16.5h13.5m0-13.5L21 7.5m0 0L16.5 12M21 7.5H7.5"/></svg> Multimodal AI</div>
+        <div class="cap-item"><svg class="cap-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M2.25 18L9 11.25l4.306 4.307a11.95 11.95 0 015.814-5.519l2.74-1.22m0 0l-5.94-2.28m5.94 2.28l-2.28 5.941"/></svg> Model Evaluation</div>
       </div>
     </div>
     <div class="hero-right">
-      <canvas id="particle-canvas"></canvas>
-      <div id="particle-overlay">
-        <!-- Stage Labels -->
-        <div class="stage-label" id="stage-1">
-          <div class="stage-connector">
-            <div class="connector-line"></div>
-            <div class="connector-node"></div>
-          </div>
+      <canvas id="particleCanvas"></canvas>
+      <div class="stage-labels">
+        <div class="stage-label">
+          <div class="stage-connector"><div class="connector-line"></div><div class="connector-node"></div></div>
           <span class="stage-title">RAW DATA</span>
           <span class="stage-caption">Unstructured</span>
         </div>
-        
-        <div class="stage-label" id="stage-2">
-          <div class="stage-connector">
-            <div class="connector-line"></div>
-            <div class="connector-arrow"></div>
-            <div class="connector-line"></div>
-            <div class="connector-node"></div>
-          </div>
+        <div class="stage-label">
+          <div class="stage-connector"><div class="connector-line"></div><div class="connector-node"></div></div>
           <span class="stage-title">ANNOTATION</span>
           <span class="stage-caption">Understood</span>
         </div>
-        
-        <div class="stage-label" id="stage-3">
-          <div class="stage-connector">
-            <div class="connector-line"></div>
-            <div class="connector-arrow"></div>
-            <div class="connector-line"></div>
-            <div class="connector-node"></div>
-          </div>
+        <div class="stage-label">
+          <div class="stage-connector"><div class="connector-line"></div><div class="connector-node"></div></div>
           <span class="stage-title">QUALITY CHECK</span>
           <span class="stage-caption">Validated</span>
         </div>
-        
-        <div class="stage-label" id="stage-4">
-          <div class="stage-connector">
-            <div class="connector-line"></div>
-            <div class="connector-arrow"></div>
-            <div class="connector-line"></div>
-            <div class="connector-node"></div>
-          </div>
+        <div class="stage-label">
+          <div class="stage-connector"><div class="connector-line"></div><div class="connector-node"></div></div>
           <span class="stage-title">AI READY</span>
           <span class="stage-caption">Structured</span>
         </div>
-        
-        <div class="stage-label" id="stage-5">
-          <div class="stage-connector">
-            <div class="connector-line"></div>
-            <div class="connector-arrow"></div>
-            <div class="connector-line"></div>
-            <div class="connector-node"></div>
-          </div>
+        <div class="stage-label">
+          <div class="stage-connector"><div class="connector-line"></div><div class="connector-node"></div></div>
           <span class="stage-title">REAL WORLD IMPACT</span>
           <span class="stage-caption">Intelligence in Action</span>
         </div>
-        
-        <!-- Center Badge -->
-        <div class="center-badge">
-          <div class="badge-dot"></div>
-          <span class="badge-text">Living Dataset™ in Action</span>
+      </div>
+      <div class="center-badge">
+        <div class="badge-dot"></div>
+        <span class="badge-text">Living Dataset™ in Action</span>
+      </div>
+      <div class="outcome-icons">
+        <div class="outcome-icon" id="icon-1">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z"/></svg>
+          <span>Smarter Decisions</span>
         </div>
-        
-        <!-- Right-side Outcome Icons -->
-        <div class="outcome-icons">
-          <div class="outcome-icon" id="icon-1">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
-              <path d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z"/>
-            </svg>
-            <span>Smarter Decisions</span>
-          </div>
-          <div class="outcome-icon" id="icon-2">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
-              <path d="M13 10V3L4 14h7v7l9-11h-7z"/>
-            </svg>
-            <span>AI That Performs</span>
-          </div>
-          <div class="outcome-icon" id="icon-3">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
-              <path d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/>
-            </svg>
-            <span>Operational<br>Efficiency</span>
-          </div>
-          <div class="outcome-icon" id="icon-4">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
-              <path d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6"/>
-            </svg>
-            <span>Real Business<br>Impact</span>
-          </div>
+        <div class="outcome-icon" id="icon-2">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M13 10V3L4 14h7v7l9-11h-7z"/></svg>
+          <span>AI That Performs</span>
+        </div>
+        <div class="outcome-icon" id="icon-3">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+          <span>Operational<br>Efficiency</span>
+        </div>
+        <div class="outcome-icon" id="icon-4">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6"/></svg>
+          <span>Real Business<br>Impact</span>
         </div>
       </div>
     </div>
   </section>
 
-  <!-- Three.js -->
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
-  
   <script>
-    // ============================================
-    // PARTICLE SYSTEM
-    // ============================================
-    class ParticleSystem {
-        constructor(count = 8000) {
-            this.count = count;
-            this.particles = [];
-            this.time = 0;
-            this.loopDuration = 12;
+  (function() {
+    var canvas = document.getElementById('particleCanvas');
+    var ctx = canvas.getContext('2d');
+    var W, H;
+    var particles = [];
+    var connections = [];
+    var flowLines = [];
+    var time = 0;
+    var PARTICLE_COUNT = 3000;
+    var CONNECTION_DIST = 60;
+    var MAX_CONNECTIONS = 1500;
 
-            this.zoneColors = [
-                { r: 0.9, g: 0.95, b: 1.0 },
-                { r: 0.2, g: 0.5, b: 1.0 },
-                { r: 1.0, g: 0.75, b: 0.2 },
-                { r: 0.4, g: 0.9, b: 0.5 },
-                { r: 0.6, g: 0.3, b: 0.9 }
-            ];
+    var zoneColors = [
+      { r: 230, g: 242, b: 255 },
+      { r: 50,  g: 128, b: 255 },
+      { r: 255, g: 191, b: 50  },
+      { r: 100, g: 230, b: 130 },
+      { r: 155, g: 80,  b: 230 }
+    ];
 
-            this.noiseOffsets = [];
-            for (let i = 0; i < 100; i++) {
-                this.noiseOffsets.push({
-                    x: Math.random() * 1000,
-                    y: Math.random() * 1000,
-                    z: Math.random() * 1000
-                });
-            }
-
-            this.initParticles();
-        }
-
-        initParticles() {
-            for (let i = 0; i < this.count; i++) {
-                this.particles.push(this.createParticle(i));
-            }
-        }
-
-        createParticle(index) {
-            const zone = Math.floor(Math.random() * 5);
-            const zoneWidth = 2.0 / 5;
-            const baseX = -1.0 + (zone * zoneWidth) + (Math.random() * zoneWidth * 0.8);
-
-            return {
-                x: baseX + (Math.random() - 0.5) * 0.3,
-                y: (Math.random() - 0.5) * 1.2,
-                z: (Math.random() - 0.5) * 0.4,
-                baseX: baseX,
-                baseY: (Math.random() - 0.5) * 1.2,
-                baseZ: (Math.random() - 0.5) * 0.4,
-                initialX: baseX + (Math.random() - 0.5) * 0.3,
-                initialY: (Math.random() - 0.5) * 1.2,
-                initialZ: (Math.random() - 0.5) * 0.4,
-                vx: 0,
-                vy: 0,
-                vz: 0,
-                size: 0.5 + Math.random() * 1.5,
-                opacity: 0.3 + Math.random() * 0.7,
-                zone: zone,
-                phase: Math.random() * Math.PI * 2,
-                speed: 0.3 + Math.random() * 0.5,
-                splinePoints: this.generateSplinePoints(baseX),
-                connectDistance: 0.05 + Math.random() * 0.08,
-                connections: []
-            };
-        }
-
-        generateSplinePoints(baseX) {
-            const points = [];
-            const numPoints = 4;
-            for (let i = 0; i < numPoints; i++) {
-                points.push({
-                    x: baseX + (i / numPoints) * 0.4 + (Math.random() - 0.5) * 0.1,
-                    y: (Math.random() - 0.5) * 0.3,
-                    z: (Math.random() - 0.5) * 0.1
-                });
-            }
-            return points;
-        }
-
-        noise(x, y, z) {
-            const n = Math.sin(x * 12.9898 + y * 78.233 + z * 45.164) * 43758.5453;
-            return n - Math.floor(n);
-        }
-
-        update(deltaTime) {
-            this.time += deltaTime;
-            const loopTime = (this.time % this.loopDuration) / this.loopDuration;
-            for (let i = 0; i < this.particles.length; i++) {
-                const p = this.particles[i];
-                this.updateParticle(p, loopTime, deltaTime);
-            }
-        }
-
-        updateParticle(p, loopTime, deltaTime) {
-            const loopProgress = loopTime;
-            const loopReturn = Math.pow(Math.sin(loopProgress * Math.PI), 0.5);
-            const loopOffsetX = Math.sin(loopProgress * Math.PI * 2) * 0.15;
-            const loopOffsetY = Math.cos(loopProgress * Math.PI * 2) * 0.08;
-
-            const timeScale = 0.3;
-            const noiseX = this.noise(
-                p.initialX * 2 + this.time * timeScale,
-                p.initialY,
-                p.initialZ
-            ) * 2 - 1;
-            const noiseY = this.noise(
-                p.initialX,
-                p.initialY * 2 + this.time * timeScale,
-                p.initialZ
-            ) * 2 - 1;
-
-            const driftX = Math.sin(this.time * 0.2 + p.phase) * 0.0008 +
-                           Math.cos(this.time * 0.15 + p.phase * 1.3) * 0.0005;
-            const driftY = Math.cos(this.time * 0.18 + p.phase * 0.7) * 0.0006 +
-                           Math.sin(this.time * 0.12 + p.phase * 1.1) * 0.0004;
-
-            const splineInfluence = this.getSplineInfluence(p, loopProgress);
-            const flowSpeed = 0.012 * p.speed;
-            const flowX = flowSpeed * deltaTime;
-
-            const targetX = p.initialX + loopOffsetX + splineInfluence.x + noiseX * 0.02;
-            const targetY = p.initialY + loopOffsetY + splineInfluence.y + noiseY * 0.02;
-
-            const lerpFactor = 0.02;
-            p.x += (targetX - p.x) * lerpFactor + driftX + flowX;
-            p.y += (targetY - p.y) * lerpFactor + driftY;
-            p.z = p.initialZ + Math.sin(this.time * 0.3 + p.phase) * 0.05;
-
-            const fluidOscX = Math.sin(this.time * 0.4 + p.phase) * 0.001;
-            const fluidOscY = Math.cos(this.time * 0.35 + p.phase * 1.5) * 0.0008;
-            p.x += fluidOscX;
-            p.y += fluidOscY;
-
-            if (p.x > 1.3) {
-                p.x = -1.3;
-                p.initialX = -1.3;
-            }
-
-            if (Math.abs(p.y) > 0.65) {
-                p.y *= 0.995;
-            }
-        }
-
-        getSplineInfluence(p, loopProgress) {
-            const points = p.splinePoints;
-            const t = loopProgress * (points.length - 1);
-            const index = Math.floor(t);
-            const frac = t - index;
-
-            if (index >= points.length - 1) {
-                return { x: points[points.length - 1].x, y: points[points.length - 1].y };
-            }
-
-            const p0 = points[Math.max(0, index - 1)];
-            const p1 = points[index];
-            const p2 = points[Math.min(points.length - 1, index + 1)];
-            const p3 = points[Math.min(points.length - 1, index + 2)];
-
-            const t2 = frac * frac;
-            const t3 = t2 * frac;
-
-            const x = 0.5 * (
-                (2 * p1.x) +
-                (-p0.x + p2.x) * frac +
-                (2 * p0.x - 5 * p1.x + 4 * p2.x - p3.x) * t2 +
-                (-p0.x + 3 * p1.x - 3 * p2.x + p3.x) * t3
-            );
-
-            const y = 0.5 * (
-                (2 * p1.y) +
-                (-p0.y + p2.y) * frac +
-                (2 * p0.y - 5 * p1.y + 4 * p2.y - p3.y) * t2 +
-                (-p0.y + 3 * p1.y - 3 * p2.y + p3.y) * t3
-            );
-
-            return { x, y };
-        }
-
-        getParticleData() {
-            const positions = new Float32Array(this.count * 3);
-            const colors = new Float32Array(this.count * 3);
-            const sizes = new Float32Array(this.count);
-            const alphas = new Float32Array(this.count);
-
-            for (let i = 0; i < this.count; i++) {
-                const p = this.particles[i];
-                const i3 = i * 3;
-                positions[i3] = p.x;
-                positions[i3 + 1] = p.y;
-                positions[i3 + 2] = p.z;
-                const color = this.getZoneColor(p.x, p.zone);
-                colors[i3] = color.r;
-                colors[i3 + 1] = color.g;
-                colors[i3 + 2] = color.b;
-                sizes[i] = p.size;
-                alphas[i] = p.opacity;
-            }
-
-            return { positions, colors, sizes, alphas };
-        }
-
-        getZoneColor(x, baseZone) {
-            const normalizedX = (x + 1) / 2;
-            const zoneIndex = Math.min(4, Math.floor(normalizedX * 5));
-            const color = this.zoneColors[zoneIndex];
-            const nextColor = this.zoneColors[Math.min(4, zoneIndex + 1)];
-            const zoneProgress = (normalizedX * 5) % 1;
-            const t = zoneProgress * zoneProgress * (3 - 2 * zoneProgress);
-
-            return {
-                r: color.r + (nextColor.r - color.r) * t,
-                g: color.g + (nextColor.g - color.g) * t,
-                b: color.b + (nextColor.b - color.b) * t
-            };
-        }
+    function resize() {
+      var container = canvas.parentElement;
+      W = container.clientWidth;
+      H = container.clientHeight;
+      canvas.width = W * (window.devicePixelRatio || 1);
+      canvas.height = H * (window.devicePixelRatio || 1);
+      canvas.style.width = W + 'px';
+      canvas.style.height = H + 'px';
+      ctx.setTransform(window.devicePixelRatio || 1, 0, 0, window.devicePixelRatio || 1, 0, 0);
     }
 
-    // ============================================
-    // ANIMATION ENGINE
-    // ============================================
-    class LivingDatasetAnimation {
-        constructor(container) {
-            this.canvas = document.getElementById('particle-canvas');
-            this.container = container;
-            this.width = container.clientWidth;
-            this.height = container.clientHeight;
-            this.time = 0;
-            this.loopDuration = 12;
+    function lerp(a, b, t) { return a + (b - a) * t; }
 
-            this.init();
-            this.createScene();
-            this.createParticles();
-            this.createEffects();
-            this.animate();
-            this.handleResize();
-        }
-
-        init() {
-            this.renderer = new THREE.WebGLRenderer({
-                canvas: this.canvas,
-                antialias: true,
-                alpha: true,
-                powerPreference: "high-performance"
-            });
-            this.renderer.setSize(this.width, this.height);
-            this.renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
-            this.renderer.setClearColor(0x000000, 1);
-            this.renderer.autoClear = false;
-
-            this.scene = new THREE.Scene();
-
-            this.camera = new THREE.OrthographicCamera(
-                -1, 1, 1, -1, 0.1, 100
-            );
-            this.camera.position.z = 5;
-
-            this.clock = new THREE.Clock();
-            this.lastTime = 0;
-        }
-
-        createScene() {
-            const ambientLight = new THREE.AmbientLight(0xffffff, 0.3);
-            this.scene.add(ambientLight);
-        }
-
-        createParticles() {
-            this.particleSystem = new ParticleSystem(8000);
-
-            const vertexShader = `
-                attribute float size;
-                attribute vec3 customColor;
-                attribute float alpha;
-                varying vec3 vColor;
-                varying float vAlpha;
-                uniform float time;
-
-                void main() {
-                    vColor = customColor;
-                    vAlpha = alpha;
-
-                    vec4 mvPosition = modelViewMatrix * vec4(position, 1.0);
-
-                    float pulse = 1.0 + sin(time * 0.5 + position.x * 10.0) * 0.1;
-                    gl_PointSize = size * pulse * (300.0 / -mvPosition.z);
-
-                    gl_Position = projectionMatrix * mvPosition;
-                }
-            `;
-
-            const fragmentShader = `
-                varying vec3 vColor;
-                varying float vAlpha;
-                uniform float time;
-
-                void main() {
-                    vec2 center = gl_PointCoord - vec2(0.5);
-                    float dist = length(center);
-
-                    if (dist > 0.5) discard;
-
-                    float alpha = smoothstep(0.5, 0.0, dist) * vAlpha;
-                    float innerGlow = exp(-dist * 6.0) * 0.4;
-                    float outerGlow = exp(-dist * 2.0) * 0.2;
-
-                    float finalAlpha = (alpha + innerGlow + outerGlow) * 0.7;
-                    float shimmer = 1.0 + sin(time * 2.0 + dist * 20.0) * 0.05;
-
-                    gl_FragColor = vec4(vColor * shimmer, finalAlpha);
-                }
-            `;
-
-            this.particleGeometry = new THREE.BufferGeometry();
-            const data = this.particleSystem.getParticleData();
-
-            this.particleGeometry.setAttribute('position',
-                new THREE.BufferAttribute(data.positions, 3));
-            this.particleGeometry.setAttribute('customColor',
-                new THREE.BufferAttribute(data.colors, 3));
-            this.particleGeometry.setAttribute('size',
-                new THREE.BufferAttribute(data.sizes, 1));
-            this.particleGeometry.setAttribute('alpha',
-                new THREE.BufferAttribute(data.alphas, 1));
-
-            this.particleMaterial = new THREE.ShaderMaterial({
-                vertexShader: vertexShader,
-                fragmentShader: fragmentShader,
-                transparent: true,
-                blending: THREE.AdditiveBlending,
-                depthWrite: false,
-                uniforms: {
-                    time: { value: 0 }
-                }
-            });
-
-            this.particles = new THREE.Points(
-                this.particleGeometry,
-                this.particleMaterial
-            );
-
-            this.scene.add(this.particles);
-        }
-
-        createEffects() {
-            this.createConnectionLines();
-            this.createFlowIndicators();
-        }
-
-        createConnectionLines() {
-            const lineGeometry = new THREE.BufferGeometry();
-            const linePositions = new Float32Array(8000 * 6);
-            const lineColors = new Float32Array(8000 * 6);
-
-            lineGeometry.setAttribute('position',
-                new THREE.BufferAttribute(linePositions, 3));
-            lineGeometry.setAttribute('color',
-                new THREE.BufferAttribute(lineColors, 3));
-
-            const lineMaterial = new THREE.LineBasicMaterial({
-                vertexColors: true,
-                transparent: true,
-                opacity: 0.25,
-                blending: THREE.AdditiveBlending
-            });
-
-            this.connectionLines = new THREE.LineSegments(lineGeometry, lineMaterial);
-            this.scene.add(this.connectionLines);
-        }
-
-        createFlowIndicators() {
-            const flowGeometry = new THREE.BufferGeometry();
-            const flowPositions = new Float32Array(200 * 6);
-            const flowColors = new Float32Array(200 * 6);
-
-            flowGeometry.setAttribute('position',
-                new THREE.BufferAttribute(flowPositions, 3));
-            flowGeometry.setAttribute('color',
-                new THREE.BufferAttribute(flowColors, 3));
-
-            const flowMaterial = new THREE.LineBasicMaterial({
-                vertexColors: true,
-                transparent: true,
-                opacity: 0.15,
-                blending: THREE.AdditiveBlending
-            });
-
-            this.flowLines = new THREE.LineSegments(flowGeometry, flowMaterial);
-            this.scene.add(this.flowLines);
-        }
-
-        updateConnections() {
-            const positions = this.particleGeometry.attributes.position.array;
-            const colors = this.particleGeometry.attributes.customColor.array;
-            const linePositions = this.connectionLines.geometry.attributes.position.array;
-            const lineColors = this.connectionLines.geometry.attributes.color.array;
-
-            let connectionCount = 0;
-            const maxConnections = 8000;
-            const connectionDist = 0.06;
-            const step = 6;
-
-            for (let i = 0; i < this.particleSystem.count; i += step) {
-                if (connectionCount >= maxConnections) break;
-
-                const i3 = i * 3;
-                const x1 = positions[i3];
-                const y1 = positions[i3 + 1];
-
-                for (let j = i + step; j < Math.min(i + 200, this.particleSystem.count); j += step) {
-                    if (connectionCount >= maxConnections) break;
-
-                    const j3 = j * 3;
-                    const x2 = positions[j3];
-                    const y2 = positions[j3 + 1];
-
-                    const dx = x2 - x1;
-                    const dy = y2 - y1;
-                    const dist = Math.sqrt(dx * dx + dy * dy);
-
-                    if (dist < connectionDist && dist > 0.01) {
-                        const lineIdx = connectionCount * 6;
-
-                        linePositions[lineIdx] = x1;
-                        linePositions[lineIdx + 1] = y1;
-                        linePositions[lineIdx + 2] = 0;
-                        linePositions[lineIdx + 3] = x2;
-                        linePositions[lineIdx + 4] = y2;
-                        linePositions[lineIdx + 5] = 0;
-
-                        const fade = 1 - (dist / connectionDist);
-                        lineColors[lineIdx] = colors[i3] * fade;
-                        lineColors[lineIdx + 1] = colors[i3 + 1] * fade;
-                        lineColors[lineIdx + 2] = colors[i3 + 2] * fade;
-                        lineColors[lineIdx + 3] = colors[j3] * fade;
-                        lineColors[lineIdx + 4] = colors[j3 + 1] * fade;
-                        lineColors[lineIdx + 5] = colors[j3 + 2] * fade;
-
-                        connectionCount++;
-                    }
-                }
-            }
-
-            for (let i = connectionCount * 6; i < linePositions.length; i++) {
-                linePositions[i] = 0;
-                lineColors[i] = 0;
-            }
-
-            this.connectionLines.geometry.attributes.position.needsUpdate = true;
-            this.connectionLines.geometry.attributes.color.needsUpdate = true;
-        }
-
-        updateFlowIndicators() {
-            const positions = this.flowLines.geometry.attributes.position.array;
-            const colors = this.flowLines.geometry.attributes.color.array;
-
-            for (let i = 0; i < 200; i++) {
-                const i6 = i * 6;
-                const baseX = -1 + (i / 200) * 2;
-                const offset = Math.sin(this.time * 0.3 + i * 0.1) * 0.05;
-
-                positions[i6] = baseX;
-                positions[i6 + 1] = -0.5 + offset;
-                positions[i6 + 2] = -0.05;
-                positions[i6 + 3] = baseX + 0.01;
-                positions[i6 + 4] = 0.5 + offset;
-                positions[i6 + 5] = -0.05;
-
-                const normalizedX = (baseX + 1) / 2;
-                const zone = Math.floor(normalizedX * 5);
-                const zoneColors = [
-                    [0.9, 0.95, 1.0],
-                    [0.2, 0.5, 1.0],
-                    [1.0, 0.75, 0.2],
-                    [0.4, 0.9, 0.5],
-                    [0.6, 0.3, 0.9]
-                ];
-
-                const color = zoneColors[Math.min(4, zone)];
-                colors[i6] = color[0] * 0.3;
-                colors[i6 + 1] = color[1] * 0.3;
-                colors[i6 + 2] = color[2] * 0.3;
-                colors[i6 + 3] = color[0] * 0.3;
-                colors[i6 + 4] = color[1] * 0.3;
-                colors[i6 + 5] = color[2] * 0.3;
-            }
-
-            this.flowLines.geometry.attributes.position.needsUpdate = true;
-            this.flowLines.geometry.attributes.color.needsUpdate = true;
-        }
-
-        animate() {
-            requestAnimationFrame(() => this.animate());
-
-            const deltaTime = this.clock.getDelta();
-            this.time += deltaTime;
-
-            this.particleSystem.update(deltaTime);
-
-            const data = this.particleSystem.getParticleData();
-            this.particleGeometry.attributes.position.array = data.positions;
-            this.particleGeometry.attributes.customColor.array = data.colors;
-            this.particleGeometry.attributes.size.array = data.sizes;
-            this.particleGeometry.attributes.alpha.array = data.alphas;
-
-            this.particleGeometry.attributes.position.needsUpdate = true;
-            this.particleGeometry.attributes.customColor.needsUpdate = true;
-            this.particleGeometry.attributes.size.needsUpdate = true;
-            this.particleGeometry.attributes.alpha.needsUpdate = true;
-
-            this.particleMaterial.uniforms.time.value = this.time;
-
-            if (Math.floor(this.time * 30) % 3 === 0) {
-                this.updateConnections();
-            }
-
-            this.updateFlowIndicators();
-
-            this.renderer.clear();
-            this.renderer.render(this.scene, this.camera);
-        }
-
-        handleResize() {
-            window.addEventListener('resize', () => {
-                this.width = this.container.clientWidth;
-                this.height = this.container.clientHeight;
-                this.renderer.setSize(this.width, this.height);
-            });
-        }
+    function getZoneColor(x) {
+      var nx = (x / W);
+      var zone = Math.min(4, Math.floor(nx * 5));
+      var next = Math.min(4, zone + 1);
+      var t = (nx * 5) % 1;
+      t = t * t * (3 - 2 * t);
+      return {
+        r: Math.round(lerp(zoneColors[zone].r, zoneColors[next].r, t)),
+        g: Math.round(lerp(zoneColors[zone].g, zoneColors[next].g, t)),
+        b: Math.round(lerp(zoneColors[zone].b, zoneColors[next].b, t))
+      };
     }
 
-    // ============================================
-    // INITIALIZE
-    // ============================================
-    document.addEventListener('DOMContentLoaded', () => {
-        const heroRight = document.querySelector('.hero-right');
-        if (heroRight && window.innerWidth > 768) {
-            new LivingDatasetAnimation(heroRight);
+    function createParticle() {
+      var zone = Math.floor(Math.random() * 5);
+      var zoneW = W / 5;
+      var x = zone * zoneW + Math.random() * zoneW;
+      var y = Math.random() * H;
+      return {
+        x: x, y: y,
+        baseX: x, baseY: y,
+        size: 0.4 + Math.random() * 1.8,
+        opacity: 0.15 + Math.random() * 0.6,
+        speed: 0.15 + Math.random() * 0.4,
+        phase: Math.random() * Math.PI * 2,
+        driftAmpX: 0.3 + Math.random() * 1.2,
+        driftAmpY: 0.2 + Math.random() * 0.8,
+        driftFreqX: 0.0005 + Math.random() * 0.001,
+        driftFreqY: 0.0004 + Math.random() * 0.0008,
+        zone: zone
+      };
+    }
+
+    function initParticles() {
+      particles = [];
+      for (var i = 0; i < PARTICLE_COUNT; i++) {
+        particles.push(createParticle());
+      }
+    }
+
+    function initFlowLines() {
+      flowLines = [];
+      for (var i = 0; i < 120; i++) {
+        flowLines.push({
+          x: Math.random() * W,
+          baseY: Math.random() * H,
+          speed: 0.2 + Math.random() * 0.6,
+          length: 30 + Math.random() * 80,
+          opacity: 0.03 + Math.random() * 0.06,
+          phase: Math.random() * Math.PI * 2
+        });
+      }
+    }
+
+    function updateParticles(dt) {
+      time += dt;
+      for (var i = 0; i < particles.length; i++) {
+        var p = particles[i];
+
+        var driftX = Math.sin(time * p.driftFreqX + p.phase) * p.driftAmpX;
+        var driftY = Math.cos(time * p.driftFreqY + p.phase * 1.3) * p.driftAmpY;
+
+        p.x += p.speed * dt * 0.06;
+        p.y = p.baseY + driftY + Math.sin(time * 0.0003 + p.phase) * 8;
+
+        if (p.x > W + 20) {
+          p.x = -20;
+          p.baseX = -20;
         }
-    });
+      }
+    }
+
+    function drawFlowLines() {
+      for (var i = 0; i < flowLines.length; i++) {
+        var f = flowLines[i];
+        f.x += f.speed * 0.5;
+        if (f.x > W + f.length) f.x = -f.length;
+
+        var waveY = Math.sin(time * 0.001 + f.phase) * 20;
+        var color = getZoneColor(f.x);
+        ctx.beginPath();
+        ctx.moveTo(f.x, f.baseY + waveY);
+        ctx.lineTo(f.x + f.length, f.baseY + waveY + Math.sin(time * 0.0005 + f.phase) * 10);
+        ctx.strokeStyle = 'rgba(' + color.r + ',' + color.g + ',' + color.b + ',' + f.opacity + ')';
+        ctx.lineWidth = 0.8;
+        ctx.stroke();
+      }
+    }
+
+    function drawParticles() {
+      for (var i = 0; i < particles.length; i++) {
+        var p = particles[i];
+        var color = getZoneColor(p.x);
+
+        var pulse = 1 + Math.sin(time * 0.002 + p.phase) * 0.15;
+        var size = p.size * pulse;
+        var alpha = p.opacity * (0.7 + Math.sin(time * 0.001 + p.phase * 2) * 0.3);
+
+        ctx.beginPath();
+        ctx.arc(p.x, p.y, size, 0, Math.PI * 2);
+        ctx.fillStyle = 'rgba(' + color.r + ',' + color.g + ',' + color.b + ',' + alpha + ')';
+        ctx.fill();
+
+        if (size > 1.2) {
+          ctx.beginPath();
+          ctx.arc(p.x, p.y, size * 2.5, 0, Math.PI * 2);
+          ctx.fillStyle = 'rgba(' + color.r + ',' + color.g + ',' + color.b + ',' + (alpha * 0.12) + ')';
+          ctx.fill();
+        }
+      }
+    }
+
+    function drawConnections() {
+      var count = 0;
+      var step = 4;
+      ctx.lineWidth = 0.4;
+
+      for (var i = 0; i < particles.length && count < MAX_CONNECTIONS; i += step) {
+        var a = particles[i];
+        for (var j = i + step; j < Math.min(i + 150, particles.length) && count < MAX_CONNECTIONS; j += step) {
+          var b = particles[j];
+          var dx = a.x - b.x;
+          var dy = a.y - b.y;
+          var dist = Math.sqrt(dx * dx + dy * dy);
+
+          if (dist < CONNECTION_DIST) {
+            var fade = 1 - dist / CONNECTION_DIST;
+            var color = getZoneColor((a.x + b.x) / 2);
+            ctx.beginPath();
+            ctx.moveTo(a.x, a.y);
+            ctx.lineTo(b.x, b.y);
+            ctx.strokeStyle = 'rgba(' + color.r + ',' + color.g + ',' + color.b + ',' + (fade * 0.18) + ')';
+            ctx.stroke();
+            count++;
+          }
+        }
+      }
+    }
+
+    function drawBackground() {
+      ctx.fillStyle = '#000000';
+      ctx.fillRect(0, 0, W, H);
+
+      var grad = ctx.createRadialGradient(W * 0.35, H * 0.5, 0, W * 0.35, H * 0.5, W * 0.5);
+      grad.addColorStop(0, 'rgba(255,255,255,0.02)');
+      grad.addColorStop(1, 'rgba(0,0,0,0)');
+      ctx.fillStyle = grad;
+      ctx.fillRect(0, 0, W, H);
+    }
+
+    var lastTime = 0;
+    function animate(timestamp) {
+      if (!lastTime) lastTime = timestamp;
+      var dt = Math.min(timestamp - lastTime, 50);
+      lastTime = timestamp;
+
+      drawBackground();
+      updateParticles(dt);
+      drawFlowLines();
+      drawConnections();
+      drawParticles();
+
+      requestAnimationFrame(animate);
+    }
+
+    function start() {
+      resize();
+      initParticles();
+      initFlowLines();
+      requestAnimationFrame(animate);
+    }
+
+    window.addEventListener('resize', resize);
+
+    if (document.readyState === 'complete') {
+      start();
+    } else {
+      window.addEventListener('load', start);
+    }
+  })();
   </script>
 </body>
 </html>
