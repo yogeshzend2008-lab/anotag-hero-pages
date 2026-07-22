@@ -2,884 +2,1132 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width,initial-scale=1">
 <title>Anotag — Living Dataset</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
 <style>
 *,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
 :root{
-  --bg:#06080f;
-  --blue:#3b82f6;
-  --cyan:#06b6d4;
-  --gold:#f59e0b;
-  --green:#10b981;
-  --purple:#8b5cf6;
-  --pink:#ec4899;
-  --white:#f0f4ff;
-  --muted:#7a8ba8;
-  --card-bg:rgba(15,20,35,0.65);
-  --glass:rgba(255,255,255,0.04);
-  --glass-border:rgba(255,255,255,0.08);
+  --bg:#060810;--card:#0c0e18;
+  --blue:#3b82f6;--cyan:#06b6d4;--gold:#f59e0b;
+  --green:#10b981;--purple:#8b5cf6;--pink:#ec4899;
+  --white:#eef2ff;--muted:#64748b;
+  --glass:rgba(255,255,255,0.04);--glass-border:rgba(255,255,255,0.07);
 }
 html{scroll-behavior:smooth}
-body{
-  font-family:'Outfit',system-ui,sans-serif;
-  background:var(--bg);
-  color:var(--white);
-  overflow-x:hidden;
-  -webkit-font-smoothing:antialiased;
-}
+body{font-family:'Outfit',sans-serif;background:var(--bg);color:var(--white);overflow-x:hidden;-webkit-font-smoothing:antialiased}
 
-/* ───────── STAGE LABELS BAR ───────── */
-.stage-bar{
-  position:relative;z-index:20;
-  display:flex;align-items:center;justify-content:center;
-  gap:0;
-  padding:18px 40px;
-  background:rgba(8,12,24,0.85);
+/* ═══════════════════════════════════════
+   NAVIGATION BAR
+   ═══════════════════════════════════════ */
+.nav{
+  position:fixed;top:0;left:0;right:0;z-index:100;
+  display:flex;align-items:center;justify-content:space-between;
+  padding:16px 40px;
+  background:rgba(6,8,16,0.8);backdrop-filter:blur(24px);
   border-bottom:1px solid var(--glass-border);
-  backdrop-filter:blur(20px);
-  flex-wrap:wrap;
 }
-.stage-item{
-  display:flex;align-items:center;gap:10px;
-  padding:8px 18px;
-  font-size:11px;font-weight:600;letter-spacing:1.5px;text-transform:uppercase;
+.nav-logo{font-size:20px;font-weight:800;letter-spacing:-0.5px}
+.nav-logo span{color:var(--blue)}
+.nav-links{display:flex;gap:32px;align-items:center}
+.nav-links a{font-size:13px;font-weight:500;color:var(--muted);text-decoration:none;transition:color 0.2s}
+.nav-links a:hover{color:var(--white)}
+.nav-cta{
+  padding:10px 22px;border-radius:8px;font-size:13px;font-weight:600;
+  background:linear-gradient(135deg,var(--blue),var(--purple));color:#fff;
+  text-decoration:none;transition:all 0.3s;
+}
+.nav-cta:hover{transform:translateY(-1px);box-shadow:0 4px 20px rgba(59,130,246,0.4)}
+
+/* ═══════════════════════════════════════
+   STAGE PIPELINE BAR
+   ═══════════════════════════════════════ */
+.pipeline{
+  position:fixed;top:60px;left:0;right:0;z-index:99;
+  display:flex;align-items:center;justify-content:center;
+  padding:14px 40px;gap:0;
+  background:rgba(6,8,16,0.7);backdrop-filter:blur(16px);
+  border-bottom:1px solid var(--glass-border);
+}
+.pipe-stage{
+  display:flex;align-items:center;gap:8px;
+  padding:6px 16px;
+  font-size:10px;font-weight:700;letter-spacing:1.8px;text-transform:uppercase;
   color:var(--muted);
-  position:relative;
-  white-space:nowrap;
+  transition:all 0.3s;
 }
-.stage-item .dot{
-  width:8px;height:8px;border-radius:50%;
-  background:currentColor;
-  animation:pulse-dot 2s ease-in-out infinite;
-  flex-shrink:0;
+.pipe-stage .pip{
+  width:6px;height:6px;border-radius:50%;background:currentColor;
+  animation:pipPulse 2.5s ease-in-out infinite;
 }
-.stage-item .arrow{
-  color:rgba(255,255,255,0.15);font-size:16px;margin-left:6px;flex-shrink:0;
+.pipe-stage:nth-child(1){color:rgba(200,220,255,0.7)}
+.pipe-stage:nth-child(2){color:var(--blue)}
+.pipe-stage:nth-child(3){color:var(--gold)}
+.pipe-stage:nth-child(4){color:var(--green)}
+.pipe-stage:nth-child(5){color:var(--purple)}
+.pipe-arrow{
+  width:32px;height:1px;background:linear-gradient(90deg,rgba(255,255,255,0.15),rgba(255,255,255,0.05));
+  position:relative;flex-shrink:0;
 }
-.stage-item:nth-child(1){color:rgba(200,220,255,0.7)}
-.stage-item:nth-child(2){color:rgba(59,130,246,0.8)}
-.stage-item:nth-child(3){color:rgba(245,158,11,0.8)}
-.stage-item:nth-child(4){color:rgba(16,185,129,0.8)}
-.stage-item:nth-child(5){color:rgba(139,92,246,0.8)}
+.pipe-arrow::after{
+  content:'';position:absolute;right:0;top:-2px;
+  border:3px solid transparent;border-left:4px solid rgba(255,255,255,0.2);
+}
+@keyframes pipPulse{0%,100%{transform:scale(0.8);opacity:0.5}50%{transform:scale(1.3);opacity:1}}
 
-@keyframes pulse-dot{
-  0%,100%{transform:scale(1);opacity:0.7}
-  50%{transform:scale(1.5);opacity:1}
-}
-
-/* ───────── HERO ───────── */
+/* ═══════════════════════════════════════
+   HERO SECTION
+   ═══════════════════════════════════════ */
 .hero{
   position:relative;
-  min-height:calc(100vh - 60px);
+  height:100vh;min-height:700px;
   display:flex;
+  padding-top:100px;
   overflow:hidden;
 }
 
-/* ── Animated Background ── */
-.hero-bg{
-  position:absolute;inset:0;z-index:0;
-  background:var(--bg);
-  overflow:hidden;
+/* Background atmosphere */
+.atmosphere{position:absolute;inset:0;z-index:0;overflow:hidden}
+.atmo-orb{
+  position:absolute;border-radius:50%;filter:blur(140px);opacity:0.2;
+  animation:drift 30s ease-in-out infinite alternate;
 }
-.orb{
-  position:absolute;
-  border-radius:50%;
-  filter:blur(120px);
-  opacity:0.3;
-  animation:orbFloat 20s ease-in-out infinite;
-}
-.orb-1{width:600px;height:600px;background:var(--blue);top:-10%;left:-5%;animation-delay:0s;animation-duration:25s}
-.orb-2{width:500px;height:500px;background:var(--purple);bottom:-15%;left:30%;animation-delay:-5s;animation-duration:30s}
-.orb-3{width:400px;height:400px;background:var(--cyan);top:20%;right:-5%;animation-delay:-10s;animation-duration:22s}
-.orb-4{width:350px;height:350px;background:var(--gold);bottom:10%;right:20%;animation-delay:-15s;animation-duration:28s}
-.orb-5{width:300px;height:300px;background:var(--pink);top:40%;left:50%;animation-delay:-8s;animation-duration:26s}
+.atmo-orb:nth-child(1){width:700px;height:700px;background:var(--blue);top:-20%;left:-10%;animation-delay:0s}
+.atmo-orb:nth-child(2){width:500px;height:500px;background:var(--purple);bottom:-20%;left:40%;animation-delay:-8s}
+.atmo-orb:nth-child(3){width:600px;height:600px;background:var(--cyan);top:10%;right:-10%;animation-delay:-15s}
+.atmo-orb:nth-child(4){width:400px;height:400px;background:var(--gold);bottom:0;right:30%;animation-delay:-20s}
+@keyframes drift{0%{transform:translate(0,0) scale(1)}50%{transform:translate(30px,-20px) scale(1.05)}100%{transform:translate(-20px,30px) scale(0.95)}}
 
-@keyframes orbFloat{
-  0%,100%{transform:translate(0,0) scale(1)}
-  25%{transform:translate(40px,-30px) scale(1.1)}
-  50%{transform:translate(-20px,40px) scale(0.9)}
-  75%{transform:translate(30px,20px) scale(1.05)}
-}
-
-/* Grid overlay */
-.hero-bg::after{
+/* Grid mesh overlay */
+.atmosphere::after{
   content:'';position:absolute;inset:0;
   background-image:
-    linear-gradient(rgba(255,255,255,0.02) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(255,255,255,0.02) 1px, transparent 1px);
-  background-size:60px 60px;
-  mask-image:radial-gradient(ellipse 70% 60% at 55% 50%, black 20%, transparent 70%);
-  -webkit-mask-image:radial-gradient(ellipse 70% 60% at 55% 50%, black 20%, transparent 70%);
+    linear-gradient(rgba(255,255,255,0.015) 1px,transparent 1px),
+    linear-gradient(90deg,rgba(255,255,255,0.015) 1px,transparent 1px);
+  background-size:80px 80px;
+  mask-image:radial-gradient(ellipse 60% 50% at 60% 50%,black 10%,transparent 70%);
+  -webkit-mask-image:radial-gradient(ellipse 60% 50% at 60% 50%,black 10%,transparent 70%);
 }
 
-/* ── Hero Layout ── */
-.hero-inner{
+/* Hero content grid */
+.hero-grid{
   position:relative;z-index:2;
-  width:100%;max-width:1400px;margin:0 auto;
-  display:flex;align-items:center;
-  padding:60px 50px 40px;
-  gap:40px;
-}
-.hero-left{
-  flex:0 0 420px;
-  display:flex;flex-direction:column;
-  gap:28px;
-}
-.hero-right{
-  flex:1;position:relative;
-  height:520px;
-  display:flex;align-items:center;justify-content:center;
+  width:100%;max-width:1440px;margin:0 auto;
+  display:grid;grid-template-columns:1fr 1.4fr;
+  align-items:center;
+  padding:0 50px;gap:40px;
 }
 
-/* ── Badge ── */
+/* ── Left Column: Text ── */
+.hero-text{display:flex;flex-direction:column;gap:24px}
 .hero-badge{
   display:inline-flex;align-items:center;gap:8px;
-  background:rgba(139,92,246,0.12);
-  border:1px solid rgba(139,92,246,0.25);
-  border-radius:40px;
-  padding:6px 18px 6px 10px;
-  font-size:12px;font-weight:600;color:var(--purple);
-  letter-spacing:0.5px;
   width:fit-content;
-  animation:fadeInUp 0.8s ease both;
+  padding:6px 16px 6px 10px;border-radius:30px;
+  background:rgba(139,92,246,0.1);border:1px solid rgba(139,92,246,0.25);
+  font-size:11px;font-weight:600;color:var(--purple);letter-spacing:0.5px;
 }
-.hero-badge .pulse{
+.hero-badge .live{
   width:6px;height:6px;border-radius:50%;background:var(--purple);
-  animation:badge-pulse 2s ease-in-out infinite;
+  animation:livePulse 2s ease-in-out infinite;
 }
-@keyframes badge-pulse{0%,100%{opacity:0.5;transform:scale(0.8)}50%{opacity:1;transform:scale(1.2)}}
+@keyframes livePulse{0%,100%{opacity:0.4;transform:scale(0.7)}50%{opacity:1;transform:scale(1.2)}}
 
-/* ── Text ── */
-.hero-title{
-  font-size:clamp(36px,4vw,52px);font-weight:800;
-  line-height:1.08;letter-spacing:-1.5px;
-  animation:fadeInUp 0.8s ease 0.1s both;
+.hero h1{
+  font-size:clamp(40px,4.5vw,62px);font-weight:800;
+  line-height:1.05;letter-spacing:-2px;
 }
-.hero-title .gradient{
-  background:linear-gradient(135deg,var(--blue),var(--cyan),var(--purple));
-  -webkit-background-clip:text;-webkit-text-fill-color:transparent;
-  background-clip:text;
+.hero h1 .hl{
+  background:linear-gradient(135deg,var(--blue) 0%,var(--cyan) 40%,var(--purple) 100%);
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
 }
-.hero-sub{
-  font-size:16px;line-height:1.7;color:var(--muted);
-  max-width:420px;
-  animation:fadeInUp 0.8s ease 0.2s both;
-}
-.hero-actions{
-  display:flex;gap:14px;flex-wrap:wrap;
-  animation:fadeInUp 0.8s ease 0.3s both;
-}
+.hero-desc{font-size:16px;line-height:1.75;color:var(--muted);max-width:440px}
+.hero-btns{display:flex;gap:14px;flex-wrap:wrap}
 .btn{
   display:inline-flex;align-items:center;gap:8px;
-  padding:14px 28px;border-radius:12px;font-size:14px;font-weight:600;
-  cursor:pointer;border:none;text-decoration:none;
-  transition:all 0.3s ease;
+  padding:14px 28px;border-radius:10px;font-size:14px;font-weight:600;
+  cursor:pointer;border:none;text-decoration:none;transition:all 0.3s;font-family:inherit;
 }
-.btn-primary{
-  background:linear-gradient(135deg,var(--blue),var(--purple));
-  color:#fff;
-  box-shadow:0 4px 20px rgba(59,130,246,0.3);
+.btn-fill{
+  background:linear-gradient(135deg,var(--blue),var(--purple));color:#fff;
+  box-shadow:0 4px 24px rgba(59,130,246,0.3);
 }
-.btn-primary:hover{transform:translateY(-2px);box-shadow:0 8px 30px rgba(59,130,246,0.4)}
-.btn-secondary{
-  background:var(--glass);
-  border:1px solid var(--glass-border);
-  color:var(--white);
+.btn-fill:hover{transform:translateY(-2px);box-shadow:0 8px 32px rgba(59,130,246,0.45)}
+.btn-ghost{
+  background:var(--glass);border:1px solid var(--glass-border);color:var(--white);
 }
-.btn-secondary:hover{background:rgba(255,255,255,0.08);transform:translateY(-2px)}
+.btn-ghost:hover{background:rgba(255,255,255,0.07);transform:translateY(-2px)}
 
-@keyframes fadeInUp{
-  from{opacity:0;transform:translateY(24px)}
-  to{opacity:1;transform:translateY(0)}
+/* Stats row */
+.hero-stats{
+  display:flex;gap:32px;margin-top:8px;
 }
+.stat{text-align:left}
+.stat-num{font-size:28px;font-weight:800;letter-spacing:-1px;background:linear-gradient(135deg,var(--blue),var(--cyan));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+.stat-label{font-size:11px;font-weight:500;color:var(--muted);letter-spacing:0.5px;margin-top:2px}
 
-/* ═══════════════════════════════════════
-   LIVING DATASET SVG ANIMATION
-   ═══════════════════════════════════════ */
-.dataset-viz{
-  width:100%;height:100%;
+/* ── Right Column: Canvas ── */
+.hero-canvas-wrap{
   position:relative;
-  animation:fadeIn 1s ease 0.5s both;
-}
-@keyframes fadeIn{from{opacity:0}to{opacity:1}}
-
-.dataset-viz svg{
-  width:100%;height:100%;
-}
-
-/* Zone glows */
-.zone-glow{
-  opacity:0;
-  animation:zonePulse 4s ease-in-out infinite;
-}
-.zone-glow:nth-child(1){animation-delay:0s}
-.zone-glow:nth-child(2){animation-delay:0.8s}
-.zone-glow:nth-child(3){animation-delay:1.6s}
-.zone-glow:nth-child(4){animation-delay:2.4s}
-.zone-glow:nth-child(5){animation-delay:3.2s}
-
-@keyframes zonePulse{
-  0%,100%{opacity:0.06}
-  50%{opacity:0.15}
-}
-
-/* Particles */
-.particle{
-  opacity:0;
-  animation:particleLife var(--dur) var(--delay) ease-in-out infinite;
-}
-@keyframes particleLife{
-  0%{opacity:0;transform:translate(0,0) scale(0)}
-  10%{opacity:1;transform:scale(1)}
-  90%{opacity:1;transform:scale(1)}
-  100%{opacity:0;transform:translate(var(--tx),var(--ty)) scale(0)}
-}
-
-/* Connection lines */
-.conn-line{
-  stroke-dasharray:4 6;
-  animation:dashFlow 3s linear infinite;
-  opacity:0.15;
-}
-@keyframes dashFlow{to{stroke-dashoffset:-30}}
-
-/* Flowing streams */
-.stream-path{
-  fill:none;
-  stroke-dasharray:8 12;
-  animation:streamFlow 4s linear infinite;
-  opacity:0.25;
-}
-@keyframes streamFlow{to{stroke-dashoffset:-40}}
-
-/* Annotation boxes */
-.annot-box{
-  opacity:0;
-  animation:annotFade 5s ease-in-out infinite;
-  animation-delay:var(--delay);
-}
-@keyframes annotFade{0%,100%{opacity:0}20%,80%{opacity:1}}
-
-/* Stage labels inside viz */
-.viz-label{
-  font-family:'Outfit',sans-serif;
-  font-weight:700;
-  font-size:10px;
-  letter-spacing:1.5px;
-  text-transform:uppercase;
-  fill:currentColor;
-  opacity:0.6;
-}
-
-/* Zone dots */
-.zone-dot{
-  animation:zoneDotPulse 2s ease-in-out infinite;
-  animation-delay:var(--delay);
-}
-@keyframes zoneDotPulse{0%,100%{r:3;opacity:0.5}50%{r:5;opacity:1}}
-
-/* ─── Outcome icons ─── */
-.outcome-icons{
-  position:absolute;right:0;top:50%;transform:translateY(-50%);
-  display:flex;flex-direction:column;gap:20px;
-  z-index:10;
-}
-.outcome-icon{
-  display:flex;flex-direction:column;align-items:center;gap:4px;
-  opacity:0;
-  animation:fadeInUp 0.6s ease var(--delay) both;
-}
-.outcome-icon .circle{
-  width:44px;height:44px;border-radius:12px;
-  display:flex;align-items:center;justify-content:center;
-  font-size:20px;
+  height:560px;
+  border-radius:20px;
+  overflow:hidden;
   border:1px solid var(--glass-border);
-  background:var(--glass);
-  backdrop-filter:blur(10px);
+  background:rgba(8,10,20,0.6);
 }
-.outcome-icon .text{
-  font-size:9px;font-weight:600;text-transform:uppercase;
-  letter-spacing:0.8px;color:var(--muted);
-  text-align:center;max-width:70px;line-height:1.3;
-}
+#mainCanvas{width:100%;height:100%;display:block}
 
-/* ─── Living Dataset Badge ─── */
-.living-badge{
-  position:absolute;bottom:-10px;left:50%;transform:translateX(-50%);
-  z-index:10;
-  display:flex;align-items:center;gap:10px;
-  background:rgba(139,92,246,0.15);
-  border:1px solid rgba(139,92,246,0.3);
-  border-radius:40px;
-  padding:10px 24px;
-  white-space:nowrap;
-  animation:fadeInUp 0.8s ease 1s both;
+/* Canvas overlay labels */
+.canvas-overlay{position:absolute;inset:0;pointer-events:none}
+.canvas-label{
+  position:absolute;
+  font-size:9px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;
+  opacity:0.5;
+  writing-mode:vertical-rl;text-orientation:mixed;
+  transform:rotate(180deg);
 }
-.living-badge .ring{
-  width:28px;height:28px;
-  border:2px solid var(--purple);
-  border-radius:50%;
-  border-top-color:transparent;
-  animation:spin 2s linear infinite;
-  flex-shrink:0;
+.canvas-label:nth-child(1){left:14px;top:50%;color:rgba(200,220,255,0.6)}
+.canvas-label:nth-child(2){left:calc(14px + 20%);top:50%;color:var(--blue)}
+.canvas-label:nth-child(3){left:calc(14px + 38%);top:50%;color:var(--gold)}
+.canvas-label:nth-child(4){left:calc(14px + 52%);top:50%;color:var(--green)}
+.canvas-label:nth-child(5){left:calc(14px + 70%);top:50%;color:var(--purple)}
+
+/* Floating outcome cards on right */
+.outcome-strip{
+  position:absolute;right:-200px;top:50%;transform:translateY(-50%);
+  display:flex;flex-direction:column;gap:16px;
+  pointer-events:none;
+}
+.outcome-card{
+  display:flex;align-items:center;gap:12px;
+  padding:10px 16px;border-radius:10px;
+  background:rgba(12,14,24,0.8);border:1px solid var(--glass-border);
+  backdrop-filter:blur(12px);
+  white-space:nowrap;
+  opacity:0;animation:slideInRight 0.6s ease forwards;
+}
+.outcome-card:nth-child(1){animation-delay:0.6s}
+.outcome-card:nth-child(2){animation-delay:0.8s}
+.outcome-card:nth-child(3){animation-delay:1.0s}
+.outcome-card:nth-child(4){animation-delay:1.2s}
+@keyframes slideInRight{from{opacity:0;transform:translateX(-20px)}to{opacity:1;transform:translateX(0)}}
+.outcome-card .oc-icon{
+  width:36px;height:36px;border-radius:8px;
+  display:flex;align-items:center;justify-content:center;
+  font-size:16px;flex-shrink:0;
+}
+.outcome-card .oc-text{font-size:11px;font-weight:600;color:var(--muted);line-height:1.3}
+.outcome-card .oc-text strong{display:block;color:var(--white);font-weight:700}
+
+/* Living Dataset badge */
+.ld-badge{
+  position:absolute;bottom:20px;left:50%;transform:translateX(-50%);
+  display:flex;align-items:center;gap:10px;
+  padding:10px 24px;border-radius:30px;
+  background:rgba(139,92,246,0.12);border:1px solid rgba(139,92,246,0.3);
+  pointer-events:none;
+}
+.ld-badge .spinner{
+  width:20px;height:20px;border:2px solid rgba(139,92,246,0.3);
+  border-top-color:var(--purple);border-radius:50%;
+  animation:spin 1.5s linear infinite;
 }
 @keyframes spin{to{transform:rotate(360deg)}}
-.living-badge span{
-  font-size:13px;font-weight:600;color:rgba(200,180,255,0.9);
-}
+.ld-badge span{font-size:12px;font-weight:600;color:rgba(200,180,255,0.85)}
 
 /* ═══════════════════════════════════════
-   INDUSTRY CARDS
+   INDUSTRY SECTIONS
    ═══════════════════════════════════════ */
-.industry-section{
+.industries{
   position:relative;z-index:5;
-  padding:80px 50px 40px;
-  max-width:1400px;margin:0 auto;
+  padding:100px 50px 60px;
+  max-width:1440px;margin:0 auto;
 }
-.section-label{
-  font-size:12px;font-weight:700;letter-spacing:2px;text-transform:uppercase;
-  color:var(--blue);margin-bottom:8px;
+.sec-badge{
+  display:inline-flex;align-items:center;gap:6px;
+  padding:5px 14px;border-radius:20px;
+  background:rgba(59,130,246,0.1);border:1px solid rgba(59,130,246,0.2);
+  font-size:10px;font-weight:700;color:var(--blue);letter-spacing:1px;text-transform:uppercase;
+  margin-bottom:16px;
 }
-.section-title{
-  font-size:clamp(28px,3vw,40px);font-weight:800;letter-spacing:-1px;
-  margin-bottom:12px;
-}
-.section-sub{
-  font-size:15px;color:var(--muted);margin-bottom:40px;
-}
-.industry-grid{
-  display:grid;
-  grid-template-columns:repeat(5,1fr);
-  gap:20px;
+.sec-title{font-size:clamp(30px,3.5vw,44px);font-weight:800;letter-spacing:-1.5px;margin-bottom:8px}
+.sec-sub{font-size:15px;color:var(--muted);margin-bottom:48px}
+
+.ind-grid{
+  display:grid;grid-template-columns:repeat(5,1fr);gap:20px;
 }
 .ind-card{
-  position:relative;
-  border-radius:16px;
-  overflow:hidden;
-  aspect-ratio:3/4;
-  cursor:pointer;
-  transition:all 0.4s cubic-bezier(0.4,0,0.2,1);
+  position:relative;border-radius:16px;overflow:hidden;
+  aspect-ratio:3/4;cursor:pointer;
   border:1px solid var(--glass-border);
+  transition:all 0.4s cubic-bezier(0.4,0,0.2,1);
 }
 .ind-card:hover{
-  transform:translateY(-8px) scale(1.02);
+  transform:translateY(-10px) scale(1.02);
   border-color:rgba(255,255,255,0.15);
-  box-shadow:0 20px 50px rgba(0,0,0,0.4);
+  box-shadow:0 24px 60px rgba(0,0,0,0.5);
 }
-.ind-card img{
-  width:100%;height:100%;object-fit:cover;
-  transition:transform 0.6s ease;
-}
-.ind-card:hover img{transform:scale(1.08)}
-.ind-card .overlay{
+.ind-card img{width:100%;height:100%;object-fit:cover;transition:transform 0.6s ease}
+.ind-card:hover img{transform:scale(1.1)}
+.ind-card .card-overlay{
   position:absolute;inset:0;
-  background:linear-gradient(180deg,transparent 30%,rgba(6,8,15,0.9) 100%);
+  background:linear-gradient(180deg,transparent 20%,rgba(6,8,16,0.92) 100%);
   display:flex;flex-direction:column;justify-content:flex-end;
-  padding:20px;
+  padding:22px;
 }
-.ind-card .tag{
-  font-size:10px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;
+.ind-card .card-tag{
+  font-size:9px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;
   color:var(--blue);margin-bottom:6px;
 }
-.ind-card .name{
-  font-size:18px;font-weight:700;letter-spacing:-0.3px;
-  margin-bottom:4px;
+.ind-card .card-name{font-size:17px;font-weight:700;margin-bottom:4px}
+.ind-card .card-desc{font-size:11.5px;color:var(--muted);line-height:1.5}
+.ind-card .card-arrow{
+  position:absolute;top:16px;right:16px;
+  width:32px;height:32px;border-radius:50%;
+  background:rgba(255,255,255,0.08);border:1px solid rgba(255,255,255,0.12);
+  display:flex;align-items:center;justify-content:center;
+  transition:all 0.3s;
 }
-.ind-card .desc{
-  font-size:12px;color:var(--muted);line-height:1.5;
-}
+.ind-card:hover .card-arrow{background:rgba(255,255,255,0.15);transform:translate(2px,-2px)}
+.ind-card .card-arrow svg{width:14px;height:14px;color:var(--white)}
 
 /* ═══════════════════════════════════════
    TRUST BAR
    ═══════════════════════════════════════ */
-.trust-bar{
+.trust{
   position:relative;z-index:5;
   display:flex;align-items:center;justify-content:center;
-  gap:40px;
-  padding:30px 50px;
-  max-width:1400px;margin:0 auto;
+  gap:clamp(20px,3.5vw,48px);
+  padding:28px 50px;
+  max-width:1440px;margin:0 auto;
   border-top:1px solid var(--glass-border);
   flex-wrap:wrap;
 }
 .trust-item{
   display:flex;align-items:center;gap:10px;
-  font-size:13px;color:var(--muted);font-weight:500;
+  font-size:12.5px;font-weight:500;color:var(--muted);white-space:nowrap;
 }
-.trust-item svg{
-  width:20px;height:20px;
-  color:var(--blue);
-  opacity:0.6;
+.trust-item svg{width:18px;height:18px;color:var(--blue);opacity:0.5}
+
+/* ═══════════════════════════════════════
+   FOOTER
+   ═══════════════════════════════════════ */
+.footer{
+  position:relative;z-index:5;
+  text-align:center;padding:40px 50px;
+  font-size:12px;color:rgba(255,255,255,0.2);
+  border-top:1px solid var(--glass-border);
 }
 
 /* ═══════════════════════════════════════
    RESPONSIVE
    ═══════════════════════════════════════ */
-@media(max-width:1024px){
-  .hero-inner{flex-direction:column;padding:40px 30px;text-align:center}
-  .hero-left{flex:none;width:100%;max-width:600px;align-items:center}
-  .hero-right{height:400px;width:100%}
-  .hero-actions{justify-content:center}
-  .outcome-icons{display:none}
-  .industry-grid{grid-template-columns:repeat(3,1fr)}
+@media(max-width:1100px){
+  .hero-grid{grid-template-columns:1fr;text-align:center;padding-top:40px}
+  .hero-text{align-items:center}
+  .hero-desc{margin:0 auto}
+  .hero-btns{justify-content:center}
+  .hero-stats{justify-content:center}
+  .hero-canvas-wrap{height:420px}
+  .outcome-strip{display:none}
+  .ind-grid{grid-template-columns:repeat(3,1fr)}
+  .pipeline{display:none}
 }
 @media(max-width:768px){
-  .hero-right{height:320px}
-  .stage-bar{padding:12px 16px;gap:4px}
-  .stage-item{font-size:9px;padding:4px 8px}
-  .stage-item .arrow{display:none}
-  .industry-grid{grid-template-columns:repeat(2,1fr)}
-  .trust-bar{gap:20px;padding:20px 30px}
-  .industry-section{padding:50px 20px 30px}
+  .nav{padding:12px 20px}
+  .nav-links{display:none}
+  .hero{height:auto;min-height:auto;padding-top:80px}
+  .hero-grid{padding:0 20px}
+  .hero-canvas-wrap{height:340px;border-radius:14px}
+  .industries{padding:60px 20px 40px}
+  .ind-grid{grid-template-columns:repeat(2,1fr)}
+  .trust{gap:16px;padding:20px}
 }
 @media(max-width:480px){
-  .hero-right{height:260px}
-  .industry-grid{grid-template-columns:1fr}
+  .hero-canvas-wrap{height:260px}
+  .ind-grid{grid-template-columns:1fr}
 }
 </style>
 </head>
 <body>
 
-<!-- ═══════════ STAGE LABELS ═══════════ -->
-<div class="stage-bar">
-  <div class="stage-item">
-    <span class="dot"></span>RAW DATA<span class="arrow">&#8594;</span>
+<!-- ═══════════ NAV ═══════════ -->
+<nav class="nav">
+  <div class="nav-logo">A<span>no</span>tag</div>
+  <div class="nav-links">
+    <a href="#solutions">Solutions</a>
+    <a href="#platform">Platform</a>
+    <a href="#industries">Industries</a>
+    <a href="#about">About</a>
+    <a href="#contact" class="nav-cta">Book a Demo</a>
   </div>
-  <div class="stage-item">
-    <span class="dot"></span>ANNOTATION<span class="arrow">&#8594;</span>
-  </div>
-  <div class="stage-item">
-    <span class="dot"></span>QUALITY CHECK<span class="arrow">&#8594;</span>
-  </div>
-  <div class="stage-item">
-    <span class="dot"></span>AI READY<span class="arrow">&#8594;</span>
-  </div>
-  <div class="stage-item">
-    <span class="dot"></span>REAL-WORLD IMPACT
-  </div>
+</nav>
+
+<!-- ═══════════ PIPELINE ═══════════ -->
+<div class="pipeline">
+  <div class="pipe-stage"><span class="pip"></span>Raw Data</div>
+  <div class="pipe-arrow"></div>
+  <div class="pipe-stage"><span class="pip"></span>Annotation</div>
+  <div class="pipe-arrow"></div>
+  <div class="pipe-stage"><span class="pip"></span>Quality Check</div>
+  <div class="pipe-arrow"></div>
+  <div class="pipe-stage"><span class="pip"></span>AI Ready</div>
+  <div class="pipe-arrow"></div>
+  <div class="pipe-stage"><span class="pip"></span>Real-World Impact</div>
 </div>
 
 <!-- ═══════════ HERO ═══════════ -->
 <section class="hero">
-  <div class="hero-bg">
-    <div class="orb orb-1"></div>
-    <div class="orb orb-2"></div>
-    <div class="orb orb-3"></div>
-    <div class="orb orb-4"></div>
-    <div class="orb orb-5"></div>
+  <div class="atmosphere">
+    <div class="atmo-orb"></div>
+    <div class="atmo-orb"></div>
+    <div class="atmo-orb"></div>
+    <div class="atmo-orb"></div>
   </div>
 
-  <div class="hero-inner">
+  <div class="hero-grid">
     <!-- Left: Text -->
-    <div class="hero-left">
-      <div class="hero-badge">
-        <span class="pulse"></span>
-        Living Dataset Technology
+    <div class="hero-text">
+      <div class="hero-badge"><span class="live"></span>Living Dataset Technology</div>
+      <h1>AI Data<br>That Powers<br><span class="hl">Intelligence</span></h1>
+      <p class="hero-desc">High-quality training data that helps AI models learn better, perform stronger, and scale faster across every industry.</p>
+      <div class="hero-btns">
+        <a href="#solutions" class="btn btn-fill">Explore Solutions <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg></a>
+        <a href="#contact" class="btn btn-ghost">Book a Consultation</a>
       </div>
-      <h1 class="hero-title">
-        AI Data That<br>
-        <span class="gradient">Powers Intelligence</span>
-      </h1>
-      <p class="hero-sub">
-        High-quality training data that helps AI models learn better,
-        perform stronger, and scale faster across every industry.
-      </p>
-      <div class="hero-actions">
-        <a href="#solutions" class="btn btn-primary">Explore Solutions &#8594;</a>
-        <a href="#contact" class="btn btn-secondary">Book a Consultation</a>
+      <div class="hero-stats">
+        <div class="stat"><div class="stat-num">10M+</div><div class="stat-label">Data Points Annotated</div></div>
+        <div class="stat"><div class="stat-num">98%</div><div class="stat-label">Quality Score</div></div>
+        <div class="stat"><div class="stat-num">50+</div><div class="stat-label">Industries Served</div></div>
       </div>
     </div>
 
-    <!-- Right: SVG Visualization -->
-    <div class="hero-right">
-      <div class="dataset-viz" id="datasetViz">
-        <svg id="vizSvg" viewBox="0 0 900 520" preserveAspectRatio="xMidYMid meet"></svg>
+    <!-- Right: Canvas -->
+    <div class="hero-canvas-wrap" id="canvasWrap">
+      <canvas id="mainCanvas"></canvas>
+      <div class="canvas-overlay">
+        <span class="canvas-label">Raw Data</span>
+        <span class="canvas-label">Annotation</span>
+        <span class="canvas-label">Quality</span>
+        <span class="canvas-label">AI Ready</span>
+        <span class="canvas-label">Impact</span>
       </div>
 
-      <!-- Outcome Icons -->
-      <div class="outcome-icons">
-        <div class="outcome-icon" style="--delay:0.8s">
-          <div class="circle" style="color:var(--blue)">&#128269;</div>
-          <span class="text">Smarter Decisions</span>
+      <!-- Outcome cards -->
+      <div class="outcome-strip" style="position:absolute;right:16px;top:50%;transform:translateY(-50%);display:flex;flex-direction:column;gap:14px;pointer-events:none">
+        <div class="outcome-card">
+          <div class="oc-icon" style="background:rgba(59,130,246,0.15);color:var(--blue)">&#128269;</div>
+          <div class="oc-text"><strong>Smarter</strong>Decisions</div>
         </div>
-        <div class="outcome-icon" style="--delay:1s">
-          <div class="circle" style="color:var(--cyan)">&#9889;</div>
-          <span class="text">AI That Performs</span>
+        <div class="outcome-card">
+          <div class="oc-icon" style="background:rgba(6,182,212,0.15);color:var(--cyan)">&#9889;</div>
+          <div class="oc-text"><strong>AI That</strong>Performs</div>
         </div>
-        <div class="outcome-icon" style="--delay:1.2s">
-          <div class="circle" style="color:var(--green)">&#9881;</div>
-          <span class="text">Operational Efficiency</span>
+        <div class="outcome-card">
+          <div class="oc-icon" style="background:rgba(16,185,129,0.15);color:var(--green)">&#9881;</div>
+          <div class="oc-text"><strong>Operational</strong>Efficiency</div>
         </div>
-        <div class="outcome-icon" style="--delay:1.4s">
-          <div class="circle" style="color:var(--purple)">&#128640;</div>
-          <span class="text">Real Business Impact</span>
+        <div class="outcome-card">
+          <div class="oc-icon" style="background:rgba(139,92,246,0.15);color:var(--purple)">&#128640;</div>
+          <div class="oc-text"><strong>Real Business</strong>Impact</div>
         </div>
       </div>
 
-      <!-- Living Dataset Badge -->
-      <div class="living-badge">
-        <div class="ring"></div>
+      <div class="ld-badge">
+        <div class="spinner"></div>
         <span>Living Dataset&trade; in Action</span>
       </div>
     </div>
   </div>
 </section>
 
-<!-- ═══════════ INDUSTRY CARDS ═══════════ -->
-<section class="industry-section" id="solutions">
-  <div class="section-label">AI Data Solutions for Every Industry</div>
-  <h2 class="section-title">Hover to explore</h2>
-  <div class="industry-grid">
+<!-- ═══════════ INDUSTRIES ═══════════ -->
+<section class="industries" id="industries">
+  <div class="sec-badge">&#9679; Solutions</div>
+  <h2 class="sec-title">AI Data Solutions for<br>Every Industry</h2>
+  <p class="sec-sub">Hover to explore how Anotag powers AI across sectors</p>
+  <div class="ind-grid">
     <div class="ind-card">
-      <img src="https://static.wixstatic.com/media/576657_43e3a1c0b66847ecb173f060e9407b46~mv2.png" alt="Healthcare" loading="lazy">
-      <div class="overlay">
-        <div class="tag">Sector</div>
-        <div class="name">Healthcare</div>
-        <div class="desc">Medical imaging, diagnostics, and patient care AI</div>
+      <img src="https://images.unsplash.com/photo-1576091160399-112ba8d25d1d?w=400&h=540&fit=crop" alt="Healthcare" loading="lazy">
+      <div class="card-overlay">
+        <div class="card-tag">Sector</div>
+        <div class="card-name">Healthcare</div>
+        <div class="card-desc">Medical imaging, diagnostics, and patient care AI</div>
       </div>
+      <div class="card-arrow"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg></div>
     </div>
     <div class="ind-card">
-      <img src="https://static.wixstatic.com/media/576657_1e8b8b8b8b8b4b8b8b8b8b8b8b8b8b8b~mv2.png" alt="Automotive" loading="lazy">
-      <div class="overlay">
-        <div class="tag">Sector</div>
-        <div class="name">Automotive</div>
-        <div class="desc">Autonomous driving, ADAS, and smart mobility</div>
+      <img src="https://images.unsplash.com/photo-1549317661-bd32c8ce0afa?w=400&h=540&fit=crop" alt="Automotive" loading="lazy">
+      <div class="card-overlay">
+        <div class="card-tag">Sector</div>
+        <div class="card-name">Automotive</div>
+        <div class="card-desc">Autonomous driving, ADAS, and smart mobility</div>
       </div>
+      <div class="card-arrow"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg></div>
     </div>
     <div class="ind-card">
-      <img src="https://static.wixstatic.com/media/576657_0a7c5c709ca54f8284b34453c32b9e8e~mv2.png" alt="Retail" loading="lazy">
-      <div class="overlay">
-        <div class="tag">Sector</div>
-        <div class="name">Retail &amp; eCommerce</div>
-        <div class="desc">Product recognition, shelf analytics, and customer insights</div>
+      <img src="https://images.unsplash.com/photo-1556742049-0cfed4f6a45d?w=400&h=540&fit=crop" alt="Retail" loading="lazy">
+      <div class="card-overlay">
+        <div class="card-tag">Sector</div>
+        <div class="card-name">Retail &amp; eCommerce</div>
+        <div class="card-desc">Product recognition, shelf analytics, customer insights</div>
       </div>
+      <div class="card-arrow"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg></div>
     </div>
     <div class="ind-card">
-      <img src="https://static.wixstatic.com/media/576657_4b7e6e24927d4a8f92e9296f4c8f2c8f~mv2.png" alt="Agriculture" loading="lazy">
-      <div class="overlay">
-        <div class="tag">Sector</div>
-        <div class="name">Agriculture</div>
-        <div class="desc">Crop monitoring, yield prediction, and precision farming</div>
+      <img src="https://images.unsplash.com/photo-1625246333195-78d9c38ad449?w=400&h=540&fit=crop" alt="Agriculture" loading="lazy">
+      <div class="card-overlay">
+        <div class="card-tag">Sector</div>
+        <div class="card-name">Agriculture</div>
+        <div class="card-desc">Crop monitoring, yield prediction, precision farming</div>
       </div>
+      <div class="card-arrow"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg></div>
     </div>
     <div class="ind-card">
-      <img src="https://static.wixstatic.com/media/576657_f0f0a0f0f0f0f0f0f0f0f0f0f0f0f0f0~mv2.png" alt="Financial Services" loading="lazy">
-      <div class="overlay">
-        <div class="tag">Sector</div>
-        <div class="name">Financial Services</div>
-        <div class="desc">Document intelligence, fraud detection, and risk analysis</div>
+      <img src="https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=400&h=540&fit=crop" alt="Finance" loading="lazy">
+      <div class="card-overlay">
+        <div class="card-tag">Sector</div>
+        <div class="card-name">Financial Services</div>
+        <div class="card-desc">Document intelligence, fraud detection, risk analysis</div>
       </div>
+      <div class="card-arrow"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg></div>
     </div>
   </div>
 </section>
 
-<!-- ═══════════ TRUST BAR ═══════════ -->
-<div class="trust-bar">
-  <div class="trust-item">
-    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
-    Enterprise Security
-  </div>
-  <div class="trust-item">
-    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 11-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
-    98%+ Quality Assurance
-  </div>
-  <div class="trust-item">
-    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87"/><path d="M16 3.13a4 4 0 010 7.75"/></svg>
-    Human-in-the-Loop
-  </div>
-  <div class="trust-item">
-    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
-    Scalable Operations
-  </div>
-  <div class="trust-item">
-    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="7" width="20" height="14" rx="2" ry="2"/><path d="M16 21V5a2 2 0 00-2-2h-4a2 2 0 00-2 2v16"/></svg>
-    Flexible Engagement
-  </div>
-  <div class="trust-item">
-    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2L2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5"/><path d="M2 12l10 5 10-5"/></svg>
-    Domain Experts
-  </div>
+<!-- ═══════════ TRUST ═══════════ -->
+<div class="trust">
+  <div class="trust-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>Enterprise Security</div>
+  <div class="trust-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M22 11.08V12a10 10 0 11-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>98%+ Quality Assurance</div>
+  <div class="trust-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87M16 3.13a4 4 0 010 7.75"/></svg>Human-in-the-Loop</div>
+  <div class="trust-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>Scalable Operations</div>
+  <div class="trust-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 21V5a2 2 0 00-2-2h-4a2 2 0 00-2 2v16"/></svg>Flexible Engagement</div>
+  <div class="trust-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26"/></svg>Domain Experts</div>
 </div>
 
+<div class="footer">&copy; 2026 Anotag. All rights reserved.</div>
+
+<!-- ═══════════════════════════════════════
+     PARTICLE UNIVERSE ENGINE
+     ═══════════════════════════════════════ -->
 <script>
 (function(){
-  var svg = document.getElementById('vizSvg');
-  var NS = 'http://www.w3.org/2000/svg';
+  'use strict';
 
+  var canvas = document.getElementById('mainCanvas');
+  var wrap = document.getElementById('canvasWrap');
+  if (!canvas || !wrap) return;
+
+  var ctx = canvas.getContext('2d');
+  if (!ctx) { console.error('No 2d context'); return; }
+
+  var W = 0, H = 0, dpr = 1;
+  var mouseX = -9999, mouseY = -9999;
+  var mouseVX = 0, mouseVY = 0;
+  var prevMX = 0, prevMY = 0;
+  var time = 0, lastFrame = 0;
+  var particles = [];
+  var bursts = [];
+
+  /* ══════════════════════════════════
+     ZONE DEFINITIONS
+     ══════════════════════════════════ */
   var ZONES = [
-    {x:0,   w:170, label:'RAW DATA',          color:'#c8dcff', rgb:'200,220,255'},
-    {x:170, w:160, label:'ANNOTATION',        color:'#3b82f6', rgb:'59,130,246'},
-    {x:330, w:140, label:'QUALITY CHECK',     color:'#f59e0b', rgb:'245,158,11'},
-    {x:470, w:150, label:'AI READY',          color:'#10b981', rgb:'16,185,129'},
-    {x:620, w:280, label:'REAL-WORLD IMPACT', color:'#8b5cf6', rgb:'139,92,246'}
+    { xStart:0.00, xEnd:0.20, hue:210, sat:40, lit:80, speed:0.35, turbulence:1.0, label:'RAW' },
+    { xStart:0.20, xEnd:0.38, hue:220, sat:80, lit:60, speed:0.30, turbulence:0.6, label:'ANNOTATE' },
+    { xStart:0.38, xEnd:0.52, hue:40,  sat:90, lit:60, speed:0.20, turbulence:0.3, label:'QC' },
+    { xStart:0.52, xEnd:0.68, hue:150, sat:70, lit:55, speed:0.25, turbulence:0.4, label:'READY' },
+    { xStart:0.68, xEnd:1.00, hue:270, sat:70, lit:65, speed:0.45, turbulence:0.8, label:'IMPACT' }
   ];
 
-  var Y = 80, H = 380;
+  var ZONE_COLORS = [
+    [200,215,255],
+    [59,130,246],
+    [245,158,11],
+    [16,185,129],
+    [139,92,246]
+  ];
 
-  // ── Zone ellipses ──
-  function makeEllipses(){
-    var g = document.createElementNS(NS,'g');
-    ZONES.forEach(function(z, i){
-      var cx = z.x + z.w/2;
-      var rx = z.w * 0.52;
-      var ry = H * 0.48;
-      // Outer glow
-      var e = document.createElementNS(NS,'ellipse');
-      e.setAttribute('cx', cx);
-      e.setAttribute('cy', 260);
-      e.setAttribute('rx', rx);
-      e.setAttribute('ry', ry);
-      e.setAttribute('fill', 'none');
-      e.setAttribute('stroke', z.color);
-      e.setAttribute('stroke-width', '1');
-      e.setAttribute('opacity', '0.12');
-      e.classList.add('zone-glow');
-      e.style.animationDelay = (i * 0.8) + 's';
-      g.appendChild(e);
-      // Inner fill
-      var e2 = document.createElementNS(NS,'ellipse');
-      e2.setAttribute('cx', cx);
-      e2.setAttribute('cy', 260);
-      e2.setAttribute('rx', rx * 0.92);
-      e2.setAttribute('ry', ry * 0.92);
-      e2.setAttribute('fill', 'url(#zoneGrad'+i+')');
-      e2.setAttribute('opacity', '0.08');
-      e2.classList.add('zone-glow');
-      e2.style.animationDelay = (i * 0.8 + 0.4) + 's';
-      g.appendChild(e2);
-      // Label
-      var t = document.createElementNS(NS,'text');
-      t.setAttribute('x', cx);
-      t.setAttribute('y', Y - 20);
-      t.setAttribute('text-anchor','middle');
-      t.setAttribute('class','viz-label');
-      t.style.color = z.color;
-      t.textContent = z.label;
-      g.appendChild(t);
-      // Bottom dot
-      var dot = document.createElementNS(NS,'circle');
-      dot.setAttribute('cx', cx);
-      dot.setAttribute('cy', Y + H + 20);
-      dot.setAttribute('r', '3');
-      dot.setAttribute('fill', z.color);
-      dot.classList.add('zone-dot');
-      dot.style.setProperty('--delay', (i * 0.5) + 's');
-      g.appendChild(dot);
-    });
-    svg.appendChild(g);
-  }
-
-  // ── Flowing streams (curved paths between zones) ──
-  function makeStreams(){
-    var colors = ['#3b82f6','#06b6d4','#f59e0b','#10b981','#8b5cf6'];
-    for(var s = 0; s < 6; s++){
-      var startY = 140 + s * 50;
-      var cp1y = startY + (Math.random()-0.5)*80;
-      var cp2y = startY + (Math.random()-0.5)*80;
-      var endY = startY + (Math.random()-0.5)*60;
-      var d = 'M -20 '+startY+' C 200 '+cp1y+', 500 '+cp2y+', 920 '+endY;
-      var p = document.createElementNS(NS,'path');
-      p.setAttribute('d', d);
-      p.setAttribute('class','stream-path');
-      p.setAttribute('stroke', colors[s % colors.length]);
-      p.setAttribute('stroke-width', '1.5');
-      p.style.animationDelay = (s * 0.6) + 's';
-      p.style.animationDuration = (3 + s * 0.5) + 's';
-      svg.appendChild(p);
+  /* ══════════════════════════════════
+     SIMPLEX NOISE (simplified)
+     ══════════════════════════════════ */
+  var perm = new Uint8Array(512);
+  (function(){
+    var p = [];
+    for(var i=0;i<256;i++) p[i]=i;
+    for(var i=255;i>0;i--){
+      var j=Math.floor(Math.random()*(i+1));
+      var t=p[i];p[i]=p[j];p[j]=t;
     }
+    for(var i=0;i<512;i++) perm[i]=p[i&255];
+  })();
+  function fade(t){return t*t*t*(t*(t*6-15)+10)}
+  function grad(h,x,y){var v=h&3;return(v===0?x+y:v===1?-x+y:v===2?x-y:-x-y)}
+  function noise2d(x,y){
+    var X=Math.floor(x)&255, Y=Math.floor(y)&255;
+    x-=Math.floor(x); y-=Math.floor(y);
+    var u=fade(x), v=fade(y);
+    var A=perm[X]+Y, B=perm[X+1]+Y;
+    return lerp(
+      lerp(grad(perm[A],x,y),grad(perm[B],x-1,y),u),
+      lerp(grad(perm[A+1],x,y-1),grad(perm[B+1],x-1,y-1),u),
+      v
+    );
+  }
+  function fbm(x,y,oct){
+    var v=0,a=0.5,f=1;
+    for(var i=0;i<oct;i++){v+=a*noise2d(x*f,y*f);x*=2;y*=2;a*=0.5;}
+    return v;
   }
 
-  // ── Particles ──
-  function makeParticles(){
-    var count = 180;
-    var g = document.createElementNS(NS,'g');
+  /* ══════════════════════════════════
+     HELPERS
+     ══════════════════════════════════ */
+  function lerp(a,b,t){return a+(b-a)*t}
+  function clamp(v,a,b){return Math.max(a,Math.min(b,v))}
+  function rand(a,b){return a+Math.random()*(b-a)}
+  function dist(x1,y1,x2,y2){var dx=x1-x2,dy=y1-y2;return Math.sqrt(dx*dx+dy*dy)}
+
+  function getZone(nx){
+    for(var i=0;i<5;i++){
+      if(nx>=ZONES[i].xStart && nx<ZONES[i].xEnd) return i;
+    }
+    return 4;
+  }
+
+  function zoneColor(nx, alpha){
+    var zi = clamp(Math.floor(nx * 5), 0, 4);
+    var zni = clamp(zi + 1, 0, 4);
+    var t = (nx * 5) % 1;
+    var c0 = ZONE_COLORS[zi], c1 = ZONE_COLORS[zni];
+    var r = Math.round(lerp(c0[0],c1[0],t));
+    var g = Math.round(lerp(c0[1],c1[1],t));
+    var b = Math.round(lerp(c0[2],c1[2],t));
+    return 'rgba('+r+','+g+','+b+','+alpha+')';
+  }
+
+  function zoneColorRGB(nx){
+    var zi = clamp(Math.floor(nx * 5), 0, 4);
+    return ZONE_COLORS[zi];
+  }
+
+  /* ══════════════════════════════════
+     RESIZE
+     ══════════════════════════════════ */
+  function resize(){
+    dpr = Math.min(window.devicePixelRatio || 1, 2);
+    var rect = wrap.getBoundingClientRect();
+    W = rect.width;
+    H = rect.height;
+    canvas.width = W * dpr;
+    canvas.height = H * dpr;
+    canvas.style.width = W + 'px';
+    canvas.style.height = H + 'px';
+    ctx.setTransform(dpr,0,0,dpr,0,0);
+  }
+
+  /* ══════════════════════════════════
+     PARTICLE SYSTEM
+     ══════════════════════════════════ */
+  function makeParticle(forceZone){
+    var zi = forceZone !== undefined ? forceZone : Math.floor(Math.random()*5);
+    var z = ZONES[zi];
+    var nx = rand(z.xStart, z.xEnd);
+    return {
+      x: nx * W,
+      y: rand(H*0.08, H*0.92),
+      vx: 0, vy: 0,
+      size: rand(0.5, 2.8),
+      baseAlpha: rand(0.15, 0.7),
+      alpha: 0,
+      zone: zi,
+      nx: nx,
+      noiseOffX: rand(0, 1000),
+      noiseOffY: rand(1000, 2000),
+      phase: rand(0, 6.28),
+      life: 0,
+      maxLife: rand(300, 800)
+    };
+  }
+
+  function initParticles(){
+    var count = Math.min(Math.floor(W * H / 1200), 4000);
+    particles = [];
     for(var i = 0; i < count; i++){
-      var zoneIdx = Math.floor(Math.random() * 5);
-      var z = ZONES[zoneIdx];
-      var cx = z.x + Math.random() * z.w;
-      var cy = Y + 30 + Math.random() * (H - 60);
-      var r = 1 + Math.random() * 2.5;
-      var dur = 3 + Math.random() * 5;
-      var delay = Math.random() * 6;
-      var tx = (Math.random()-0.5) * 60;
-      var ty = (Math.random()-0.5) * 40;
-
-      var circle = document.createElementNS(NS,'circle');
-      circle.setAttribute('cx', cx);
-      circle.setAttribute('cy', cy);
-      circle.setAttribute('r', r);
-      circle.setAttribute('fill', z.color);
-      circle.setAttribute('opacity', '0');
-      circle.classList.add('particle');
-      circle.style.setProperty('--dur', dur+'s');
-      circle.style.setProperty('--delay', delay+'s');
-      circle.style.setProperty('--tx', tx+'px');
-      circle.style.setProperty('--ty', ty+'px');
-      g.appendChild(circle);
+      var p = makeParticle();
+      p.life = rand(0, p.maxLife);
+      particles.push(p);
     }
-    svg.appendChild(g);
   }
 
-  // ── Connection lines ──
-  function makeConnections(){
-    var g = document.createElementNS(NS,'g');
-    var pts = [];
-    for(var i = 0; i < 60; i++){
-      var zoneIdx = Math.floor(Math.random() * 5);
-      var z = ZONES[zoneIdx];
-      pts.push({
-        x: z.x + Math.random() * z.w,
-        y: Y + 30 + Math.random() * (H - 60),
-        color: z.color
+  /* ══════════════════════════════════
+     FLOW FIELD
+     ══════════════════════════════════ */
+  function getFlowAngle(x, y, t){
+    var nx = x / W;
+    var ny = y / H;
+    var n1 = fbm(nx * 3 + t * 0.05, ny * 3, 3);
+    var n2 = fbm(nx * 3 + 100, ny * 3 + t * 0.03, 3);
+    var zi = getZone(nx);
+    var turb = ZONES[zi].turbulence;
+    return (n1 * 2 + n2) * Math.PI * turb;
+  }
+
+  /* ══════════════════════════════════
+     UPDATE
+     ══════════════════════════════════ */
+  function updateParticles(dt){
+    var t = time * 0.001;
+    for(var i = 0; i < particles.length; i++){
+      var p = particles[i];
+      p.life += 1;
+
+      var nx = p.x / W;
+      var zi = getZone(nx);
+      var z = ZONES[zi];
+      p.zone = zi;
+      p.nx = nx;
+
+      // Flow field
+      var angle = getFlowAngle(p.x, p.y, time);
+      var flowStrength = 0.3 * z.speed;
+      p.vx += Math.cos(angle) * flowStrength;
+      p.vy += Math.sin(angle) * flowStrength;
+
+      // Base rightward drift
+      p.vx += z.speed * 0.4;
+
+      // Mouse interaction
+      var dx = p.x - mouseX;
+      var dy = p.y - mouseY;
+      var md = Math.sqrt(dx*dx + dy*dy);
+      var mouseRadius = 120;
+      if(md < mouseRadius && md > 1){
+        var force = (1 - md/mouseRadius) * 0.8;
+        p.vx += (dx/md) * force;
+        p.vy += (dy/md) * force;
+      }
+
+      // Apply velocity with damping
+      p.x += p.vx * dt * 0.06;
+      p.y += p.vy * dt * 0.06;
+      p.vx *= 0.92;
+      p.vy *= 0.92;
+
+      // Vertical bounds
+      if(p.y < H*0.05){ p.y = H*0.05; p.vy *= -0.5; }
+      if(p.y > H*0.95){ p.y = H*0.95; p.vy *= -0.5; }
+
+      // Recycle if out of bounds
+      if(p.x > W + 20 || p.life > p.maxLife){
+        var newP = makeParticle();
+        newP.x = -5;
+        newP.y = rand(H*0.08, H*0.92);
+        particles[i] = newP;
+        continue;
+      }
+      if(p.x < -20){
+        var newP = makeParticle();
+        newP.x = -5;
+        particles[i] = newP;
+        continue;
+      }
+
+      // Alpha fade in/out
+      var lifeFrac = p.life / p.maxLife;
+      var fadeIn = clamp(p.life / 30, 0, 1);
+      var fadeOut = clamp((1 - lifeFrac) * 5, 0, 1);
+      p.alpha = p.baseAlpha * fadeIn * fadeOut;
+
+      // Pulse
+      p.alpha *= 0.7 + Math.sin(time * 0.002 + p.phase) * 0.3;
+    }
+  }
+
+  /* ══════════════════════════════════
+     BURST EFFECTS
+     ══════════════════════════════════ */
+  function addBurst(x, y){
+    var zi = getZone(x/W);
+    for(var i = 0; i < 40; i++){
+      var angle = rand(0, Math.PI*2);
+      var speed = rand(1, 4);
+      bursts.push({
+        x: x, y: y,
+        vx: Math.cos(angle) * speed,
+        vy: Math.sin(angle) * speed,
+        size: rand(1, 3),
+        alpha: 1,
+        color: ZONE_COLORS[zi],
+        life: 0, maxLife: rand(40, 80)
       });
     }
-    for(var i = 0; i < pts.length; i++){
-      for(var j = i+1; j < pts.length; j++){
-        var dx = pts[i].x - pts[j].x;
-        var dy = pts[i].y - pts[j].y;
-        var dist = Math.sqrt(dx*dx + dy*dy);
-        if(dist < 100){
-          var line = document.createElementNS(NS,'line');
-          line.setAttribute('x1', pts[i].x);
-          line.setAttribute('y1', pts[i].y);
-          line.setAttribute('x2', pts[j].x);
-          line.setAttribute('y2', pts[j].y);
-          line.setAttribute('stroke', pts[i].color);
-          line.setAttribute('stroke-width', '0.5');
-          line.setAttribute('class','conn-line');
-          line.style.animationDelay = (Math.random()*3)+'s';
-          g.appendChild(line);
+  }
+
+  function updateBursts(dt){
+    for(var i = bursts.length - 1; i >= 0; i--){
+      var b = bursts[i];
+      b.life += 1;
+      b.x += b.vx * dt * 0.05;
+      b.y += b.vy * dt * 0.05;
+      b.vx *= 0.96;
+      b.vy *= 0.96;
+      b.alpha = 1 - (b.life / b.maxLife);
+      if(b.life >= b.maxLife) bursts.splice(i, 1);
+    }
+  }
+
+  /* ══════════════════════════════════
+     DRAWING
+     ══════════════════════════════════ */
+  function drawBackground(){
+    // Base
+    ctx.fillStyle = '#060810';
+    ctx.fillRect(0, 0, W, H);
+
+    // Zone gradient bands
+    for(var i = 0; i < 5; i++){
+      var z = ZONES[i];
+      var x0 = z.xStart * W;
+      var x1 = z.xEnd * W;
+      var c = ZONE_COLORS[i];
+      var grad = ctx.createLinearGradient(x0, 0, x1, 0);
+      grad.addColorStop(0, 'rgba('+c[0]+','+c[1]+','+c[2]+',0.02)');
+      grad.addColorStop(0.5, 'rgba('+c[0]+','+c[1]+','+c[2]+',0.04)');
+      grad.addColorStop(1, 'rgba('+c[0]+','+c[1]+','+c[2]+',0.02)');
+      ctx.fillStyle = grad;
+      ctx.fillRect(x0, 0, x1 - x0, H);
+    }
+
+    // Zone dividers
+    ctx.strokeStyle = 'rgba(255,255,255,0.04)';
+    ctx.lineWidth = 1;
+    for(var i = 1; i < 5; i++){
+      var x = ZONES[i].xStart * W;
+      ctx.beginPath();
+      ctx.moveTo(x, H*0.05);
+      ctx.lineTo(x, H*0.95);
+      ctx.stroke();
+    }
+  }
+
+  function drawConnections(){
+    var gridStep = 50;
+    var connDist = 60;
+    for(var x = 0; x < W; x += gridStep){
+      for(var y = 0; y < H; y += gridStep){
+        var best = null, bestD = connDist;
+        for(var i = 0; i < particles.length; i++){
+          var p = particles[i];
+          if(Math.abs(p.x - x) < gridStep && Math.abs(p.y - y) < gridStep){
+            var d = dist(p.x, p.y, x, y);
+            if(d < bestD){ bestD = d; best = p; }
+          }
         }
       }
     }
-    svg.appendChild(g);
+    // Draw connections between close particles
+    ctx.lineWidth = 0.3;
+    for(var i = 0; i < particles.length; i++){
+      var p1 = particles[i];
+      if(p1.alpha < 0.05) continue;
+      for(var j = i+1; j < Math.min(i+8, particles.length); j++){
+        var p2 = particles[j];
+        if(p2.alpha < 0.05) continue;
+        var d = dist(p1.x, p1.y, p2.x, p2.y);
+        if(d < connDist){
+          var a = (1 - d/connDist) * Math.min(p1.alpha, p2.alpha) * 0.3;
+          ctx.strokeStyle = zoneColor(p1.nx, a);
+          ctx.beginPath();
+          ctx.moveTo(p1.x, p1.y);
+          ctx.lineTo(p2.x, p2.y);
+          ctx.stroke();
+        }
+      }
+    }
   }
 
-  // ── Annotation boxes (Zone 2) ──
-  function makeAnnotBoxes(){
-    var g = document.createElementNS(NS,'g');
+  function drawParticles(){
+    for(var i = 0; i < particles.length; i++){
+      var p = particles[i];
+      if(p.alpha < 0.01) continue;
+
+      var c = zoneColorRGB(p.nx);
+
+      // Outer glow
+      if(p.size > 1){
+        ctx.beginPath();
+        ctx.arc(p.x, p.y, p.size * 4, 0, Math.PI*2);
+        ctx.fillStyle = 'rgba('+c[0]+','+c[1]+','+c[2]+','+(p.alpha*0.06)+')';
+        ctx.fill();
+      }
+
+      // Core
+      ctx.beginPath();
+      ctx.arc(p.x, p.y, p.size, 0, Math.PI*2);
+      ctx.fillStyle = 'rgba('+c[0]+','+c[1]+','+c[2]+','+p.alpha+')';
+      ctx.fill();
+    }
+  }
+
+  function drawBursts(){
+    for(var i = 0; i < bursts.length; i++){
+      var b = bursts[i];
+      var c = b.color;
+      ctx.beginPath();
+      ctx.arc(b.x, b.y, b.size * 3, 0, Math.PI*2);
+      ctx.fillStyle = 'rgba('+c[0]+','+c[1]+','+c[2]+','+(b.alpha*0.15)+')';
+      ctx.fill();
+      ctx.beginPath();
+      ctx.arc(b.x, b.y, b.size, 0, Math.PI*2);
+      ctx.fillStyle = 'rgba('+c[0]+','+c[1]+','+c[2]+','+b.alpha+')';
+      ctx.fill();
+    }
+  }
+
+  function drawAnnotationBoxes(){
+    var t = time * 0.001;
+    var x0 = W * 0.22, x1 = W * 0.36;
     var boxes = [
-      {x:185, y:120, w:70, h:40, label:'Car', conf:'97%'},
-      {x:220, y:200, w:80, h:50, label:'Pedestrian', conf:'94%'},
-      {x:195, y:300, w:65, h:35, label:'Sign', conf:'99%'},
-      {x:250, y:370, w:70, h:40, label:'Lane', conf:'96%'}
+      {x:0.24, y:0.20, w:0.04, h:0.08, label:'Car', conf:'97.2%'},
+      {x:0.28, y:0.45, w:0.05, h:0.10, label:'Pedestrian', conf:'94.8%'},
+      {x:0.22, y:0.68, w:0.04, h:0.07, label:'Sign', conf:'99.1%'},
+      {x:0.30, y:0.78, w:0.03, h:0.06, label:'Lane', conf:'96.3%'}
     ];
-    boxes.forEach(function(b, i){
-      var rect = document.createElementNS(NS,'rect');
-      rect.setAttribute('x', b.x);
-      rect.setAttribute('y', b.y);
-      rect.setAttribute('width', b.w);
-      rect.setAttribute('height', b.h);
-      rect.setAttribute('rx', '4');
-      rect.setAttribute('fill', 'none');
-      rect.setAttribute('stroke', '#3b82f6');
-      rect.setAttribute('stroke-width', '1.5');
-      rect.setAttribute('class','annot-box');
-      rect.style.setProperty('--delay', (i * 1.2) + 's');
-      g.appendChild(rect);
+    for(var i = 0; i < boxes.length; i++){
+      var b = boxes[i];
+      var bx = b.x * W, by = b.y * H, bw = b.w * W, bh = b.h * H;
+      var pulse = 0.5 + Math.sin(t * 1.5 + i * 1.2) * 0.3;
+      var a = pulse * 0.6;
 
-      var t1 = document.createElementNS(NS,'text');
-      t1.setAttribute('x', b.x + 4);
-      t1.setAttribute('y', b.y + 14);
-      t1.setAttribute('font-size','9');
-      t1.setAttribute('fill','#3b82f6');
-      t1.setAttribute('font-weight','600');
-      t1.setAttribute('font-family','Outfit, sans-serif');
-      t1.textContent = b.label;
-      t1.classList.add('annot-box');
-      t1.style.setProperty('--delay', (i * 1.2) + 's');
-      g.appendChild(t1);
+      // Corner brackets
+      var cs = 4;
+      ctx.strokeStyle = 'rgba(59,130,246,'+a+')';
+      ctx.lineWidth = 1.2;
+      // Top-left
+      ctx.beginPath();ctx.moveTo(bx,by+cs);ctx.lineTo(bx,by);ctx.lineTo(bx+cs,by);ctx.stroke();
+      // Top-right
+      ctx.beginPath();ctx.moveTo(bx+bw-cs,by);ctx.lineTo(bx+bw,by);ctx.lineTo(bx+bw,by+cs);ctx.stroke();
+      // Bottom-left
+      ctx.beginPath();ctx.moveTo(bx,by+bh-cs);ctx.lineTo(bx,by+bh);ctx.lineTo(bx+cs,by+bh);ctx.stroke();
+      // Bottom-right
+      ctx.beginPath();ctx.moveTo(bx+bw-cs,by+bh);ctx.lineTo(bx+bw,by+bh);ctx.lineTo(bx+bw,by+bh-cs);ctx.stroke();
 
-      var t2 = document.createElementNS(NS,'text');
-      t2.setAttribute('x', b.x + 4);
-      t2.setAttribute('y', b.y + 28);
-      t2.setAttribute('font-size','8');
-      t2.setAttribute('fill','#7a8ba8');
-      t2.setAttribute('font-family','Outfit, sans-serif');
-      t2.textContent = b.conf;
-      t2.classList.add('annot-box');
-      t2.style.setProperty('--delay', (i * 1.2 + 0.2) + 's');
-      g.appendChild(t2);
-    });
-    svg.appendChild(g);
+      // Fill
+      ctx.fillStyle = 'rgba(59,130,246,'+(a*0.04)+')';
+      ctx.fillRect(bx, by, bw, bh);
+
+      // Label
+      ctx.font = '600 9px Outfit';
+      ctx.fillStyle = 'rgba(59,130,246,'+(a*0.9)+')';
+      ctx.textAlign = 'left';
+      ctx.fillText(b.label, bx+3, by-6);
+
+      // Confidence
+      ctx.fillStyle = 'rgba(100,150,220,'+(a*0.6)+')';
+      ctx.font = '400 8px Outfit';
+      ctx.fillText(b.conf, bx+3, by-6+12);
+    }
+    ctx.textAlign = 'left';
   }
 
-  // ── Grid nodes (Zone 4) ──
-  function makeGrid(){
-    var g = document.createElementNS(NS,'g');
-    var gx0 = ZONES[3].x + 15, gy0 = Y + 50;
-    var cols = 6, rows = 7, gapX = 20, gapY = 42;
-    var nodes = [];
+  function drawQualityCheck(){
+    var cx = W * 0.45, cy = H * 0.45;
+    var t = time * 0.001;
+    var pulse = 0.4 + Math.sin(t * 2) * 0.3;
+
+    // Outer ring
+    ctx.beginPath();
+    ctx.arc(cx, cy, 28, 0, Math.PI*2);
+    ctx.strokeStyle = 'rgba(245,158,11,'+(pulse*0.4)+')';
+    ctx.lineWidth = 1.5;
+    ctx.stroke();
+
+    // Inner ring
+    ctx.beginPath();
+    ctx.arc(cx, cy, 18, 0, Math.PI*2);
+    ctx.strokeStyle = 'rgba(245,158,11,'+(pulse*0.6)+')';
+    ctx.lineWidth = 2;
+    ctx.stroke();
+
+    // Checkmark
+    ctx.beginPath();
+    ctx.moveTo(cx-8, cy);
+    ctx.lineTo(cx-2, cy+6);
+    ctx.lineTo(cx+10, cy-7);
+    ctx.strokeStyle = 'rgba(245,158,11,'+(pulse*0.9)+')';
+    ctx.lineWidth = 2.5;
+    ctx.lineCap = 'round';
+    ctx.lineJoin = 'round';
+    ctx.stroke();
+    ctx.lineCap = 'butt';
+    ctx.lineJoin = 'miter';
+
+    // Glow
+    var g = ctx.createRadialGradient(cx, cy, 0, cx, cy, 50);
+    g.addColorStop(0, 'rgba(245,158,11,'+(pulse*0.08)+')');
+    g.addColorStop(1, 'rgba(245,158,11,0)');
+    ctx.fillStyle = g;
+    ctx.fillRect(cx-50, cy-50, 100, 100);
+
+    // Text
+    ctx.font = '600 9px Outfit';
+    ctx.fillStyle = 'rgba(245,158,11,'+(pulse*0.7)+')';
+    ctx.textAlign = 'center';
+    ctx.fillText('VALIDATED', cx, cy + 42);
+    ctx.textAlign = 'left';
+  }
+
+  function drawGridZone(){
+    var x0 = W * 0.54, x1 = W * 0.66;
+    var cols = 8, rows = 10;
+    var sx = (x1-x0)/cols, sy = H*0.8/rows;
+    var startY = H*0.1;
+    var t = time * 0.001;
+
     for(var r = 0; r < rows; r++){
       for(var c = 0; c < cols; c++){
-        var nx = gx0 + c * gapX + (Math.random()-0.5)*6;
-        var ny = gy0 + r * gapY + (Math.random()-0.5)*6;
-        nodes.push({x:nx, y:ny});
-        var dot = document.createElementNS(NS,'circle');
-        dot.setAttribute('cx', nx);
-        dot.setAttribute('cy', ny);
-        dot.setAttribute('r', '2');
-        dot.setAttribute('fill', '#10b981');
-        dot.setAttribute('opacity', '0.5');
-        g.appendChild(dot);
-      }
-    }
-    // connections
-    for(var i = 0; i < nodes.length; i++){
-      for(var j = i+1; j < nodes.length; j++){
-        var dx = nodes[i].x - nodes[j].x;
-        var dy = nodes[i].y - nodes[j].y;
-        if(Math.sqrt(dx*dx+dy*dy) < 50){
-          var l = document.createElementNS(NS,'line');
-          l.setAttribute('x1', nodes[i].x);
-          l.setAttribute('y1', nodes[i].y);
-          l.setAttribute('x2', nodes[j].x);
-          l.setAttribute('y2', nodes[j].y);
-          l.setAttribute('stroke','#10b981');
-          l.setAttribute('stroke-width','0.4');
-          l.setAttribute('opacity','0.2');
-          l.setAttribute('class','conn-line');
-          l.style.animationDelay = (Math.random()*4)+'s';
-          g.appendChild(l);
+        var nx = x0 + c*sx;
+        var ny = startY + r*sy;
+        var pulse = 0.3 + Math.sin(t*1.5 + r*0.3 + c*0.4) * 0.2;
+
+        // Node
+        ctx.beginPath();
+        ctx.arc(nx, ny, 2, 0, Math.PI*2);
+        ctx.fillStyle = 'rgba(16,185,129,'+(pulse*0.7)+')';
+        ctx.fill();
+
+        // Horizontal line
+        if(c < cols-1){
+          ctx.beginPath();
+          ctx.moveTo(nx, ny);
+          ctx.lineTo(nx+sx, ny);
+          ctx.strokeStyle = 'rgba(16,185,129,'+(pulse*0.12)+')';
+          ctx.lineWidth = 0.5;
+          ctx.stroke();
+        }
+        // Vertical line
+        if(r < rows-1){
+          ctx.beginPath();
+          ctx.moveTo(nx, ny);
+          ctx.lineTo(nx, ny+sy);
+          ctx.strokeStyle = 'rgba(16,185,129,'+(pulse*0.08)+')';
+          ctx.lineWidth = 0.5;
+          ctx.stroke();
         }
       }
     }
-    svg.appendChild(g);
+
+    // Label
+    ctx.font = '600 9px Outfit';
+    ctx.fillStyle = 'rgba(16,185,129,0.4)';
+    ctx.textAlign = 'center';
+    ctx.fillText('STRUCTURED', (x0+x1)/2, H*0.96);
+    ctx.textAlign = 'left';
   }
 
-  // ── Gradient defs ──
-  function makeDefs(){
-    var defs = document.createElementNS(NS,'defs');
-    ZONES.forEach(function(z, i){
-      var lg = document.createElementNS(NS,'radialGradient');
-      lg.setAttribute('id', 'zoneGrad'+i);
-      var s1 = document.createElementNS(NS,'stop');
-      s1.setAttribute('offset','0%');
-      s1.setAttribute('stop-color', z.color);
-      s1.setAttribute('stop-opacity','0.3');
-      var s2 = document.createElementNS(NS,'stop');
-      s2.setAttribute('offset','100%');
-      s2.setAttribute('stop-color', z.color);
-      s2.setAttribute('stop-opacity','0');
-      lg.appendChild(s1);
-      lg.appendChild(s2);
-      defs.appendChild(lg);
-    });
-    svg.insertBefore(defs, svg.firstChild);
+  function drawImpactStreams(){
+    var x0 = W * 0.70;
+    var t = time * 0.001;
+
+    for(var i = 0; i < 8; i++){
+      var startY = H * (0.1 + i * 0.1);
+      var segments = 20;
+      ctx.beginPath();
+      ctx.moveTo(x0, startY);
+
+      for(var s = 1; s <= segments; s++){
+        var frac = s / segments;
+        var x = x0 + frac * (W - x0 - 20);
+        var wave = Math.sin(frac * 4 + t * 2 + i) * (15 + frac * 25);
+        var y = startY + wave;
+        ctx.lineTo(x, y);
+      }
+
+      var alpha = 0.08 + Math.sin(t + i * 0.8) * 0.04;
+      ctx.strokeStyle = 'rgba(139,92,246,'+alpha+')';
+      ctx.lineWidth = 1.5;
+      ctx.stroke();
+    }
   }
 
-  // Init
-  makeDefs();
-  makeEllipses();
-  makeStreams();
-  makeConnections();
-  makeAnnotBoxes();
-  makeGrid();
-  makeParticles();
+  function drawMouseGlow(){
+    if(mouseX < 0) return;
+    var g = ctx.createRadialGradient(mouseX, mouseY, 0, mouseX, mouseY, 80);
+    g.addColorStop(0, 'rgba(255,255,255,0.03)');
+    g.addColorStop(1, 'rgba(255,255,255,0)');
+    ctx.fillStyle = g;
+    ctx.fillRect(mouseX-80, mouseY-80, 160, 160);
+  }
+
+  /* ══════════════════════════════════
+     MAIN LOOP
+     ══════════════════════════════════ */
+  function loop(ts){
+    if(!lastFrame) lastFrame = ts;
+    var dt = Math.min(ts - lastFrame, 50);
+    lastFrame = ts;
+    time += dt;
+
+    mouseVX = mouseX - prevMX;
+    mouseVY = mouseY - prevMY;
+    prevMX = mouseX;
+    prevMY = mouseY;
+
+    ctx.clearRect(0, 0, W, H);
+    drawBackground();
+    drawImpactStreams();
+    drawGridZone();
+    drawQualityCheck();
+    drawConnections();
+    drawAnnotationBoxes();
+    updateParticles(dt);
+    drawParticles();
+    updateBursts(dt);
+    drawBursts();
+    drawMouseGlow();
+
+    requestAnimationFrame(loop);
+  }
+
+  /* ══════════════════════════════════
+     EVENTS
+     ══════════════════════════════════ */
+  wrap.addEventListener('mousemove', function(e){
+    var rect = wrap.getBoundingClientRect();
+    mouseX = e.clientX - rect.left;
+    mouseY = e.clientY - rect.top;
+  });
+  wrap.addEventListener('mouseleave', function(){
+    mouseX = -9999; mouseY = -9999;
+  });
+  wrap.addEventListener('click', function(e){
+    var rect = wrap.getBoundingClientRect();
+    addBurst(e.clientX - rect.left, e.clientY - rect.top);
+  });
+
+  window.addEventListener('resize', function(){
+    resize();
+    initParticles();
+  });
+
+  /* ══════════════════════════════════
+     INIT
+     ══════════════════════════════════ */
+  function boot(){
+    resize();
+    if(W < 20 || H < 20){
+      setTimeout(boot, 150);
+      return;
+    }
+    initParticles();
+    requestAnimationFrame(loop);
+  }
+
+  if(document.readyState === 'complete') boot();
+  else window.addEventListener('load', boot);
 })();
 </script>
-
 </body>
 </html>
